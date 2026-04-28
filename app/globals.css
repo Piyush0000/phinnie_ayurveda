@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-forest: #2D5016;
+  --color-turmeric: #C8860A;
+  --color-terracotta: #C1440E;
+  --color-cream: #FDF8F0;
+  --color-parchment: #F5EDD8;
+  --color-charcoal: #1C1C1C;
+  --color-warmgray: #8B7355;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-lato), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), 'Playfair Display', serif;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-turmeric);
+  color: var(--color-cream);
+}
+
+.scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(139, 115, 85, 0.4);
+  border-radius: 3px;
+}
+
+@layer utilities {
+  .container-narrow { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+  .container-wide { max-width: 1440px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+}
+
+@media (min-width: 768px) {
+  .container-narrow, .container-wide { padding-left: 2rem; padding-right: 2rem; }
+}
