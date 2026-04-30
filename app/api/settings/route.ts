@@ -3,20 +3,20 @@ import { z } from 'zod'
 import connectDB from '@/lib/mongodb'
 import SiteSettings from '@/models/SiteSettings'
 import { handleApiError, requireAdmin } from '@/lib/api-helpers'
+import { settingsSchema } from '@/lib/validations'
 
 export const dynamic = 'force-dynamic'
 
-const schema = z.object({
-  storeName: z.string().min(2).optional(),
-  storeEmail: z.string().email().optional().or(z.literal('')),
-  storePhone: z.string().optional(),
-  storeAddress: z.string().optional(),
-  currency: z.string().optional(),
-  freeShippingMin: z.number().nonnegative().optional(),
-  shippingCharge: z.number().nonnegative().optional(),
-  taxRate: z.number().nonnegative().optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
+const fullSchema = settingsSchema.extend({
+  bannerText: z.string().max(280).optional(),
+  bannerEnabled: z.boolean().optional(),
+  social: z
+    .object({
+      instagram: z.string().url().optional().or(z.literal('')),
+      facebook: z.string().url().optional().or(z.literal('')),
+      twitter: z.string().url().optional().or(z.literal('')),
+    })
+    .optional(),
 })
 
 export async function GET() {
@@ -38,7 +38,7 @@ export async function PATCH(req: NextRequest) {
     const { error } = await requireAdmin()
     if (error) return error
     await connectDB()
-    const parsed = schema.safeParse(await req.json())
+    const parsed = fullSchema.safeParse(await req.json())
     if (!parsed.success) {
       return NextResponse.json(
         { error: parsed.error.issues[0]?.message ?? 'Invalid input' },
@@ -53,4 +53,9 @@ export async function PATCH(req: NextRequest) {
   } catch (err) {
     return handleApiError(err)
   }
+}
+
+// Allow PUT as alias to PATCH for compatibility
+export async function PUT(req: NextRequest) {
+  return PATCH(req)
 }

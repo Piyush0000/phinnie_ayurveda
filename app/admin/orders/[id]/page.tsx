@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
-import Order from '@/models/Order'
+import Order, { type IOrder } from '@/models/Order'
 import AdminHeader from '@/components/admin/AdminHeader'
 import OrderStatusUpdater from './OrderStatusUpdater'
 import { OrderStatusBadge, PaymentStatusBadge } from '@/components/admin/OrderStatusBadge'
@@ -8,12 +8,20 @@ import { formatPrice, formatDateTime } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
+type SerializedOrder = Omit<IOrder, '_id' | 'userId' | 'createdAt' | 'updatedAt' | 'statusHistory'> & {
+  _id: string
+  userId?: string
+  createdAt: string
+  updatedAt: string
+  statusHistory: { status: string; timestamp: string; note?: string }[]
+}
+
 export default async function AdminOrderDetailPage({ params }: { params: { id: string } }) {
   if (!isDatabaseConfigured()) return notFound()
   await connectDB()
   const order = await Order.findById(params.id).lean()
   if (!order) return notFound()
-  const o = JSON.parse(JSON.stringify(order)) as any
+  const o = JSON.parse(JSON.stringify(order)) as SerializedOrder
 
   return (
     <>
@@ -29,7 +37,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
           <div className="rounded-2xl border border-forest/10 bg-cream p-6 shadow-warm lg:col-span-2">
             <h2 className="font-display text-xl text-forest">Items</h2>
             <ul className="mt-4 divide-y divide-forest/10">
-              {o.items.map((item: any, i: number) => (
+              {o.items.map((item, i) => (
                 <li key={i} className="flex justify-between py-3">
                   <div>
                     <div className="font-semibold text-charcoal">{item.name}</div>
@@ -90,7 +98,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
             <div className="rounded-2xl border border-forest/10 bg-cream p-5 shadow-warm">
               <h3 className="font-display text-lg text-forest">Timeline</h3>
               <ul className="mt-3 space-y-3">
-                {[...(o.statusHistory ?? [])].reverse().map((h: any, i: number) => (
+                {[...(o.statusHistory ?? [])].reverse().map((h, i) => (
                   <li key={i} className="flex gap-3 text-sm">
                     <div className="mt-1 h-2 w-2 shrink-0 rounded-full bg-forest" />
                     <div>

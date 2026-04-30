@@ -9,6 +9,7 @@ import SiteSettings from '@/models/SiteSettings'
 import { handleApiError, requireAdmin } from '@/lib/api-helpers'
 import { checkoutSchema } from '@/lib/validations'
 import { generateOrderNumber } from '@/lib/order-number'
+import { rateLimit } from '@/lib/rate-limit'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,6 +19,7 @@ export async function GET(req: NextRequest) {
     await connectDB()
     const sp = req.nextUrl.searchParams
     const status = sp.get('status')
+    const paymentStatusParam = sp.get('paymentStatus')
     const page = Math.max(1, Number(sp.get('page')) || 1)
     const limit = Math.min(50, Number(sp.get('limit')) || 20)
 
@@ -29,6 +31,14 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
       query.userId = session.user.id
+    } else {
+      // Admin default: hide failed-payment orders so they don't get fulfilled by
+      // mistake. They remain queryable via ?paymentStatus=FAILED for reconciliation.
+      if (paymentStatusParam) {
+        query.paymentStatus = paymentStatusParam
+      } else {
+        query.paymentStatus = { $ne: 'FAILED' }
+      }
     }
 
     const [orders, total] = await Promise.all([
@@ -52,6 +62,10 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const limited = await rateLimit(req, { limit: 15, windowMs: 60_000, key: 'order-create' })
+    if (!limited.ok) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
     const session = await auth()
     await connectDB()
     const body = await req.json()

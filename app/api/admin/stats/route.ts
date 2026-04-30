@@ -34,7 +34,7 @@ export async function GET() {
         ]),
         Order.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
         User.countDocuments({ role: 'CUSTOMER', createdAt: { $gte: startThisMonth } }),
-        Product.find({ stock: { $lt: 10 }, isActive: true })
+        Product.find({ stock: { $lte: 5 }, isActive: true })
           .sort({ stock: 1 })
           .limit(10)
           .select('name slug stock images price')

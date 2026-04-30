@@ -15,6 +15,9 @@ interface Settings {
   freeShippingMin?: number
   shippingCharge?: number
   taxRate?: number
+  bannerText?: string
+  bannerEnabled?: boolean
+  social?: { instagram?: string; facebook?: string; twitter?: string }
   metaTitle?: string
   metaDescription?: string
 }
@@ -27,7 +30,7 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     fetch('/api/settings')
       .then((r) => r.json())
-      .then((d) => setSettings(d ?? {}))
+      .then((d: Settings) => setSettings(d ?? {}))
       .catch(() => {})
       .finally(() => setLoading(false))
   }, [])
@@ -35,19 +38,23 @@ export default function AdminSettingsPage() {
   const update = <K extends keyof Settings>(key: K, value: Settings[K]) =>
     setSettings((s) => ({ ...s, [key]: value }))
 
+  const updateSocial = (key: 'instagram' | 'facebook' | 'twitter', value: string) =>
+    setSettings((s) => ({ ...s, social: { ...(s.social ?? {}), [key]: value } }))
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
     try {
+      const payload = {
+        ...settings,
+        freeShippingMin: settings.freeShippingMin !== undefined ? Number(settings.freeShippingMin) : undefined,
+        shippingCharge: settings.shippingCharge !== undefined ? Number(settings.shippingCharge) : undefined,
+        taxRate: settings.taxRate !== undefined ? Number(settings.taxRate) : undefined,
+      }
       const res = await fetch('/api/settings', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...settings,
-          freeShippingMin: settings.freeShippingMin ? Number(settings.freeShippingMin) : undefined,
-          shippingCharge: settings.shippingCharge ? Number(settings.shippingCharge) : undefined,
-          taxRate: settings.taxRate ? Number(settings.taxRate) : undefined,
-        }),
+        body: JSON.stringify(payload),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -78,6 +85,26 @@ export default function AdminSettingsPage() {
         </section>
 
         <section className="rounded-2xl border border-forest/10 bg-cream p-6 shadow-warm">
+          <h2 className="font-display text-xl text-forest">Announcement Banner</h2>
+          <div className="mt-4 grid gap-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={settings.bannerEnabled ?? false}
+                onChange={(e) => update('bannerEnabled', e.target.checked)}
+              />
+              <span className="font-semibold">Show banner on storefront</span>
+            </label>
+            <Input
+              label="Banner Text"
+              value={settings.bannerText ?? ''}
+              onChange={(e) => update('bannerText', e.target.value)}
+              placeholder="✦ Free shipping on orders over ₹999 ✦"
+            />
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-forest/10 bg-cream p-6 shadow-warm">
           <h2 className="font-display text-xl text-forest">Shipping & Tax</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-3">
             <Input
@@ -98,6 +125,15 @@ export default function AdminSettingsPage() {
               value={settings.taxRate ?? 18}
               onChange={(e) => update('taxRate', Number(e.target.value))}
             />
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-forest/10 bg-cream p-6 shadow-warm">
+          <h2 className="font-display text-xl text-forest">Social Links</h2>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            <Input label="Instagram URL" value={settings.social?.instagram ?? ''} onChange={(e) => updateSocial('instagram', e.target.value)} />
+            <Input label="Facebook URL" value={settings.social?.facebook ?? ''} onChange={(e) => updateSocial('facebook', e.target.value)} />
+            <Input label="Twitter URL" value={settings.social?.twitter ?? ''} onChange={(e) => updateSocial('twitter', e.target.value)} />
           </div>
         </section>
 

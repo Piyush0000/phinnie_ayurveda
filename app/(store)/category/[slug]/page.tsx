@@ -1,12 +1,26 @@
 import { notFound } from 'next/navigation'
+import type { Metadata } from 'next'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
-import Category from '@/models/Category'
-import Product from '@/models/Product'
+import Category, { type ICategory } from '@/models/Category'
+import Product, { type IProduct } from '@/models/Product'
 import ProductGrid from '@/components/store/ProductGrid'
 
 export const dynamic = 'force-dynamic'
 
-async function getData(slug: string) {
+type CategoryDoc = Omit<ICategory, '_id' | 'createdAt' | 'updatedAt'> & {
+  _id: string
+  createdAt: string
+  updatedAt: string
+}
+
+type ProductDoc = Omit<IProduct, '_id' | 'categoryId' | 'createdAt' | 'updatedAt'> & {
+  _id: string
+  categoryId: string
+  createdAt: string
+  updatedAt: string
+}
+
+async function getData(slug: string): Promise<{ category: CategoryDoc; products: ProductDoc[] } | null> {
   if (!isDatabaseConfigured()) return null
   await connectDB()
   const category = await Category.findOne({ slug }).lean()
@@ -15,8 +29,24 @@ async function getData(slug: string) {
     .sort({ isFeatured: -1, soldCount: -1 })
     .lean()
   return {
-    category: JSON.parse(JSON.stringify(category)) as any,
-    products: JSON.parse(JSON.stringify(products)) as any[],
+    category: JSON.parse(JSON.stringify(category)) as CategoryDoc,
+    products: JSON.parse(JSON.stringify(products)) as ProductDoc[],
+  }
+}
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const data = await getData(params.slug)
+  if (!data) return { title: 'Category — Phinnie Aurvadic' }
+  const { category } = data
+  return {
+    title: `${category.name} — Phinnie Aurvadic`,
+    description:
+      category.description ?? `Shop ${category.name} — handcrafted Ayurvedic remedies from Phinnie Aurvadic.`,
+    openGraph: {
+      title: `${category.name} — Phinnie Aurvadic`,
+      description: category.description ?? undefined,
+      images: category.image ? [category.image] : undefined,
+    },
   }
 }
 

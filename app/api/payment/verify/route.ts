@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
-import Product from '@/models/Product'
-import Coupon from '@/models/Coupon'
 import { verifyRazorpaySignature } from '@/lib/razorpay'
-import { sendOrderConfirmation } from '@/lib/email'
 import { handleApiError } from '@/lib/api-helpers'
+import { rateLimit } from '@/lib/rate-limit'
+import { finalizePaidOrder } from '@/lib/order-fulfillment'
 
 const schema = z.object({
   orderId: z.string(),
@@ -17,6 +16,10 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    const limited = await rateLimit(req, { limit: 20, windowMs: 60_000, key: 'payment-verify' })
+    if (!limited.ok) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
     await connectDB()
     const body = await req.json()
     const parsed = schema.safeParse(body)
@@ -62,21 +65,7 @@ export async function POST(req: NextRequest) {
     })
     await order.save()
 
-    // Decrement stock atomically per item
-    await Promise.all(
-      order.items.map((item) =>
-        Product.findOneAndUpdate(
-          { _id: item.productId, stock: { $gte: item.quantity } },
-          { $inc: { stock: -item.quantity, soldCount: item.quantity } },
-        ),
-      ),
-    )
-
-    if (order.couponCode) {
-      await Coupon.findOneAndUpdate({ code: order.couponCode }, { $inc: { usedCount: 1 } })
-    }
-
-    void sendOrderConfirmation(order)
+    await finalizePaidOrder(order)
 
     return NextResponse.json({
       success: true,

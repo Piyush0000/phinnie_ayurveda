@@ -2,13 +2,12 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import Google from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
+import authConfig from '../auth.config'
 import connectDB, { isDatabaseConfigured } from './mongodb'
 import User from '@/models/User'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  trustHost: true,
-  session: { strategy: 'jwt' },
-  pages: { signIn: '/login' },
+  ...authConfig,
   providers: [
     Credentials({
       name: 'Credentials',
@@ -45,6 +44,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       : []),
   ],
   callbacks: {
+    ...authConfig.callbacks,
     async signIn({ user, account }) {
       if (account?.provider === 'google' && user.email && isDatabaseConfigured()) {
         await connectDB()
@@ -79,13 +79,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return token
     },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = (token.id as string) ?? token.sub ?? ''
-        session.user.role = (token.role as 'CUSTOMER' | 'ADMIN') ?? 'CUSTOMER'
-      }
-      return session
-    },
   },
 })
 
@@ -103,4 +96,3 @@ declare module 'next-auth' {
     }
   }
 }
-

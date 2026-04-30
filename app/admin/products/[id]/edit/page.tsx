@@ -11,16 +11,19 @@ export default async function EditProductPage({ params }: { params: { id: string
   await connectDB()
   const product = await Product.findById(params.id).lean()
   if (!product) return notFound()
-  const initial = JSON.parse(JSON.stringify(product)) as any
+  const initial = JSON.parse(JSON.stringify(product)) as Record<string, unknown> & {
+    name?: string
+    categoryId?: string
+  }
   return (
     <>
-      <AdminHeader title={`Edit: ${initial.name}`} />
+      <AdminHeader title={`Edit: ${initial.name ?? ''}`} />
       <div className="p-6 lg:p-8">
         <ProductForm
           productId={params.id}
           initial={{
             ...initial,
-            categoryId: String(initial.categoryId),
+            categoryId: String(initial.categoryId ?? ''),
           }}
         />
       </div>

@@ -23,8 +23,14 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 })
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+
 export const metadata: Metadata = {
-  title: 'Phinnie Aurvadic — Authentic Ayurvedic Wellness',
+  metadataBase: new URL(APP_URL),
+  title: {
+    default: 'Phinnie Aurvadic — Authentic Ayurvedic Wellness',
+    template: '%s | Phinnie Aurvadic',
+  },
   description:
     'Discover premium Ayurvedic products handcrafted from time-honored formulas. Hair care, skin care, wellness and more.',
   keywords: ['Ayurveda', 'natural', 'wellness', 'hair care', 'skin care', 'Phinnie Aurvadic'],
@@ -32,7 +38,11 @@ export const metadata: Metadata = {
     title: 'Phinnie Aurvadic',
     description: 'Authentic Ayurvedic products for modern wellness.',
     type: 'website',
+    url: APP_URL,
+    siteName: 'Phinnie Aurvadic',
   },
+  twitter: { card: 'summary_large_image', title: 'Phinnie Aurvadic' },
+  robots: { index: true, follow: true },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

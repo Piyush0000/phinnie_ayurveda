@@ -53,7 +53,12 @@ function LoginForm() {
         <Input label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register('email')} />
         <Input label="Password" type="password" autoComplete="current-password" error={errors.password?.message} {...register('password')} />
       </div>
-      <Button loading={loading} size="lg" className="mt-6 w-full">
+      <div className="mt-2 text-right">
+        <Link href="/forgot" className="text-xs font-semibold text-forest hover:underline">
+          Forgot password?
+        </Link>
+      </div>
+      <Button loading={loading} size="lg" className="mt-4 w-full">
         Sign in
       </Button>
       <p className="mt-4 text-center text-sm text-warmgray">

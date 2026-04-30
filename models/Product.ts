@@ -62,10 +62,11 @@ const ProductSchema = new Schema<IProduct>(
   { timestamps: true },
 )
 
-ProductSchema.index({ slug: 1 })
+// `slug` already has unique index from schema definition; avoid double-indexing.
 ProductSchema.index({ categoryId: 1 })
-ProductSchema.index({ categorySlug: 1 })
+ProductSchema.index({ categorySlug: 1, isActive: 1 })
 ProductSchema.index({ isActive: 1, isFeatured: 1 })
+ProductSchema.index({ stock: 1 })
 ProductSchema.index({ name: 'text', description: 'text', tags: 'text' })
 
 const Product: Model<IProduct> =

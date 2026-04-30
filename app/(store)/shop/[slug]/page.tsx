@@ -1,8 +1,9 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
-import Product from '@/models/Product'
-import Review from '@/models/Review'
+import Product, { type IProduct } from '@/models/Product'
+import Review, { type IReview } from '@/models/Review'
 import ProductImageGallery from '@/components/store/ProductImageGallery'
 import StarRating from '@/components/store/StarRating'
 import AddToCartSection from './AddToCartSection'
@@ -11,7 +12,21 @@ import Badge from '@/components/ui/Badge'
 
 export const dynamic = 'force-dynamic'
 
-async function getProduct(slug: string) {
+type ProductDoc = Omit<IProduct, '_id' | 'categoryId' | 'createdAt' | 'updatedAt'> & {
+  _id: string
+  categoryId: string
+  createdAt: string
+  updatedAt: string
+}
+
+type ReviewDoc = Omit<IReview, '_id' | 'userId' | 'productId' | 'createdAt'> & {
+  _id: string
+  userId: string
+  productId: string
+  createdAt: string
+}
+
+async function getProduct(slug: string): Promise<{ product: ProductDoc; reviews: ReviewDoc[]; related: ProductDoc[] } | null> {
   if (!isDatabaseConfigured()) return null
   await connectDB()
   const product = await Product.findOne({ slug, isActive: true }).lean()
@@ -23,9 +38,9 @@ async function getProduct(slug: string) {
       .lean(),
   ])
   return {
-    product: JSON.parse(JSON.stringify(product)) as any,
-    reviews: JSON.parse(JSON.stringify(reviews)) as any[],
-    related: JSON.parse(JSON.stringify(related)) as any[],
+    product: JSON.parse(JSON.stringify(product)) as ProductDoc,
+    reviews: JSON.parse(JSON.stringify(reviews)) as ReviewDoc[],
+    related: JSON.parse(JSON.stringify(related)) as ProductDoc[],
   }
 }
 
@@ -33,9 +48,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const data = await getProduct(params.slug)
   if (!data) return { title: 'Product Not Found' }
   const { product } = data
+  const title = `${product.metaTitle || product.name} | Phinnie Aurvadic`
+  const description =
+    product.metaDescription || product.shortDesc || product.description.slice(0, 160)
+  const heroImage = product.images[0]
   return {
-    title: `${product.metaTitle || product.name} | Phinnie Aurvadic`,
-    description: product.metaDescription || product.shortDesc || product.description.slice(0, 150),
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      images: heroImage ? [{ url: heroImage, alt: product.name }] : undefined,
+    },
   }
 }
 
@@ -79,7 +104,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
           {product.benefits?.length > 0 && (
             <ul className="mt-2 space-y-1.5">
-              {product.benefits.map((b: string, i: number) => (
+              {product.benefits.map((b, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-charcoal">
                   <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-turmeric" />
                   {b}
@@ -132,7 +157,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
             <p className="mt-3 text-sm text-warmgray">Be the first to review this product.</p>
           ) : (
             <ul className="mt-4 space-y-4">
-              {reviews.map((r: any) => (
+              {reviews.map((r) => (
                 <li key={r._id} className="rounded-xl border border-forest/10 bg-cream p-4">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold">{r.userName}</span>
@@ -153,16 +178,21 @@ export default async function ProductPage({ params }: { params: { slug: string }
         <section className="mt-16">
           <h2 className="font-display text-3xl text-charcoal">You may also like</h2>
           <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {related.map((p: any) => (
+            {related.map((p) => (
               <a
                 key={p._id}
                 href={`/shop/${p.slug}`}
                 className="group flex flex-col overflow-hidden rounded-2xl border border-forest/10 bg-cream shadow-warm transition hover:-translate-y-0.5"
               >
-                <div className="aspect-square bg-parchment">
+                <div className="relative aspect-square bg-parchment">
                   {p.images[0] && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={p.images[0]} alt={p.name} className="h-full w-full object-cover transition group-hover:scale-105" />
+                    <Image
+                      src={p.images[0]}
+                      alt={p.name}
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="object-cover transition group-hover:scale-105"
+                    />
                   )}
                 </div>
                 <div className="p-3">

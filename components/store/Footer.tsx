@@ -1,7 +1,16 @@
 import Link from 'next/link'
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react'
 
-export default function Footer() {
+interface FooterProps {
+  social?: { instagram?: string; facebook?: string; twitter?: string }
+}
+
+export default function Footer({ social }: FooterProps = {}) {
+  const links = [
+    { href: social?.instagram, label: 'Instagram', Icon: Instagram },
+    { href: social?.facebook, label: 'Facebook', Icon: Facebook },
+    { href: social?.twitter, label: 'Twitter', Icon: Twitter },
+  ]
   return (
     <footer className="mt-16 bg-forest-800 text-cream">
       <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
@@ -11,15 +20,20 @@ export default function Footer() {
             Authentic Ayurveda crafted from time-honored formulas. Pure, ethical, and made with reverence for nature.
           </p>
           <div className="mt-5 flex gap-3">
-            <a href="#" aria-label="Instagram" className="rounded-full border border-cream/30 p-2 hover:bg-cream/10">
-              <Instagram size={16} />
-            </a>
-            <a href="#" aria-label="Facebook" className="rounded-full border border-cream/30 p-2 hover:bg-cream/10">
-              <Facebook size={16} />
-            </a>
-            <a href="#" aria-label="Twitter" className="rounded-full border border-cream/30 p-2 hover:bg-cream/10">
-              <Twitter size={16} />
-            </a>
+            {links.map(({ href, label, Icon }) =>
+              href ? (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="rounded-full border border-cream/30 p-2 hover:bg-cream/10"
+                >
+                  <Icon size={16} />
+                </a>
+              ) : null,
+            )}
           </div>
         </div>
 

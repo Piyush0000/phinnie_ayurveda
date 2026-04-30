@@ -6,11 +6,23 @@ import AdminHeader from '@/components/admin/AdminHeader'
 import { OrderStatusBadge, PaymentStatusBadge } from '@/components/admin/OrderStatusBadge'
 import { formatPrice, formatDate } from '@/lib/utils'
 import { cn } from '@/lib/utils'
+import type { OrderStatus, PaymentStatus } from '@/models/Order'
+
+interface AdminOrderRow {
+  _id: string
+  orderNumber: string
+  total: number
+  status: OrderStatus
+  paymentStatus: PaymentStatus
+  createdAt: string
+  shippingAddress?: { name?: string; email?: string }
+  items: { quantity: number }[]
+}
 
 const STATUSES = ['ALL', 'PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']
 
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<AdminOrderRow[]>([])
   const [status, setStatus] = useState('ALL')
   const [loading, setLoading] = useState(true)
 

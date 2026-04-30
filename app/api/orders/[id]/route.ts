@@ -17,10 +17,12 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
 
     const isAdmin = session?.user?.role === 'ADMIN'
     const isOwner =
-      session?.user && order.userId && String(order.userId) === session.user.id
-    // For order-confirmation page after guest checkout, allow lookup by orderNumber
-    if (!isAdmin && !isOwner) {
-      // Allow access by orderNumber lookup (guest checkout fallback) but strip nothing
+      !!session?.user && !!order.userId && String(order.userId) === session.user.id
+    // Guest checkout fallback: order has no userId — allow lookup by orderNumber only
+    const isGuestLookup = !order.userId && !isValidObjectId(id) && id === order.orderNumber
+
+    if (!isAdmin && !isOwner && !isGuestLookup) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
     return NextResponse.json(order)
   } catch (err) {

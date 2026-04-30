@@ -1,10 +1,50 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { FilterQuery } from 'mongoose'
+import { auth } from '@/lib/auth'
 import connectDB from '@/lib/mongodb'
-import Review from '@/models/Review'
+import Review, { type IReview } from '@/models/Review'
 import Product from '@/models/Product'
 import Order from '@/models/Order'
 import { handleApiError, requireUser } from '@/lib/api-helpers'
 import { reviewSchema } from '@/lib/validations'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET(req: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+    await connectDB()
+    const sp = req.nextUrl.searchParams
+    const productId = sp.get('productId')
+    const rating = sp.get('rating')
+    const page = Math.max(1, Number(sp.get('page')) || 1)
+    const limit = Math.min(100, Number(sp.get('limit')) || 50)
+
+    const query: FilterQuery<IReview> = {}
+    if (productId) query.productId = productId
+    if (rating) query.rating = Number(rating)
+
+    const [reviews, total] = await Promise.all([
+      Review.find(query)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean(),
+      Review.countDocuments(query),
+    ])
+    return NextResponse.json({
+      reviews,
+      total,
+      page,
+      totalPages: Math.max(1, Math.ceil(total / limit)),
+    })
+  } catch (err) {
+    return handleApiError(err)
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

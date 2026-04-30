@@ -9,6 +9,17 @@ import RevenueChart from '@/components/admin/RevenueChart'
 import { OrderStatusBadge, PaymentStatusBadge } from '@/components/admin/OrderStatusBadge'
 import { formatPrice, formatDate } from '@/lib/utils'
 
+interface RecentOrder {
+  _id: string
+  orderNumber: string
+  total: number
+  status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'REFUNDED'
+  paymentStatus: 'PENDING' | 'PAID' | 'FAILED' | 'REFUNDED'
+  createdAt: string
+  shippingAddress?: { name?: string; email?: string }
+  items: { quantity: number }[]
+}
+
 interface Stats {
   revenue: { thisMonth: number; lastMonth: number; changePct: number; lifetime: number }
   orders: {
@@ -20,7 +31,7 @@ interface Stats {
   }
   customers: { newThisMonth: number; total: number }
   products: { total: number; lowStock: { _id: string; name: string; stock: number; slug: string }[] }
-  recentOrders: any[]
+  recentOrders: RecentOrder[]
 }
 
 export default function AdminDashboard() {

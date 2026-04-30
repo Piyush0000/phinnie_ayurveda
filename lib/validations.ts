@@ -76,3 +76,58 @@ export const orderStatusSchema = z.object({
   status: z.enum(['PENDING', 'CONFIRMED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'REFUNDED']),
   note: z.string().optional(),
 })
+
+export const categoryCreateSchema = z.object({
+  name: z.string().min(2).max(80),
+  slug: z.string().min(2).regex(/^[a-z0-9-]+$/).optional(),
+  description: z.string().max(500).optional(),
+  image: z.string().url().optional().or(z.literal('')),
+})
+export type CategoryCreateInput = z.infer<typeof categoryCreateSchema>
+
+export const categoryUpdateSchema = categoryCreateSchema.partial()
+export type CategoryUpdateInput = z.infer<typeof categoryUpdateSchema>
+
+export const couponSchema = z.object({
+  code: z.string().min(2).max(40).regex(/^[A-Z0-9_-]+$/i, 'Letters, digits, dash and underscore only'),
+  type: z.enum(['PERCENT', 'FIXED']),
+  value: z.number().positive(),
+  minOrder: z.number().nonnegative().optional(),
+  maxUses: z.number().int().positive().optional(),
+  isActive: z.boolean().default(true),
+  expiresAt: z.string().datetime().optional().or(z.literal('')),
+})
+export type CouponInput = z.infer<typeof couponSchema>
+
+export const couponUpdateSchema = couponSchema.partial()
+export type CouponUpdateInput = z.infer<typeof couponUpdateSchema>
+
+export const settingsSchema = z.object({
+  storeName: z.string().min(2).max(80).optional(),
+  storeEmail: z.string().email().optional().or(z.literal('')),
+  storePhone: z.string().max(40).optional(),
+  storeAddress: z.string().max(500).optional(),
+  currency: z.string().min(3).max(8).optional(),
+  freeShippingMin: z.number().nonnegative().optional(),
+  shippingCharge: z.number().nonnegative().optional(),
+  taxRate: z.number().nonnegative().max(100).optional(),
+  metaTitle: z.string().max(160).optional(),
+  metaDescription: z.string().max(500).optional(),
+})
+export type SettingsInput = z.infer<typeof settingsSchema>
+
+export const reviewModerationSchema = z.object({
+  isVerified: z.boolean().optional(),
+  moderationStatus: z.enum(['PENDING', 'APPROVED', 'REJECTED']).optional(),
+})
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email('Enter a valid email'),
+})
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+
+export const resetPasswordSchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+})
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>

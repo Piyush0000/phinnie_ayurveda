@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Upload, X } from 'lucide-react'
 import toast from 'react-hot-toast'
-import Image from 'next/image'
 
 interface Props {
   images: string[]
@@ -66,8 +66,14 @@ export default function ImageUploader({ images, onChange, max = 6 }: Props) {
             key={idx}
             className="group relative aspect-square overflow-hidden rounded-lg border border-warmgray/20 bg-parchment"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={src} alt={`Product ${idx + 1}`} className="h-full w-full object-cover" />
+            <Image
+              src={src}
+              alt={`Product ${idx + 1}`}
+              fill
+              sizes="(max-width: 768px) 33vw, 16vw"
+              className="object-cover"
+              unoptimized={!/^https:\/\/(res\.cloudinary\.com|images\.unsplash\.com|placehold\.co)/.test(src)}
+            />
             <button
               type="button"
               onClick={() => removeImage(idx)}

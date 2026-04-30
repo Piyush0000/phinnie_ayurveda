@@ -3,6 +3,7 @@ import { z } from 'zod'
 import connectDB from '@/lib/mongodb'
 import Coupon from '@/models/Coupon'
 import { handleApiError } from '@/lib/api-helpers'
+import { rateLimit } from '@/lib/rate-limit'
 
 const schema = z.object({
   code: z.string().min(1),
@@ -11,6 +12,10 @@ const schema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    const limited = await rateLimit(req, { limit: 20, windowMs: 60_000, key: 'coupon-validate' })
+    if (!limited.ok) {
+      return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+    }
     await connectDB()
     const parsed = schema.safeParse(await req.json())
     if (!parsed.success) {

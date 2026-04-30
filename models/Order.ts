@@ -106,7 +106,7 @@ const OrderSchema = new Schema<IOrder>(
       default: 'PENDING',
     },
     paymentMethod: String,
-    razorpayOrderId: { type: String, index: true },
+    razorpayOrderId: { type: String, unique: true, sparse: true },
     razorpayPaymentId: String,
     razorpaySignature: String,
     notes: String,
@@ -123,6 +123,7 @@ const OrderSchema = new Schema<IOrder>(
 
 OrderSchema.index({ userId: 1, createdAt: -1 })
 OrderSchema.index({ status: 1 })
+OrderSchema.index({ paymentStatus: 1 })
 OrderSchema.index({ createdAt: -1 })
 
 const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema)

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Plus, Edit, Trash2, Search } from 'lucide-react'
 import toast from 'react-hot-toast'
 import AdminHeader from '@/components/admin/AdminHeader'
@@ -99,10 +100,15 @@ export default function AdminProductsPage() {
                   <tr key={p._id} className="border-b border-forest/5">
                     <td className="py-3 pl-4 pr-2">
                       <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 overflow-hidden rounded-lg bg-parchment">
+                        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-parchment">
                           {p.images[0] && (
-                            /* eslint-disable-next-line @next/next/no-img-element */
-                            <img src={p.images[0]} alt={p.name} className="h-full w-full object-cover" />
+                            <Image
+                              src={p.images[0]}
+                              alt={p.name}
+                              fill
+                              sizes="48px"
+                              className="object-cover"
+                            />
                           )}
                         </div>
                         <div className="min-w-0">

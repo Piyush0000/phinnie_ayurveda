@@ -4,9 +4,15 @@ import connectDB from '@/lib/mongodb'
 import User from '@/models/User'
 import { handleApiError } from '@/lib/api-helpers'
 import { registerSchema } from '@/lib/validations'
+import { rateLimit } from '@/lib/rate-limit'
+import { sendWelcomeEmail } from '@/lib/email'
 
 export async function POST(req: NextRequest) {
   try {
+    const limited = await rateLimit(req, { limit: 5, windowMs: 60_000, key: 'register' })
+    if (!limited.ok) {
+      return NextResponse.json({ error: 'Too many attempts. Please wait a minute.' }, { status: 429 })
+    }
     const body = await req.json()
     const parsed = registerSchema.safeParse(body)
     if (!parsed.success) {
@@ -27,6 +33,7 @@ export async function POST(req: NextRequest) {
       password: hash,
       role: 'CUSTOMER',
     })
+    void sendWelcomeEmail({ name: user.name ?? user.email, email: user.email })
     return NextResponse.json({
       id: String(user._id),
       email: user.email,

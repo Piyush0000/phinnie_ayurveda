@@ -16,7 +16,12 @@ const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export default function Navbar() {
+interface NavbarProps {
+  bannerText?: string | null
+  storeName?: string
+}
+
+export default function Navbar({ bannerText, storeName = 'Phinnie Aurvadic' }: NavbarProps = {}) {
   const { data: session } = useSession()
   const itemCount = useCartStore((s) => s.getItemCount())
   const openCart = useCartStore((s) => s.openCart)
@@ -40,13 +45,13 @@ export default function Navbar() {
           scrolled ? 'bg-cream/95 backdrop-blur shadow-warm' : 'bg-cream'
         }`}
       >
-        <div className="border-b border-forest/10 bg-forest text-cream">
-          <div className="container-wide flex h-8 items-center justify-center text-xs tracking-wide">
-            <span className="opacity-90">
-              ✦ Free shipping on orders over ₹999 — Authentic Ayurveda since the ancient days ✦
-            </span>
+        {bannerText && (
+          <div className="border-b border-forest/10 bg-forest text-cream">
+            <div className="container-wide flex h-8 items-center justify-center text-xs tracking-wide">
+              <span className="opacity-90">{bannerText}</span>
+            </div>
           </div>
-        </div>
+        )}
         <div className="container-wide flex h-16 items-center justify-between gap-4 lg:h-20">
           <button
             onClick={() => setMobileOpen(true)}
@@ -58,7 +63,7 @@ export default function Navbar() {
 
           <Link href="/" className="flex items-center gap-2 font-display text-2xl font-semibold text-forest lg:text-3xl">
             <LeafIcon className="h-7 w-7 text-turmeric" />
-            <span className="tracking-tight">Phinnie Aurvadic</span>
+            <span className="tracking-tight">{storeName}</span>
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
@@ -168,7 +173,7 @@ export default function Navbar() {
               <X size={20} />
             </button>
             <Link href="/" onClick={() => setMobileOpen(false)} className="font-display text-2xl text-forest">
-              Phinnie Aurvadic
+              {storeName}
             </Link>
             <nav className="mt-8 flex flex-col gap-3">
               {NAV_LINKS.map((l) => (

@@ -3,6 +3,7 @@ import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
 import { handleApiError, requireAdmin } from '@/lib/api-helpers'
 import { orderStatusSchema } from '@/lib/validations'
+import { sendShippingNotification, sendDeliveryConfirmation } from '@/lib/email'
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -32,6 +33,13 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       { new: true },
     )
     if (!order) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
+    if (parsed.data.status === 'SHIPPED') {
+      void sendShippingNotification(order)
+    } else if (parsed.data.status === 'DELIVERED') {
+      void sendDeliveryConfirmation(order)
+    }
+
     return NextResponse.json(order)
   } catch (err) {
     return handleApiError(err)

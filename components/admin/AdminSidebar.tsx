@@ -13,6 +13,8 @@ import {
   Menu,
   X,
   ExternalLink,
+  Tag,
+  Star,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -22,6 +24,8 @@ const NAV = [
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/categories', label: 'Categories', icon: FolderTree },
+  { href: '/admin/coupons', label: 'Coupons', icon: Tag },
+  { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 

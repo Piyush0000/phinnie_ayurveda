@@ -7,11 +7,21 @@ import { formatPrice, formatDateTime } from '@/lib/utils'
 
 export const dynamic = 'force-dynamic'
 
-async function getOrder(orderNumber: string) {
+import type { IOrder } from '@/models/Order'
+
+type SerializedOrder = Omit<IOrder, '_id' | 'createdAt' | 'updatedAt' | 'userId' | 'statusHistory'> & {
+  _id: string
+  createdAt: string
+  updatedAt: string
+  userId?: string
+  statusHistory: { status: string; timestamp: string; note?: string }[]
+}
+
+async function getOrder(orderNumber: string): Promise<SerializedOrder | null> {
   if (!isDatabaseConfigured()) return null
   await connectDB()
   const order = await Order.findOne({ orderNumber }).lean()
-  return order ? (JSON.parse(JSON.stringify(order)) as any) : null
+  return order ? (JSON.parse(JSON.stringify(order)) as SerializedOrder) : null
 }
 
 export default async function OrderConfirmationPage({
@@ -77,7 +87,7 @@ export default async function OrderConfirmationPage({
         <div className="mt-8">
           <h3 className="font-display text-xl text-forest">Items Ordered</h3>
           <ul className="mt-3 divide-y divide-forest/10 rounded-2xl border border-forest/10 bg-parchment/40">
-            {order.items.map((item: any, i: number) => (
+            {order.items.map((item, i) => (
               <li key={i} className="flex justify-between p-4 text-sm">
                 <span className="text-charcoal">
                   {item.name} <span className="text-warmgray">× {item.quantity}</span>

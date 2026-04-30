@@ -408,11 +408,22 @@ async function main() {
   console.log('✓ Connected')
 
   console.log('👤 Seeding admin user…')
-  const adminPassword = await bcrypt.hash('Admin@123', 10)
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@phinnieaurvadic.com').toLowerCase().trim()
+  const rawAdminPassword = process.env.ADMIN_PASSWORD
+  if (!rawAdminPassword) {
+    console.error('❌ ADMIN_PASSWORD is not set. Add it to .env.local before running the seed.')
+    console.error('   Example: ADMIN_PASSWORD="some-strong-secret-of-your-choice"')
+    process.exit(1)
+  }
+  if (rawAdminPassword.length < 8) {
+    console.error('❌ ADMIN_PASSWORD must be at least 8 characters.')
+    process.exit(1)
+  }
+  const adminPassword = await bcrypt.hash(rawAdminPassword, 10)
   await User.findOneAndUpdate(
-    { email: 'admin@phinnieaurvadic.com' },
+    { email: adminEmail },
     {
-      email: 'admin@phinnieaurvadic.com',
+      email: adminEmail,
       name: 'Admin',
       password: adminPassword,
       role: 'ADMIN',
@@ -467,7 +478,7 @@ async function main() {
   )
 
   console.log('\n✅ Seed complete!')
-  console.log('   Admin login: admin@phinnieaurvadic.com / Admin@123')
+  console.log(`   Admin login: ${adminEmail} (password from ADMIN_PASSWORD env var)`)
   console.log(`   ${PRODUCTS.length} products across ${CATEGORIES.length} categories`)
 
   await mongoose.disconnect()
