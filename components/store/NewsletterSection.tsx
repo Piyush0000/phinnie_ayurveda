@@ -29,7 +29,7 @@ export default function NewsletterSection() {
               setLoading(true)
               setTimeout(() => {
                 setLoading(false)
-                toast.success("Subscribed! Welcome to the Phinnie family.")
+                toast.success("Subscribed! Welcome to the Thinnie family.")
                 setEmail('')
               }, 600)
             }}

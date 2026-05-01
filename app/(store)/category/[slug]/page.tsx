@@ -36,14 +36,14 @@ async function getData(slug: string): Promise<{ category: CategoryDoc; products:
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const data = await getData(params.slug)
-  if (!data) return { title: 'Category — Phinnie Aurvadic' }
+  if (!data) return { title: 'Category — Thinnie Aurvadic' }
   const { category } = data
   return {
-    title: `${category.name} — Phinnie Aurvadic`,
+    title: `${category.name} — Thinnie Aurvadic`,
     description:
-      category.description ?? `Shop ${category.name} — handcrafted Ayurvedic remedies from Phinnie Aurvadic.`,
+      category.description ?? `Shop ${category.name} — handcrafted Ayurvedic remedies from Thinnie Aurvadic.`,
     openGraph: {
-      title: `${category.name} — Phinnie Aurvadic`,
+      title: `${category.name} — Thinnie Aurvadic`,
       description: category.description ?? undefined,
       images: category.image ? [category.image] : undefined,
     },

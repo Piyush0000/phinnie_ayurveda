@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import { signIn, getSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,10 +11,8 @@ import { loginSchema, type LoginInput } from '@/lib/validations'
 import Button from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 
-function LoginForm() {
+export default function AdminLoginPage() {
   const router = useRouter()
-  const sp = useSearchParams()
-  const callbackUrl = sp.get('from') || '/'
   const [loading, setLoading] = useState(false)
   const {
     register,
@@ -31,16 +29,16 @@ function LoginForm() {
         redirect: false,
       })
       if (res?.error) {
-        toast.error('Invalid email or password')
+        toast.error('Invalid credentials')
         return
       }
-      toast.success('Welcome back!')
       const session = await getSession()
-      if (session?.user?.role === 'ADMIN') {
-        router.push('/admin')
-      } else {
-        router.push(callbackUrl)
+      if (session?.user?.role !== 'ADMIN') {
+        toast.error('This account does not have admin access.')
+        return
       }
+      toast.success('Welcome, admin!')
+      router.push('/admin')
       router.refresh()
     } finally {
       setLoading(false)
@@ -52,34 +50,20 @@ function LoginForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-md rounded-3xl border border-forest/10 bg-cream p-8 shadow-warm-lg md:p-10"
     >
-      <h1 className="font-display text-3xl text-forest">Welcome Back</h1>
-      <p className="mt-1 text-sm text-warmgray">Sign in to continue your wellness journey.</p>
+      <h1 className="font-display text-3xl text-forest">Admin Login — Thinnie Aurvadic</h1>
+      <p className="mt-1 text-sm text-warmgray">Sign in with your admin account to manage the store.</p>
       <div className="mt-6 space-y-4">
         <Input label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register('email')} />
         <Input label="Password" type="password" autoComplete="current-password" error={errors.password?.message} {...register('password')} />
       </div>
-      <div className="mt-2 text-right">
-        <Link href="/forgot" className="text-xs font-semibold text-forest hover:underline">
-          Forgot password?
-        </Link>
-      </div>
-      <Button loading={loading} size="lg" className="mt-4 w-full">
+      <Button loading={loading} size="lg" className="mt-6 w-full">
         Sign in
       </Button>
-      <p className="mt-4 text-center text-sm text-warmgray">
-        New here?{' '}
-        <Link href="/register" className="font-semibold text-forest hover:underline">
-          Create an account
+      <p className="mt-4 text-center text-sm">
+        <Link href="/" className="font-semibold text-forest hover:underline">
+          ← Back to store
         </Link>
       </p>
     </form>
-  )
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div>Loading…</div>}>
-      <LoginForm />
-    </Suspense>
   )
 }

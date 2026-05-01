@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Get in touch with Phinnie Aurvadic — questions about products, orders, or wholesale enquiries.',
+    'Get in touch with Thinnie Aurvadic — questions about products, orders, or wholesale enquiries.',
   openGraph: {
-    title: 'Contact — Phinnie Aurvadic',
-    description: 'Reach the Phinnie Aurvadic team for product, order, and wholesale enquiries.',
+    title: 'Contact — Thinnie Aurvadic',
+    description: 'Reach the Thinnie Aurvadic team for product, order, and wholesale enquiries.',
   },
 }
 

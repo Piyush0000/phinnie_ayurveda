@@ -23,7 +23,7 @@ export default function ContactPage() {
             <div className="flex items-center gap-3 text-forest">
               <Mail size={18} /> <span className="font-display text-lg">Email</span>
             </div>
-            <p className="mt-1.5 text-sm text-charcoal">hello@phinnieaurvadic.com</p>
+            <p className="mt-1.5 text-sm text-charcoal">hello@thinnieaurvadic.com</p>
             <p className="text-xs text-warmgray">Response within 24h</p>
           </div>
           <div className="rounded-2xl border border-forest/10 bg-parchment/50 p-5">
@@ -38,7 +38,7 @@ export default function ContactPage() {
               <MapPin size={18} /> <span className="font-display text-lg">Visit Us</span>
             </div>
             <p className="mt-1.5 text-sm text-charcoal">
-              Phinnie Aurvadic,<br />
+              Thinnie Aurvadic,<br />
               Tapovan Road, Rishikesh,<br />
               Uttarakhand 249192
             </p>

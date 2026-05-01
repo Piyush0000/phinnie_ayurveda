@@ -10,7 +10,49 @@ import { useCartStore } from '@/store/cartStore'
 import { Input, Textarea } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { formatPrice } from '@/lib/utils'
-import PaymentButton from './PaymentButton'
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayOptions) => { open: () => void; on: (e: string, cb: () => void) => void }
+  }
+}
+
+interface RazorpayOptions {
+  key: string
+  amount: number
+  currency: string
+  name: string
+  description?: string
+  order_id: string
+  prefill?: { name?: string; email?: string; contact?: string }
+  theme?: { color?: string }
+  handler?: (response: {
+    razorpay_order_id: string
+    razorpay_payment_id: string
+    razorpay_signature: string
+  }) => void
+  modal?: { ondismiss?: () => void }
+}
+
+const RAZORPAY_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js'
+
+function loadRazorpay(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') return resolve(false)
+    if (window.Razorpay) return resolve(true)
+    const existing = document.querySelector(`script[src="${RAZORPAY_SCRIPT}"]`)
+    if (existing) {
+      existing.addEventListener('load', () => resolve(true))
+      return
+    }
+    const script = document.createElement('script')
+    script.src = RAZORPAY_SCRIPT
+    script.async = true
+    script.onload = () => resolve(true)
+    script.onerror = () => resolve(false)
+    document.body.appendChild(script)
+  })
+}
 
 export default function CheckoutForm() {
   const router = useRouter()
@@ -19,11 +61,10 @@ export default function CheckoutForm() {
   const subtotal = useCartStore((s) => s.getSubtotal())
   const discount = useCartStore((s) => s.getDiscount())
   const shipping = useCartStore((s) => s.getShipping())
-  const tax = useCartStore((s) => s.getTax())
   const total = useCartStore((s) => s.getTotal())
   const applyCoupon = useCartStore((s) => s.applyCoupon)
   const removeCoupon = useCartStore((s) => s.removeCoupon)
-  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null)
+  const clearCart = useCartStore((s) => s.clearCart)
   const [loading, setLoading] = useState(false)
   const [couponCode, setCouponCode] = useState('')
   const [notes, setNotes] = useState('')
@@ -57,7 +98,13 @@ export default function CheckoutForm() {
     }
     setLoading(true)
     try {
-      const res = await fetch('/api/orders', {
+      const ok = await loadRazorpay()
+      if (!ok) {
+        toast.error('Could not load Razorpay. Check your internet connection.')
+        return
+      }
+
+      const orderRes = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -67,15 +114,64 @@ export default function CheckoutForm() {
           notes,
         }),
       })
-      const result = await res.json()
-      if (!res.ok) {
-        toast.error(result.error || 'Could not create order')
+      const orderData = await orderRes.json()
+      if (!orderRes.ok) {
+        toast.error(orderData.error || 'Could not create order')
         return
       }
-      setCreatedOrderId(result.orderId)
-      toast.success('Order created! Complete payment to confirm.')
+      const orderId: string = orderData.orderId
+
+      const payRes = await fetch('/api/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId }),
+      })
+      const payData = await payRes.json()
+      if (!payRes.ok) {
+        toast.error(payData.error || 'Could not start payment')
+        return
+      }
+
+      const options: RazorpayOptions = {
+        key: payData.keyId,
+        amount: Number(payData.amount),
+        currency: payData.currency,
+        name: 'Thinnie Aurvadic',
+        description: 'Authentic Ayurvedic Products',
+        order_id: payData.razorpayOrderId,
+        prefill: payData.customer,
+        theme: { color: '#2D5016' },
+        modal: {
+          ondismiss: () => {
+            toast('Payment cancelled', { icon: '🙏' })
+            setLoading(false)
+          },
+        },
+        handler: async (response) => {
+          try {
+            const verifyRes = await fetch('/api/payment/verify', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderId, ...response }),
+            })
+            const verifyData = await verifyRes.json()
+            if (!verifyRes.ok) {
+              toast.error(verifyData.error || 'Payment verification failed')
+              return
+            }
+            clearCart()
+            toast.success('Payment successful!')
+            router.push(`/order-confirmation/${verifyData.orderNumber}`)
+          } catch {
+            toast.error('Payment verification failed')
+          }
+        },
+      }
+
+      const rp = new window.Razorpay!(options)
+      rp.open()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Could not create order')
+      toast.error(err instanceof Error ? err.message : 'Could not start checkout')
     } finally {
       setLoading(false)
     }
@@ -127,11 +223,12 @@ export default function CheckoutForm() {
           rows={3}
         />
 
-        {!createdOrderId && (
-          <Button type="submit" loading={loading} size="lg" className="w-full">
-            Continue to Payment
-          </Button>
-        )}
+        <Button type="submit" loading={loading} size="lg" className="w-full">
+          Pay Now with Razorpay
+        </Button>
+        <p className="text-center text-xs text-warmgray">
+          Secured by Razorpay · UPI · Cards · Netbanking
+        </p>
       </form>
 
       <aside className="rounded-2xl border border-forest/10 bg-parchment/50 p-6 md:p-8">
@@ -180,19 +277,10 @@ export default function CheckoutForm() {
             </div>
           )}
           <div className="flex justify-between"><dt className="text-warmgray">Shipping</dt><dd>{shipping === 0 ? 'Free' : formatPrice(shipping)}</dd></div>
-          <div className="flex justify-between"><dt className="text-warmgray">Tax (18% GST)</dt><dd>{formatPrice(tax)}</dd></div>
           <div className="mt-3 flex justify-between border-t border-forest/10 pt-3 text-base font-bold text-forest">
             <dt>Total</dt><dd>{formatPrice(total)}</dd>
           </div>
         </dl>
-        {createdOrderId && (
-          <div className="mt-6">
-            <PaymentButton orderId={createdOrderId} />
-            <p className="mt-2 text-center text-xs text-warmgray">
-              Secured by Razorpay · UPI · Cards · Netbanking
-            </p>
-          </div>
-        )}
       </aside>
     </div>
   )

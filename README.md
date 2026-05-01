@@ -1,4 +1,4 @@
-# Phinnie Aurvadic — Ayurvedic E-Commerce
+# Thinnie Aurvadic — Ayurvedic E-Commerce
 
 A complete, production-ready Ayurvedic e-commerce site built with Next.js 14, MongoDB, NextAuth, Razorpay, Cloudinary, and Resend.
 
@@ -27,7 +27,7 @@ The app runs even without MONGODB_URI — pages show a friendly "database not co
 
 After running `npm run seed`:
 
-- Email: **admin@phinnieaurvadic.com**
+- Email: **admin@thinnieaurvadic.com**
 - Password: **Admin@123**
 - Admin URL: http://localhost:3000/admin
 
@@ -71,4 +71,4 @@ See `.env.local.example` for all variables. The app gracefully degrades when opt
 - Razorpay signature verification uses `crypto.timingSafeEqual`.
 - Admin routes are protected at the layout level (server-side session check) AND in every admin API route.
 - All seed operations are idempotent — `npm run seed` is safe to run multiple times.
-"# phinnie_ayurveda" 
+"# thinnie_ayurveda" 

@@ -24,7 +24,6 @@ export interface AppliedCoupon {
 interface CartConfig {
   freeShippingMin: number
   shippingCharge: number
-  taxRate: number
 }
 
 interface CartState {
@@ -53,7 +52,6 @@ interface CartState {
 const DEFAULT_CONFIG: CartConfig = {
   freeShippingMin: 999,
   shippingCharge: 99,
-  taxRate: 18,
 }
 
 export const useCartStore = create<CartState>()(
@@ -123,24 +121,19 @@ export const useCartStore = create<CartState>()(
         return afterDiscount >= freeShippingMin ? 0 : shippingCharge
       },
 
-      getTax: () => {
-        const { taxRate } = get().config
-        const afterDiscount = get().getSubtotal() - get().getDiscount()
-        return Math.round((afterDiscount * taxRate) / 100)
-      },
+      getTax: () => 0,
 
       getTotal: () => {
         const subtotal = get().getSubtotal()
         const discount = get().getDiscount()
         const shipping = get().getShipping()
-        const tax = get().getTax()
-        return Math.max(0, subtotal - discount + shipping + tax)
+        return Math.max(0, subtotal - discount + shipping)
       },
 
       getItemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
     }),
     {
-      name: 'phinnie-cart',
+      name: 'thinnie-cart',
       partialize: (state) => ({
         items: state.items,
         coupon: state.coupon,

@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Shop',
   description: 'Browse handcrafted Ayurvedic remedies — hair care, skin care, wellness, and more.',
   openGraph: {
-    title: 'Shop — Phinnie Aurvadic',
+    title: 'Shop — Thinnie Aurvadic',
     description: 'Authentic Ayurveda for every aspect of your wellness journey.',
   },
 }

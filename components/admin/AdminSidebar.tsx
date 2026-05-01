@@ -57,7 +57,7 @@ export default function AdminSidebar() {
       >
         <div className="flex items-center justify-between border-b border-cream/10 px-5 py-5">
           <Link href="/admin" className="font-display text-2xl text-cream">
-            Phinnie Admin
+            Thinnie Admin
           </Link>
           <button
             onClick={() => setOpen(false)}

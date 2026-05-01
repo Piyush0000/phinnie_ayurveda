@@ -34,7 +34,7 @@ export default function RegisterPage() {
         return
       }
       await signIn('credentials', { email: data.email, password: data.password, redirect: false })
-      toast.success('Welcome to Phinnie Aurvadic!')
+      toast.success('Welcome to Thinnie Aurvadic!')
       router.push('/')
       router.refresh()
     } finally {

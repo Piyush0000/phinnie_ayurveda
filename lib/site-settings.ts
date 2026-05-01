@@ -10,7 +10,7 @@ export interface PublicSettings {
 }
 
 const DEFAULTS: PublicSettings = {
-  storeName: 'Phinnie Aurvadic',
+  storeName: 'Thinnie Aurvadic',
   freeShippingMin: 999,
   bannerText: '✦ Free shipping on orders over ₹999 — Authentic Ayurveda since the ancient days ✦',
   bannerEnabled: true,

@@ -123,12 +123,11 @@ export async function POST(req: NextRequest) {
     const settings = (await SiteSettings.findOne().lean()) ?? {
       freeShippingMin: 999,
       shippingCharge: 99,
-      taxRate: 18,
     }
     const afterDiscount = subtotal - discount
     const shippingCharge = afterDiscount >= settings.freeShippingMin ? 0 : settings.shippingCharge
-    const tax = Math.round((afterDiscount * settings.taxRate) / 100)
-    const total = Math.max(0, afterDiscount + shippingCharge + tax)
+    const tax = 0
+    const total = Math.max(0, afterDiscount + shippingCharge)
 
     const orderNumber = generateOrderNumber()
     const order = await Order.create({

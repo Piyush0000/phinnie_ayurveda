@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export const metadata = { title: 'Admin Login — Thinnie Aurvadic' }
+
+export default function AdminLoginLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-parchment via-cream to-turmeric-50">
       <div className="container-narrow flex min-h-screen flex-col items-center py-10">

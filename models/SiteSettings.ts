@@ -26,14 +26,14 @@ export interface ISiteSettings extends Document {
 
 const SiteSettingsSchema = new Schema<ISiteSettings>(
   {
-    storeName: { type: String, default: 'Phinnie Aurvadic' },
+    storeName: { type: String, default: 'Thinnie Aurvadic' },
     storeEmail: String,
     storePhone: String,
     storeAddress: String,
     currency: { type: String, default: 'INR' },
     freeShippingMin: { type: Number, default: 999 },
     shippingCharge: { type: Number, default: 99 },
-    taxRate: { type: Number, default: 18 },
+    taxRate: { type: Number, default: 0 },
     bannerText: { type: String, default: 'Free shipping on orders over ₹999 — Authentic Ayurveda since the ancient days' },
     bannerEnabled: { type: Boolean, default: true },
     social: {

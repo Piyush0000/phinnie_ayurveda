@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import 'dotenv/config'
+import dotenv from 'dotenv'
+dotenv.config({ path: '.env.local' })
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
 import User from '../models/User'
@@ -408,7 +409,7 @@ async function main() {
   console.log('✓ Connected')
 
   console.log('👤 Seeding admin user…')
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@phinnieaurvadic.com').toLowerCase().trim()
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@thinnieaurvadic.com').toLowerCase().trim()
   const rawAdminPassword = process.env.ADMIN_PASSWORD
   if (!rawAdminPassword) {
     console.error('❌ ADMIN_PASSWORD is not set. Add it to .env.local before running the seed.')
@@ -463,15 +464,15 @@ async function main() {
   await SiteSettings.findOneAndUpdate(
     {},
     {
-      storeName: 'Phinnie Aurvadic',
-      storeEmail: 'hello@phinnieaurvadic.com',
+      storeName: 'Thinnie Aurvadic',
+      storeEmail: 'hello@thinnieaurvadic.com',
       storePhone: '+91 98765 43210',
       storeAddress: 'Tapovan Road, Rishikesh, Uttarakhand 249192',
       currency: 'INR',
       freeShippingMin: 999,
       shippingCharge: 99,
       taxRate: 18,
-      metaTitle: 'Phinnie Aurvadic — Authentic Ayurveda',
+      metaTitle: 'Thinnie Aurvadic — Authentic Ayurveda',
       metaDescription: 'Premium Ayurvedic products handcrafted from time-honored formulas.',
     },
     { upsert: true, new: true },

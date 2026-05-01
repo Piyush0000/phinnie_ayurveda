@@ -28,7 +28,7 @@ export function getCloudinary(): typeof cloudinary {
 
 export async function uploadToCloudinary(
   buffer: Buffer,
-  folder = 'phinnie-aurvadic',
+  folder = 'thinnie-aurvadic',
 ): Promise<{ url: string; publicId: string }> {
   const cld = getCloudinary()
   return new Promise((resolve, reject) => {

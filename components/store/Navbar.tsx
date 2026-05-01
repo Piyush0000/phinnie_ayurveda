@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { ShoppingBag, Search, User, Menu, X, LogOut, Package, Heart } from 'lucide-react'
@@ -21,7 +22,7 @@ interface NavbarProps {
   storeName?: string
 }
 
-export default function Navbar({ bannerText, storeName = 'Phinnie Aurvadic' }: NavbarProps = {}) {
+export default function Navbar({ bannerText, storeName = 'Thinnie Aurvadic' }: NavbarProps = {}) {
   const { data: session } = useSession()
   const itemCount = useCartStore((s) => s.getItemCount())
   const openCart = useCartStore((s) => s.openCart)
@@ -61,9 +62,15 @@ export default function Navbar({ bannerText, storeName = 'Phinnie Aurvadic' }: N
             <Menu size={22} />
           </button>
 
-          <Link href="/" className="flex items-center gap-2 font-display text-2xl font-semibold text-forest lg:text-3xl">
-            <LeafIcon className="h-7 w-7 text-turmeric" />
-            <span className="tracking-tight">{storeName}</span>
+          <Link href="/" aria-label={storeName} className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt={storeName}
+              width={180}
+              height={80}
+              priority
+              className="h-10 w-auto lg:h-12"
+            />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
@@ -172,8 +179,8 @@ export default function Navbar({ bannerText, storeName = 'Phinnie Aurvadic' }: N
             >
               <X size={20} />
             </button>
-            <Link href="/" onClick={() => setMobileOpen(false)} className="font-display text-2xl text-forest">
-              {storeName}
+            <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="inline-flex items-center">
+              <Image src="/logo.png" alt={storeName} width={160} height={71} className="h-10 w-auto" />
             </Link>
             <nav className="mt-8 flex flex-col gap-3">
               {NAV_LINKS.map((l) => (
@@ -194,10 +201,3 @@ export default function Navbar({ bannerText, storeName = 'Phinnie Aurvadic' }: N
   )
 }
 
-function LeafIcon({ className = '' }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
-      <path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z" />
-    </svg>
-  )
-}

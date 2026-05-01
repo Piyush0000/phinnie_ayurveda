@@ -15,7 +15,7 @@ export default function Footer({ social }: FooterProps = {}) {
     <footer className="mt-16 bg-forest-800 text-cream">
       <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h3 className="font-display text-2xl">Phinnie Aurvadic</h3>
+          <h3 className="font-display text-2xl">Thinnie Aurvadic</h3>
           <p className="mt-3 text-sm leading-relaxed text-cream/70">
             Authentic Ayurveda crafted from time-honored formulas. Pure, ethical, and made with reverence for nature.
           </p>
@@ -62,7 +62,7 @@ export default function Footer({ social }: FooterProps = {}) {
         <div>
           <h4 className="font-display text-lg">Get in Touch</h4>
           <ul className="mt-3 space-y-2 text-sm text-cream/70">
-            <li className="flex items-start gap-2"><Mail size={14} className="mt-0.5" /> hello@phinnieaurvadic.com</li>
+            <li className="flex items-start gap-2"><Mail size={14} className="mt-0.5" /> hello@thinnieaurvadic.com</li>
             <li className="flex items-start gap-2"><Phone size={14} className="mt-0.5" /> +91 98765 43210</li>
             <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5" /> Rishikesh, Uttarakhand, India</li>
           </ul>
@@ -70,7 +70,7 @@ export default function Footer({ social }: FooterProps = {}) {
       </div>
       <div className="border-t border-cream/15">
         <div className="container-wide flex flex-col items-center justify-between gap-3 py-5 text-xs text-cream/60 md:flex-row">
-          <p>© {new Date().getFullYear()} Phinnie Aurvadic. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Thinnie Aurvadic. All rights reserved.</p>
           <p>Made with reverence for nature.</p>
         </div>
       </div>

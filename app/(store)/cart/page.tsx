@@ -14,7 +14,6 @@ export default function CartPage() {
   const subtotal = useCartStore((s) => s.getSubtotal())
   const discount = useCartStore((s) => s.getDiscount())
   const shipping = useCartStore((s) => s.getShipping())
-  const tax = useCartStore((s) => s.getTax())
   const total = useCartStore((s) => s.getTotal())
   const config = useCartStore((s) => s.config)
   const [mounted, setMounted] = useState(false)
@@ -94,7 +93,6 @@ export default function CartPage() {
             <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div>
             {discount > 0 && <div className="flex justify-between text-terracotta"><dt>Discount</dt><dd>-{formatPrice(discount)}</dd></div>}
             <div className="flex justify-between"><dt>Shipping</dt><dd>{shipping === 0 ? 'Free' : formatPrice(shipping)}</dd></div>
-            <div className="flex justify-between"><dt>Tax (18% GST)</dt><dd>{formatPrice(tax)}</dd></div>
             <div className="mt-3 flex justify-between border-t border-forest/10 pt-3 text-lg font-bold text-forest">
               <dt>Total</dt><dd>{formatPrice(total)}</dd>
             </div>

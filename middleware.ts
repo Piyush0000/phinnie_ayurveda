@@ -10,7 +10,8 @@ const PROTECTED_USER_ROUTES = ['/checkout', '/orders', '/profile']
 export default auth(async (req) => {
   const { pathname, search } = req.nextUrl
   const session = req.auth
-  const isAdminRoute = pathname.startsWith('/admin')
+  const isAdminLogin = pathname === '/admin/login'
+  const isAdminRoute = pathname.startsWith('/admin') && !isAdminLogin
   const isAdminApi = pathname.startsWith('/api/admin')
   const isProtectedUser = PROTECTED_USER_ROUTES.some((p) => pathname === p || pathname.startsWith(`${p}/`))
 
@@ -39,16 +40,20 @@ export default auth(async (req) => {
 
   if (isAdminRoute) {
     if (!session?.user) {
-      const url = new URL('/login', req.url)
-      url.searchParams.set('from', pathname + search)
-      return NextResponse.redirect(url)
+      return NextResponse.redirect(new URL('/admin/login', req.url))
     }
     if (session.user.role !== 'ADMIN') {
       return NextResponse.redirect(new URL('/', req.url))
     }
-    const res = NextResponse.next()
-    res.headers.set('x-pathname', pathname)
-    return res
+    const requestHeaders = new Headers(req.headers)
+    requestHeaders.set('x-pathname', pathname)
+    return NextResponse.next({ request: { headers: requestHeaders } })
+  }
+
+  if (isAdminLogin) {
+    const requestHeaders = new Headers(req.headers)
+    requestHeaders.set('x-pathname', pathname)
+    return NextResponse.next({ request: { headers: requestHeaders } })
   }
 
   if (isProtectedUser && !session?.user) {
