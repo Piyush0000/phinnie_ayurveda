@@ -7,7 +7,9 @@ A complete, production-ready Ayurvedic e-commerce site built with Next.js 14, Mo
 ```bash
 # 1. Install dependencies (already done if you ran npm install)
 npm install
+  
 
+  
 # 2. Copy env template and fill in your keys
 cp .env.local.example .env.local
 
