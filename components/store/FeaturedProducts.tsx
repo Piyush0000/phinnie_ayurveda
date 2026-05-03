@@ -22,7 +22,7 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-widest text-turmeric-700">Bestsellers</p>
-          <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">Featured Remedies</h2>
+          <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">Featured Wellness Products</h2>
         </div>
         <Link
           href="/shop"

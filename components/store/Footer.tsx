@@ -13,8 +13,8 @@ export default function Footer({ social }: FooterProps = {}) {
   ]
   return (
     <footer className="mt-16 bg-forest-800 text-cream">
-      <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
-        <div>
+      <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
+        <div className="lg:col-span-2">
           <h3 className="font-display text-2xl">Thinnie Aurvadic</h3>
           <p className="mt-3 text-sm leading-relaxed text-cream/70">
             Authentic Ayurveda crafted from time-honored formulas. Pure, ethical, and made with reverence for nature.
@@ -60,8 +60,18 @@ export default function Footer({ social }: FooterProps = {}) {
         </div>
 
         <div>
-          <h4 className="font-display text-lg">Get in Touch</h4>
+          <h4 className="font-display text-lg">Legal</h4>
           <ul className="mt-3 space-y-2 text-sm text-cream/70">
+            <li><Link href="/terms-and-conditions" className="hover:text-cream">Terms &amp; Conditions</Link></li>
+            <li><Link href="/privacy-policy" className="hover:text-cream">Privacy Policy</Link></li>
+            <li><Link href="/refund-policy" className="hover:text-cream">Refund Policy</Link></li>
+            <li><Link href="/disclaimer" className="hover:text-cream">Disclaimer</Link></li>
+          </ul>
+        </div>
+
+        <div className="lg:col-span-5">
+          <h4 className="font-display text-lg">Get in Touch</h4>
+          <ul className="mt-3 grid gap-2 text-sm text-cream/70 md:grid-cols-3">
             <li className="flex items-start gap-2"><Mail size={14} className="mt-0.5" /> hello@thinnieaurvadic.com</li>
             <li className="flex items-start gap-2"><Phone size={14} className="mt-0.5" /> +91 98765 43210</li>
             <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5" /> Rishikesh, Uttarakhand, India</li>
@@ -69,9 +79,20 @@ export default function Footer({ social }: FooterProps = {}) {
         </div>
       </div>
       <div className="border-t border-cream/15">
+        <div className="container-wide py-4 text-center text-[11px] leading-relaxed text-cream/60">
+          Our products are wellness supplements and are not intended to diagnose, treat, cure, or prevent any disease.
+          Please consult a qualified healthcare professional before use.
+        </div>
+      </div>
+      <div className="border-t border-cream/15">
         <div className="container-wide flex flex-col items-center justify-between gap-3 py-5 text-xs text-cream/60 md:flex-row">
           <p>© {new Date().getFullYear()} Thinnie Aurvadic. All rights reserved.</p>
-          <p>Made with reverence for nature.</p>
+          <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <Link href="/terms-and-conditions" className="hover:text-cream">Terms</Link>
+            <Link href="/privacy-policy" className="hover:text-cream">Privacy</Link>
+            <Link href="/refund-policy" className="hover:text-cream">Refunds</Link>
+            <Link href="/disclaimer" className="hover:text-cream">Disclaimer</Link>
+          </nav>
         </div>
       </div>
     </footer>

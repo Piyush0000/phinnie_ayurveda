@@ -7,7 +7,18 @@ import Category from '@/models/Category'
 // appear without requiring a redeploy.
 export const revalidate = 3600
 
-const STATIC_PATHS = ['', '/shop', '/about', '/contact', '/login', '/register']
+const STATIC_PATHS = [
+  '',
+  '/shop',
+  '/about',
+  '/contact',
+  '/login',
+  '/register',
+  '/terms-and-conditions',
+  '/privacy-policy',
+  '/refund-policy',
+  '/disclaimer',
+]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'

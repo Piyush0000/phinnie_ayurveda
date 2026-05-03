@@ -80,7 +80,7 @@ function ShopContent() {
       <header className="mb-8 text-center">
         <h1 className="font-display text-4xl text-charcoal md:text-5xl">Shop All Products</h1>
         <p className="mt-2 font-accent text-lg text-warmgray">
-          Authentic Ayurvedic remedies, handcrafted with care
+          Authentic Ayurvedic wellness products, handcrafted with care
         </p>
       </header>
 
@@ -90,7 +90,7 @@ function ShopContent() {
           <input
             value={search}
             onChange={(e) => setParam('search', e.target.value)}
-            placeholder="Search remedies, herbs, brands..."
+            placeholder="Search wellness products, herbs, brands..."
             className="h-11 w-full rounded-lg border border-warmgray/30 bg-cream pl-11 pr-4 outline-none focus:border-forest focus:ring-2 focus:ring-forest/20"
           />
           {search && (

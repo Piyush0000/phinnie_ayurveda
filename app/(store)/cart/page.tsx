@@ -28,7 +28,7 @@ export default function CartPage() {
           <ShoppingBag size={36} className="text-warmgray" />
         </div>
         <h1 className="mt-6 font-display text-4xl text-charcoal">Your cart is empty</h1>
-        <p className="mt-2 text-warmgray">Discover handcrafted Ayurvedic remedies in our shop.</p>
+        <p className="mt-2 text-warmgray">Discover handcrafted Ayurvedic wellness products in our shop.</p>
         <Link href="/shop" className="mt-8 inline-flex items-center gap-2 rounded-lg bg-forest px-7 py-3 font-semibold text-cream hover:bg-forest-600">
           Browse Shop <ArrowRight size={16} />
         </Link>

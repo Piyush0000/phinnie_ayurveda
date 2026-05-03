@@ -53,7 +53,7 @@ export default function CartDrawer() {
             </div>
             <p className="font-display text-xl text-charcoal">Your cart is empty</p>
             <p className="text-sm text-warmgray">
-              Discover authentic Ayurvedic remedies in our shop.
+              Discover authentic Ayurvedic wellness products in our shop.
             </p>
             <Link
               onClick={closeCart}

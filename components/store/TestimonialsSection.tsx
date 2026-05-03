@@ -6,14 +6,14 @@ const REVIEWS = [
     location: 'Mumbai',
     rating: 5,
     body:
-      'The Bhringraj hair oil completely transformed my hair. After three months of use, my hair fall has reduced dramatically.',
+      'The Bhringraj hair oil has been wonderful for my hair routine. After three months of use, my hair feels noticeably fuller and stronger.',
   },
   {
     name: 'Arjun Mehta',
     location: 'Bengaluru',
     rating: 5,
     body:
-      'Ashwagandha capsules have been a game changer for my stress and sleep. Pure quality, exactly what I expected.',
+      'Ashwagandha capsules have helped me feel calmer and more rested through the day. Pure quality, exactly what I expected.',
   },
   {
     name: 'Lakshmi Iyer',

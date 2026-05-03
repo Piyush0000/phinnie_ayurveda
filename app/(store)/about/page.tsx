@@ -13,7 +13,7 @@ export default function AboutPage() {
       <article className="prose prose-lg mx-auto mt-10 max-w-none text-charcoal">
         <p className="font-accent text-xl leading-relaxed">
           In the foothills of Rishikesh, where the Ganges sings its eternal song, our family has
-          been crafting Ayurvedic remedies for generations. Each formula is born from
+          been crafting Ayurvedic wellness products for generations. Each formula is born from
           centuries-old wisdom, prepared in copper vessels under the careful hand of our vaidyas.
         </p>
         <p className="mt-6 leading-relaxed">
@@ -39,7 +39,7 @@ export default function AboutPage() {
           done this for over a century.
         </p>
         <p className="mt-6 italic font-accent text-2xl text-forest">
-          "Sarve bhavantu sukhinah — May all be happy, may all be free from illness."
+          "Sarve bhavantu sukhinah — May all be happy, may all enjoy good health."
         </p>
       </article>
     </div>

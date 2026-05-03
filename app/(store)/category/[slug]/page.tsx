@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   return {
     title: `${category.name} — Thinnie Aurvadic`,
     description:
-      category.description ?? `Shop ${category.name} — handcrafted Ayurvedic remedies from Thinnie Aurvadic.`,
+      category.description ?? `Shop ${category.name} — handcrafted Ayurvedic wellness products from Thinnie Aurvadic.`,
     openGraph: {
       title: `${category.name} — Thinnie Aurvadic`,
       description: category.description ?? undefined,
