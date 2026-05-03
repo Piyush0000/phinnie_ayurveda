@@ -28,20 +28,20 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: 'Thinnie Aurvadic — Authentic Ayurvedic Wellness',
-    template: '%s | Thinnie Aurvadic',
+    default: 'Thinnie Ayurvedic — Authentic Ayurvedic Wellness',
+    template: '%s | Thinnie Ayurvedic',
   },
   description:
     'Discover premium Ayurvedic products handcrafted from time-honored formulas. Hair care, skin care, wellness and more.',
-  keywords: ['Ayurveda', 'natural', 'wellness', 'hair care', 'skin care', 'Thinnie Aurvadic'],
+  keywords: ['Ayurveda', 'natural', 'wellness', 'hair care', 'skin care', 'Thinnie Ayurvedic'],
   openGraph: {
-    title: 'Thinnie Aurvadic',
+    title: 'Thinnie Ayurvedic',
     description: 'Authentic Ayurvedic products for modern wellness.',
     type: 'website',
     url: APP_URL,
-    siteName: 'Thinnie Aurvadic',
+    siteName: 'Thinnie Ayurvedic',
   },
-  twitter: { card: 'summary_large_image', title: 'Thinnie Aurvadic' },
+  twitter: { card: 'summary_large_image', title: 'Thinnie Ayurvedic' },
   robots: { index: true, follow: true },
 }
 

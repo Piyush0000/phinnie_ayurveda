@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Refund &amp; Return Policy',
   description:
-    'Refunds at Thinnie Aurvadic are issued only for damaged or incorrect wellness products, requested within 3–5 days of delivery.',
+    'Refunds at Thinnie Ayurvedic are issued only for damaged or incorrect wellness products, requested within 3–5 days of delivery.',
   alternates: { canonical: '/refund-policy' },
   openGraph: {
-    title: 'Refund Policy — Thinnie Aurvadic',
-    description: 'Read our refund and return policy for orders placed on Thinnie Aurvadic.',
+    title: 'Refund Policy — Thinnie Ayurvedic',
+    description: 'Read our refund and return policy for orders placed on Thinnie Ayurvedic.',
   },
 }
 
@@ -45,8 +45,8 @@ export default function RefundPolicyPage() {
         </p>
         <p className="mt-3 leading-relaxed">
           To raise a request, email us at{' '}
-          <a href="mailto:hello@thinnieaurvadic.com" className="text-forest underline">
-            hello@thinnieaurvadic.com
+          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
+            hello@thinnieayurvedic.com
           </a>{' '}
           with your order number, a short description of the issue and clear photographs of the product
           and outer packaging.
@@ -79,8 +79,8 @@ export default function RefundPolicyPage() {
         <h2 className="mt-10 font-display text-3xl text-forest">6. Contact</h2>
         <p className="mt-3 leading-relaxed">
           For all refund or return queries, please reach us at{' '}
-          <a href="mailto:hello@thinnieaurvadic.com" className="text-forest underline">
-            hello@thinnieaurvadic.com
+          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
+            hello@thinnieayurvedic.com
           </a>{' '}
           or call <strong>+91 98765 43210</strong> (Mon–Sat, 10am–7pm IST).
         </p>

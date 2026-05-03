@@ -22,7 +22,7 @@ interface NavbarProps {
   storeName?: string
 }
 
-export default function Navbar({ bannerText, storeName = 'Thinnie Aurvadic' }: NavbarProps = {}) {
+export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: NavbarProps = {}) {
   const { data: session } = useSession()
   const itemCount = useCartStore((s) => s.getItemCount())
   const openCart = useCartStore((s) => s.openCart)

@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
   description:
-    'Terms & Conditions for purchasing wellness supplements and herbal products from Thinnie Aurvadic.',
+    'Terms & Conditions for purchasing wellness supplements and herbal products from Thinnie Ayurvedic.',
   alternates: { canonical: '/terms-and-conditions' },
   openGraph: {
-    title: 'Terms & Conditions — Thinnie Aurvadic',
-    description: 'Read the terms that apply to orders placed on Thinnie Aurvadic.',
+    title: 'Terms & Conditions — Thinnie Ayurvedic',
+    description: 'Read the terms that apply to orders placed on Thinnie Ayurvedic.',
   },
 }
 
@@ -24,7 +24,7 @@ export default function TermsAndConditionsPage() {
 
       <article className="prose prose-lg mx-auto mt-10 max-w-none text-charcoal">
         <p className="leading-relaxed">
-          By placing an order on Thinnie Aurvadic, you agree to the terms outlined below. Please read them
+          By placing an order on Thinnie Ayurvedic, you agree to the terms outlined below. Please read them
           carefully before completing your purchase.
         </p>
 
@@ -66,7 +66,7 @@ export default function TermsAndConditionsPage() {
         <h2 className="mt-10 font-display text-3xl text-forest">6. Intellectual Property</h2>
         <p className="mt-3 leading-relaxed">
           All content on this website — including text, graphics, logos, images, and product photography —
-          is the property of Thinnie Aurvadic and is protected by applicable copyright and trademark laws.
+          is the property of Thinnie Ayurvedic and is protected by applicable copyright and trademark laws.
         </p>
 
         <h2 className="mt-10 font-display text-3xl text-forest">7. Governing Law</h2>
@@ -78,8 +78,8 @@ export default function TermsAndConditionsPage() {
         <h2 className="mt-10 font-display text-3xl text-forest">8. Contact</h2>
         <p className="mt-3 leading-relaxed">
           For any questions about these terms, write to us at{' '}
-          <a href="mailto:hello@thinnieaurvadic.com" className="text-forest underline">
-            hello@thinnieaurvadic.com
+          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
+            hello@thinnieayurvedic.com
           </a>
           .
         </p>

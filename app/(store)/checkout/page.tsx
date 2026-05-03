@@ -1,6 +1,6 @@
 import CheckoutForm from '@/components/store/CheckoutForm'
 
-export const metadata = { title: 'Checkout — Thinnie Aurvadic' }
+export const metadata = { title: 'Checkout — Thinnie Ayurvedic' }
 
 export default function CheckoutPage() {
   return (

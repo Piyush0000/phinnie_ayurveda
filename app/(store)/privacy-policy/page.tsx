@@ -3,11 +3,11 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'How Thinnie Aurvadic collects, uses, and protects the personal information you share with us.',
+    'How Thinnie Ayurvedic collects, uses, and protects the personal information you share with us.',
   alternates: { canonical: '/privacy-policy' },
   openGraph: {
-    title: 'Privacy Policy — Thinnie Aurvadic',
-    description: 'Read how we handle your data at Thinnie Aurvadic.',
+    title: 'Privacy Policy — Thinnie Ayurvedic',
+    description: 'Read how we handle your data at Thinnie Ayurvedic.',
   },
 }
 
@@ -25,7 +25,7 @@ export default function PrivacyPolicyPage() {
       <article className="prose prose-lg mx-auto mt-10 max-w-none text-charcoal">
         <p className="leading-relaxed">
           Your privacy matters to us. This policy explains what information we collect when you visit or
-          purchase from Thinnie Aurvadic, how we use it, and the choices you have.
+          purchase from Thinnie Ayurvedic, how we use it, and the choices you have.
         </p>
 
         <h2 className="mt-10 font-display text-3xl text-forest">1. Information We Collect</h2>
@@ -80,8 +80,8 @@ export default function PrivacyPolicyPage() {
         <p className="mt-3 leading-relaxed">
           You can request access to, correction of, or deletion of your personal data at any time by
           writing to{' '}
-          <a href="mailto:hello@thinnieaurvadic.com" className="text-forest underline">
-            hello@thinnieaurvadic.com
+          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
+            hello@thinnieayurvedic.com
           </a>
           . We will respond within a reasonable time frame.
         </p>

@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const data = await getProduct(params.slug)
   if (!data) return { title: 'Product Not Found' }
   const { product } = data
-  const title = `${product.metaTitle || product.name} | Thinnie Aurvadic`
+  const title = `${product.metaTitle || product.name} | Thinnie Ayurvedic`
   const description =
     product.metaDescription || product.shortDesc || product.description.slice(0, 160)
   const heroImage = product.images[0]

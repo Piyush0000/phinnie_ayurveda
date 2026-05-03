@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Disclaimer',
   description:
-    'Important disclaimer about the wellness products and information offered by Thinnie Aurvadic.',
+    'Important disclaimer about the wellness products and information offered by Thinnie Ayurvedic.',
   alternates: { canonical: '/disclaimer' },
   openGraph: {
-    title: 'Disclaimer — Thinnie Aurvadic',
+    title: 'Disclaimer — Thinnie Ayurvedic',
     description: 'Important information about our wellness products and content.',
   },
 }
@@ -25,7 +25,7 @@ export default function DisclaimerPage() {
       <article className="prose prose-lg mx-auto mt-10 max-w-none text-charcoal">
         <h2 className="mt-2 font-display text-3xl text-forest">Not Medical Advice</h2>
         <p className="mt-3 leading-relaxed">
-          The information, articles, and product descriptions on Thinnie Aurvadic are provided for general
+          The information, articles, and product descriptions on Thinnie Ayurvedic are provided for general
           informational and educational purposes only. <strong>They are not a substitute for medical
           advice, diagnosis, or any form of professional healthcare.</strong>
         </p>
@@ -54,15 +54,15 @@ export default function DisclaimerPage() {
 
         <h2 className="mt-10 font-display text-3xl text-forest">External Links</h2>
         <p className="mt-3 leading-relaxed">
-          Our website may contain links to third-party websites. Thinnie Aurvadic is not responsible for
+          Our website may contain links to third-party websites. Thinnie Ayurvedic is not responsible for
           the content, accuracy or practices of those external sites.
         </p>
 
         <h2 className="mt-10 font-display text-3xl text-forest">Contact</h2>
         <p className="mt-3 leading-relaxed">
           For questions about this disclaimer, write to us at{' '}
-          <a href="mailto:hello@thinnieaurvadic.com" className="text-forest underline">
-            hello@thinnieaurvadic.com
+          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
+            hello@thinnieayurvedic.com
           </a>
           .
         </p>

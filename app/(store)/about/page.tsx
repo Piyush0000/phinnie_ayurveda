@@ -1,4 +1,4 @@
-export const metadata = { title: 'About — Thinnie Aurvadic' }
+export const metadata = { title: 'About — Thinnie Ayurvedic' }
 
 export default function AboutPage() {
   return (
@@ -30,7 +30,7 @@ export default function AboutPage() {
           <li>✦ Sustainably sourced and packaged</li>
           <li>✦ Backed by ancient texts and modern research</li>
         </ul>
-        <h2 className="mt-12 font-display text-3xl">Why Thinnie Aurvadic?</h2>
+        <h2 className="mt-12 font-display text-3xl">Why Thinnie Ayurvedic?</h2>
         <p className="mt-4 leading-relaxed">
           Because true wellness is not a product — it's a relationship. Between body and mind,
           between earth and self, between tradition and modern living. We don't just bottle

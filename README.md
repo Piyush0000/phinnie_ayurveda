@@ -1,4 +1,4 @@
-# Thinnie Aurvadic — Ayurvedic E-Commerce
+# Thinnie Ayurvedic — Ayurvedic E-Commerce
 
 A complete, production-ready Ayurvedic e-commerce site built with Next.js 14, MongoDB, NextAuth, Razorpay, Cloudinary, and Resend.
 
@@ -29,7 +29,7 @@ The app runs even without MONGODB_URI — pages show a friendly "database not co
 
 After running `npm run seed`:
 
-- Email: **admin@thinnieaurvadic.com**
+- Email: **admin@thinnieayurvedic.com**
 - Password: **Admin@123**
 - Admin URL: http://localhost:3000/admin
 

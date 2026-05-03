@@ -34,7 +34,7 @@ export default function RegisterPage() {
         return
       }
       await signIn('credentials', { email: data.email, password: data.password, redirect: false })
-      toast.success('Welcome to Thinnie Aurvadic!')
+      toast.success('Welcome to Thinnie Ayurvedic!')
       router.push('/')
       router.refresh()
     } finally {

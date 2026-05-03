@@ -409,7 +409,7 @@ async function main() {
   console.log('✓ Connected')
 
   console.log('👤 Seeding admin user…')
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@thinnieaurvadic.com').toLowerCase().trim()
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@thinnieayurvedic.com').toLowerCase().trim()
   const rawAdminPassword = process.env.ADMIN_PASSWORD
   if (!rawAdminPassword) {
     console.error('❌ ADMIN_PASSWORD is not set. Add it to .env.local before running the seed.')
@@ -464,15 +464,15 @@ async function main() {
   await SiteSettings.findOneAndUpdate(
     {},
     {
-      storeName: 'Thinnie Aurvadic',
-      storeEmail: 'hello@thinnieaurvadic.com',
+      storeName: 'Thinnie Ayurvedic',
+      storeEmail: 'hello@thinnieayurvedic.com',
       storePhone: '+91 98765 43210',
       storeAddress: 'Tapovan Road, Rishikesh, Uttarakhand 249192',
       currency: 'INR',
       freeShippingMin: 999,
       shippingCharge: 99,
       taxRate: 18,
-      metaTitle: 'Thinnie Aurvadic — Authentic Ayurveda',
+      metaTitle: 'Thinnie Ayurvedic — Authentic Ayurveda',
       metaDescription: 'Premium Ayurvedic products handcrafted from time-honored formulas.',
     },
     { upsert: true, new: true },

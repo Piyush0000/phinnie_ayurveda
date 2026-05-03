@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
       onSubmit={handleSubmit(onSubmit)}
       className="w-full max-w-md rounded-3xl border border-forest/10 bg-cream p-8 shadow-warm-lg md:p-10"
     >
-      <h1 className="font-display text-3xl text-forest">Admin Login — Thinnie Aurvadic</h1>
+      <h1 className="font-display text-3xl text-forest">Admin Login — Thinnie Ayurvedic</h1>
       <p className="mt-1 text-sm text-warmgray">Sign in with your admin account to manage the store.</p>
       <div className="mt-6 space-y-4">
         <Input label="Email" type="email" autoComplete="email" error={errors.email?.message} {...register('email')} />

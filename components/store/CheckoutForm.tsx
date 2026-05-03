@@ -136,7 +136,7 @@ export default function CheckoutForm() {
         key: payData.keyId,
         amount: Number(payData.amount),
         currency: payData.currency,
-        name: 'Thinnie Aurvadic',
+        name: 'Thinnie Ayurvedic',
         description: 'Authentic Ayurvedic Products',
         order_id: payData.razorpayOrderId,
         prefill: payData.customer,

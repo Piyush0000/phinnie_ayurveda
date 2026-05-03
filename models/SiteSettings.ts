@@ -26,7 +26,7 @@ export interface ISiteSettings extends Document {
 
 const SiteSettingsSchema = new Schema<ISiteSettings>(
   {
-    storeName: { type: String, default: 'Thinnie Aurvadic' },
+    storeName: { type: String, default: 'Thinnie Ayurvedic' },
     storeEmail: String,
     storePhone: String,
     storeAddress: String,

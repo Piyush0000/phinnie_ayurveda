@@ -20,7 +20,7 @@ const REVIEWS = [
     location: 'Chennai',
     rating: 5,
     body:
-      'My grandmother used these same formulas. Thinnie Aurvadic brings authentic Ayurveda to modern wellness — beautifully.',
+      'My grandmother used these same formulas. Thinnie Ayurvedic brings authentic Ayurveda to modern wellness — beautifully.',
   },
 ]
 

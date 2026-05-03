@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { auth } from '@/lib/auth'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
-export const metadata = { title: 'Admin · Thinnie Aurvadic' }
+export const metadata = { title: 'Admin · Thinnie Ayurvedic' }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = headers().get('x-pathname') ?? ''

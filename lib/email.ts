@@ -4,7 +4,7 @@ import { formatPrice } from './utils'
 
 let resend: Resend | null = null
 
-const STORE_NAME = 'Thinnie Aurvadic'
+const STORE_NAME = 'Thinnie Ayurvedic'
 const PRIMARY = '#2D5016'
 const ACCENT = '#C8860A'
 const BG = '#FDF8F0'
@@ -20,7 +20,7 @@ function getResend(): Resend | null {
 }
 
 function getFrom(): string {
-  // TODO: Verify the sending domain (thinnieaurvadic.com) in the Resend dashboard
+  // TODO: Verify the sending domain (thinnieayurvedic.com) in the Resend dashboard
   // before going to production. Until then, Resend will reject sends to addresses
   // outside the test allowlist. Fall back to onboarding@resend.dev for local dev.
   return (
