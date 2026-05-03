@@ -15,8 +15,46 @@ if (!MONGODB_URI) {
   process.exit(1)
 }
 
-const PLACEHOLDER = (name: string, color = '2D5016') =>
-  `https://placehold.co/600x600/${color}/FDF8F0?text=${encodeURIComponent(name)}`
+// Real photography from Unsplash. Each ID below has been HEAD-checked (200 OK).
+// To swap any image, replace its ID with another from unsplash.com (the part after "photo-" in the URL).
+const unsplash = (id: string, w = 800) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  'hair-care': '1522337360788-8b13dee7a37e',
+  'skin-care': '1556228720-195a672e8a03',
+  'wellness': '1545048702-79362596cdc9',
+  'digestive-health': '1495546968767-f0573cca821e',
+  'immunity': '1610348725531-843dff563e2c',
+  'oils-ghee': '1474979266404-7eaacbcd87c5',
+  'face-care': '1571781926291-c477ebfd024b',
+  'body-care': '1620916566398-39f1143ab7be',
+}
+
+const PRODUCT_IMAGES: Record<string, string> = {
+  'bhringraj-hair-oil': '1582719471384-894fbb16e074',
+  'onion-black-seed-hair-oil': '1611080626919-7cf5a9dbab5b',
+  'kumkumadi-serum': '1594035910387-fea47794261f',
+  'neem-tulsi-face-wash': '1599305445671-ac291c95aaa9',
+  'ashwagandha-ksm-66-capsules': '1543362906-acfc16c67564',
+  'brahmi-memory-capsules': '1612817288484-6f916006741a',
+  'triphala-churna': '1556228578-8c89e6adf883',
+  'hingvastak-churna': '1564890369478-c89ca6d9cde9',
+  'giloy-tulsi-tablets': '1601612628452-9e99ced43524',
+  'chyawanprash': '1576091160550-2173dba999ef',
+  'pure-a2-cow-ghee': '1612528443702-f6741f70a049',
+  'sesame-massage-oil': '1474979266404-7eaacbcd87c5',
+  'rose-water-toner': '1571019613454-1cb2f99b2d8b',
+  'aloe-vera-gel': '1603833665858-e61d17a86224',
+  'ubtan-face-pack': '1556228453-efd6c1ff04f6',
+  'sandalwood-body-scrub': '1620916566398-39f1143ab7be',
+  'kesh-raksha-hair-mask': '1522337360788-8b13dee7a37e',
+  'vitamin-c-face-serum': '1608571423902-eed4a5ad8108',
+  'moringa-powder': '1545048702-79362596cdc9',
+  'amla-juice': '1610348725531-843dff563e2c',
+}
+
+const FALLBACK_IMAGE = '1556228578-8c89e6adf883'
 
 const CATEGORIES = [
   { name: 'Hair Care', slug: 'hair-care', description: 'Nourishing oils, masks and care formulas for lustrous-looking hair.' },
@@ -369,17 +407,8 @@ const PRODUCTS: ProductSeed[] = [
 ]
 
 async function seedProduct(data: ProductSeed, catId: string, catName: string) {
-  const colorMap: Record<string, string> = {
-    'hair-care': '2D5016',
-    'skin-care': 'C1440E',
-    'wellness': 'C8860A',
-    'digestive-health': '8B7355',
-    'immunity': '2D5016',
-    'oils-ghee': 'C8860A',
-    'face-care': 'C1440E',
-    'body-care': '8B7355',
-  }
-  const color = colorMap[data.categorySlug] ?? '2D5016'
+  const primaryId = PRODUCT_IMAGES[data.slug] ?? CATEGORY_IMAGES[data.categorySlug] ?? FALLBACK_IMAGE
+  const secondaryId = CATEGORY_IMAGES[data.categorySlug] ?? FALLBACK_IMAGE
   const update = {
     name: data.name,
     slug: data.slug,
@@ -388,7 +417,7 @@ async function seedProduct(data: ProductSeed, catId: string, catName: string) {
     price: data.price,
     comparePrice: data.comparePrice,
     stock: data.stock,
-    images: [PLACEHOLDER(data.name, color), PLACEHOLDER(data.name + '-2', color)],
+    images: [unsplash(primaryId, 1000), unsplash(secondaryId, 1000)],
     categoryId: catId,
     categoryName: catName,
     categorySlug: data.categorySlug,
@@ -438,7 +467,7 @@ async function main() {
   for (const c of CATEGORIES) {
     const doc = await Category.findOneAndUpdate(
       { slug: c.slug },
-      { ...c, image: PLACEHOLDER(c.name, '2D5016') },
+      { ...c, image: unsplash(CATEGORY_IMAGES[c.slug] ?? FALLBACK_IMAGE, 1000) },
       { upsert: true, new: true },
     )
     catDocs[c.slug] = doc

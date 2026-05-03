@@ -31,28 +31,40 @@ export default function CategoryShowcase({ categories }: { categories?: Category
           Curated formulas for every aspect of your wellness journey
         </p>
       </div>
-      <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5 lg:grid-cols-4 xl:grid-cols-8">
+      <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-5 lg:grid-cols-4">
         {list.map((c) => (
           <Link
             key={c._id}
             href={`/category/${c.slug}`}
-            className="group flex flex-col items-center rounded-2xl border border-forest/10 bg-parchment/60 p-4 text-center transition hover:-translate-y-0.5 hover:bg-parchment hover:shadow-warm md:p-5"
+            className="group relative block overflow-hidden rounded-2xl border border-forest/10 bg-parchment shadow-warm transition hover:-translate-y-1 hover:shadow-warm-lg"
           >
-            <div className="relative h-16 w-16 overflow-hidden rounded-full bg-forest md:h-20 md:w-20">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-forest/5">
               {c.image ? (
-                <Image src={c.image} alt={c.name} fill sizes="80px" className="object-cover" />
+                <Image
+                  src={c.image}
+                  alt={c.name}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+                />
               ) : (
-                <div className="flex h-full items-center justify-center font-display text-2xl text-cream">
+                <div className="flex h-full items-center justify-center bg-forest font-display text-5xl text-cream">
                   {c.name.charAt(0)}
                 </div>
               )}
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-charcoal/30 to-transparent"
+                aria-hidden
+              />
             </div>
-            <h3 className="mt-3 font-display text-sm text-charcoal group-hover:text-forest md:text-base">
-              {c.name}
-            </h3>
-            {c.productCount > 0 && (
-              <p className="text-[11px] text-warmgray">{c.productCount} items</p>
-            )}
+            <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+              <h3 className="font-display text-lg text-cream md:text-xl">{c.name}</h3>
+              {c.productCount > 0 && (
+                <p className="mt-0.5 text-[11px] uppercase tracking-wider text-cream/80">
+                  {c.productCount} {c.productCount === 1 ? 'item' : 'items'}
+                </p>
+              )}
+            </div>
           </Link>
         ))}
       </div>

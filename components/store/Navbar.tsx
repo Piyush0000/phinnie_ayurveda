@@ -53,7 +53,7 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             </div>
           </div>
         )}
-        <div className="container-wide flex h-16 items-center justify-between gap-4 lg:h-20">
+        <div className="container-wide flex h-20 items-center justify-between gap-4 lg:h-24">
           <button
             onClick={() => setMobileOpen(true)}
             className="rounded-lg p-2 text-forest hover:bg-parchment lg:hidden"
@@ -66,10 +66,12 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             <Image
               src="/logo.png"
               alt={storeName}
-              width={180}
-              height={80}
+              width={360}
+              height={160}
               priority
-              className="h-10 w-auto lg:h-12"
+              quality={95}
+              sizes="(min-width: 1024px) 256px, 200px"
+              className="h-14 w-auto lg:h-16"
             />
           </Link>
 
@@ -180,7 +182,7 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
               <X size={20} />
             </button>
             <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="inline-flex items-center">
-              <Image src="/logo.png" alt={storeName} width={160} height={71} className="h-10 w-auto" />
+              <Image src="/logo.png" alt={storeName} width={320} height={142} quality={95} className="h-12 w-auto" />
             </Link>
             <nav className="mt-8 flex flex-col gap-3">
               {NAV_LINKS.map((l) => (
