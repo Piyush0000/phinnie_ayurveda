@@ -15,7 +15,7 @@ export default function Footer({ social }: FooterProps = {}) {
     <footer className="mt-16 bg-forest-800 text-cream">
       <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <h3 className="font-display text-2xl">Thinnie Ayurvedic</h3>
+          <h3 className="font-display text-2xl">Thinnie ( Slim & aane)</h3>
           <p className="mt-3 text-sm leading-relaxed text-cream/70">
             Authentic Ayurveda crafted from time-honored formulas. Pure, ethical, and made with reverence for nature.
           </p>
@@ -72,9 +72,9 @@ export default function Footer({ social }: FooterProps = {}) {
         <div className="lg:col-span-5">
           <h4 className="font-display text-lg">Get in Touch</h4>
           <ul className="mt-3 grid gap-2 text-sm text-cream/70 md:grid-cols-3">
-            <li className="flex items-start gap-2"><Mail size={14} className="mt-0.5" /> hello@thinnieayurvedic.com</li>
+            <li className="flex items-start gap-2"><Mail size={14} className="mt-0.5" /> hello@thinnie.in</li>
             <li className="flex items-start gap-2"><Phone size={14} className="mt-0.5" /> +91 98765 43210</li>
-            <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5" /> Rishikesh, Uttarakhand, India</li>
+            <li className="flex items-start gap-2"><MapPin size={14} className="mt-0.5" /> Khewat no. 491, Khatauni No. 583, ward no. 10 Lakhpat colony Karnal 132116</li>
           </ul>
         </div>
       </div>

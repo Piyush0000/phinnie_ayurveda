@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node --project tsconfig.seed.json scripts/seed.ts"
+    "seed": "ts-node --project tsconfig.seed.json scripts/seed.ts",
+    "reset": "ts-node --project tsconfig.seed.json scripts/reset.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -15,6 +16,7 @@
     "@upstash/redis": "^1.37.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.5.1",
+    "framer-motion": "^12.38.0",
     "lucide-react": "^0.454.0",
     "mongoose": "^8.7.0",
     "next": "14.2.15",

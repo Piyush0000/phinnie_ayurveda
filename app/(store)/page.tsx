@@ -1,4 +1,6 @@
 import HeroSection from '@/components/store/HeroSection'
+import BrandStorySection from '@/components/store/BrandStorySection'
+import ProcessSection from '@/components/store/ProcessSection'
 import CategoryShowcase from '@/components/store/CategoryShowcase'
 import FeaturedProducts from '@/components/store/FeaturedProducts'
 import BenefitsSection from '@/components/store/BenefitsSection'
@@ -37,9 +39,11 @@ export default async function HomePage() {
     <>
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
+      <BenefitsSection />
+      <BrandStorySection />
       <CategoryShowcase categories={categories} />
       <FeaturedProducts products={featured} />
-      <BenefitsSection />
+      <ProcessSection />
       <PromoBanner />
       <TestimonialsSection />
       <NewsletterSection />

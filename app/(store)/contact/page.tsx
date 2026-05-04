@@ -23,7 +23,7 @@ export default function ContactPage() {
             <div className="flex items-center gap-3 text-forest">
               <Mail size={18} /> <span className="font-display text-lg">Email</span>
             </div>
-            <p className="mt-1.5 text-sm text-charcoal">hello@thinnieayurvedic.com</p>
+            <p className="mt-1.5 text-sm text-charcoal">hello@thinnie.in</p>
             <p className="text-xs text-warmgray">Response within 24h</p>
           </div>
           <div className="rounded-2xl border border-forest/10 bg-parchment/50 p-5">
@@ -38,9 +38,9 @@ export default function ContactPage() {
               <MapPin size={18} /> <span className="font-display text-lg">Visit Us</span>
             </div>
             <p className="mt-1.5 text-sm text-charcoal">
-              Thinnie Ayurvedic,<br />
-              Tapovan Road, Rishikesh,<br />
-              Uttarakhand 249192
+              Thinnie ( Slim & aane),<br />
+              Khewat no. 491, Khatauni No. 583,<br />
+              ward no. 10 Lakhpat colony Karnal 132116
             </p>
           </div>
         </div>

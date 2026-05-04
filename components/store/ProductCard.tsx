@@ -60,7 +60,7 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <Link
       href={`/shop/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-forest/10 bg-cream shadow-warm transition hover:-translate-y-0.5 hover:shadow-warm-lg"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-forest/10 bg-cream/70 shadow-warm backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:border-turmeric/40 hover:shadow-warm-lg supports-[backdrop-filter]:bg-cream/55"
     >
       <div className="relative aspect-square overflow-hidden bg-parchment">
         {product.images[0] ? (

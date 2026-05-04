@@ -42,8 +42,10 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
   return (
     <>
       <header
-        className={`sticky top-0 z-40 transition-all ${
-          scrolled ? 'bg-cream/95 backdrop-blur shadow-warm' : 'bg-cream'
+        className={`sticky top-0 z-40 transition-all duration-300 ${
+          scrolled
+            ? 'border-b border-forest/10 bg-cream/85 shadow-warm backdrop-blur-xl supports-[backdrop-filter]:bg-cream/70'
+            : 'bg-cream/70 backdrop-blur-md supports-[backdrop-filter]:bg-cream/55'
         }`}
       >
         {bannerText && (
@@ -53,7 +55,7 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             </div>
           </div>
         )}
-        <div className="container-wide flex h-20 items-center justify-between gap-4 lg:h-24">
+        <div className="container-wide flex h-24 items-center justify-between gap-4 lg:h-28">
           <button
             onClick={() => setMobileOpen(true)}
             className="rounded-lg p-2 text-forest hover:bg-parchment lg:hidden"
@@ -66,12 +68,12 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             <Image
               src="/logo.png"
               alt={storeName}
-              width={360}
-              height={160}
+              width={480}
+              height={213}
               priority
               quality={95}
-              sizes="(min-width: 1024px) 256px, 200px"
-              className="h-14 w-auto lg:h-16"
+              sizes="(min-width: 1024px) 320px, 240px"
+              className="h-16 w-auto lg:h-20"
             />
           </Link>
 
