@@ -32,16 +32,9 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
         </Link>
       </div>
       <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6 lg:grid-cols-4">
-        {products.length > 0 ? (
-          products.map((p) => <ProductCard key={p._id} product={p} />)
-        ) : (
-          <div className="col-span-full rounded-2xl border border-dashed border-warmgray/30 bg-parchment/50 p-12 text-center">
-            <p className="font-display text-xl text-charcoal">No featured products yet</p>
-            <p className="mt-2 text-sm text-warmgray">
-              Connect your MongoDB and run the seed script to populate.
-            </p>
-          </div>
-        )}
+        {products.map((p) => (
+          <ProductCard key={p._id} product={p} />
+        ))}
       </div>
     </section>
   )

@@ -17,13 +17,16 @@ async function getHomeData() {
   if (!isDatabaseConfigured()) return { featured: [], categories: [] }
   try {
     await connectDB()
-    const [featured, categories] = await Promise.all([
-      Product.find({ isActive: true, isFeatured: true })
-        .sort({ soldCount: -1 })
-        .limit(8)
-        .lean(),
-      Category.find({}).sort({ name: 1 }).lean(),
-    ])
+    let featured = await Product.find({ isActive: true, isFeatured: true })
+      .sort({ soldCount: -1 })
+      .limit(8)
+      .lean()
+
+    if (featured.length === 0) {
+      featured = await Product.find({ isActive: true }).sort({ createdAt: -1 }).limit(4).lean()
+    }
+
+    const categories = await Category.find({}).sort({ name: 1 }).lean()
     return {
       featured: JSON.parse(JSON.stringify(featured)),
       categories: JSON.parse(JSON.stringify(categories)),
