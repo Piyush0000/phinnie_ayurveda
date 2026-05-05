@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
       shippingCharge: 0,
     }
     const afterDiscount = subtotal - discount
-    const shippingCharge = afterDiscount >= settings.freeShippingMin ? 0 : settings.shippingCharge
+    const shippingCharge = 0
     const tax = 0
     const total = Math.max(0, afterDiscount + shippingCharge)
 
