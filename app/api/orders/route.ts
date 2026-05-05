@@ -121,8 +121,8 @@ export async function POST(req: NextRequest) {
     }
 
     const settings = (await SiteSettings.findOne().lean()) ?? {
-      freeShippingMin: 999,
-      shippingCharge: 99,
+      freeShippingMin: 0,
+      shippingCharge: 0,
     }
     const afterDiscount = subtotal - discount
     const shippingCharge = afterDiscount >= settings.freeShippingMin ? 0 : settings.shippingCharge

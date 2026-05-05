@@ -50,8 +50,8 @@ interface CartState {
 }
 
 const DEFAULT_CONFIG: CartConfig = {
-  freeShippingMin: 999,
-  shippingCharge: 99,
+  freeShippingMin: 0,
+  shippingCharge: 0,
 }
 
 export const useCartStore = create<CartState>()(
