@@ -45,8 +45,8 @@ export default function RefundPolicyPage() {
         </p>
         <p className="mt-3 leading-relaxed">
           To raise a request, email us at{' '}
-          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
-            hello@thinnieayurvedic.com
+          <a href="mailto:hello@thinnie.in" className="text-forest underline">
+            hello@thinnie.in
           </a>{' '}
           with your order number, a short description of the issue and clear photographs of the product
           and outer packaging.
@@ -79,10 +79,10 @@ export default function RefundPolicyPage() {
         <h2 className="mt-10 font-display text-3xl text-forest">6. Contact</h2>
         <p className="mt-3 leading-relaxed">
           For all refund or return queries, please reach us at{' '}
-          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
-            hello@thinnieayurvedic.com
-          </a>{' '}
-          or call <strong>+91 98765 43210</strong> (Mon–Sat, 10am–7pm IST).
+          <a href="mailto:hello@thinnie.in" className="text-forest underline">
+            hello@thinnie.in
+          </a>
+          .
         </p>
       </article>
     </div>

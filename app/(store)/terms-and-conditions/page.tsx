@@ -78,8 +78,8 @@ export default function TermsAndConditionsPage() {
         <h2 className="mt-10 font-display text-3xl text-forest">8. Contact</h2>
         <p className="mt-3 leading-relaxed">
           For any questions about these terms, write to us at{' '}
-          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
-            hello@thinnieayurvedic.com
+          <a href="mailto:hello@thinnie.in" className="text-forest underline">
+            hello@thinnie.in
           </a>
           .
         </p>

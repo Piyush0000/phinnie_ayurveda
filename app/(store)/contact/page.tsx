@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Send } from 'lucide-react'
+import { Mail, MapPin, Send } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Button from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Input'
@@ -24,21 +24,15 @@ export default function ContactPage() {
               <Mail size={18} /> <span className="font-display text-lg">Email</span>
             </div>
             <p className="mt-1.5 text-sm text-charcoal">hello@thinnie.in</p>
+            <p className="text-sm text-charcoal">support@thinnie.in</p>
             <p className="text-xs text-warmgray">Response within 24h</p>
-          </div>
-          <div className="rounded-2xl border border-forest/10 bg-parchment/50 p-5">
-            <div className="flex items-center gap-3 text-forest">
-              <Phone size={18} /> <span className="font-display text-lg">Phone</span>
-            </div>
-            <p className="mt-1.5 text-sm text-charcoal">+91 98765 43210</p>
-            <p className="text-xs text-warmgray">Mon-Sat, 10am-7pm IST</p>
           </div>
           <div className="rounded-2xl border border-forest/10 bg-parchment/50 p-5">
             <div className="flex items-center gap-3 text-forest">
               <MapPin size={18} /> <span className="font-display text-lg">Visit Us</span>
             </div>
             <p className="mt-1.5 text-sm text-charcoal">
-              Thinnie ( Slim & aane),<br />
+              SLim and Saane,<br />
               Khewat no. 491, Khatauni No. 583,<br />
               ward no. 10 Lakhpat colony Karnal 132116
             </p>

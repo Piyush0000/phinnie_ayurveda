@@ -80,8 +80,8 @@ export default function PrivacyPolicyPage() {
         <p className="mt-3 leading-relaxed">
           You can request access to, correction of, or deletion of your personal data at any time by
           writing to{' '}
-          <a href="mailto:hello@thinnieayurvedic.com" className="text-forest underline">
-            hello@thinnieayurvedic.com
+          <a href="mailto:hello@thinnie.in" className="text-forest underline">
+            hello@thinnie.in
           </a>
           . We will respond within a reasonable time frame.
         </p>
