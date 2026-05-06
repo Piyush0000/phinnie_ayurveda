@@ -12,9 +12,9 @@ export interface IProduct extends Document {
   sku?: string
   stock: number
   images: string[]
-  categoryId: mongoose.Types.ObjectId
-  categoryName: string
-  categorySlug: string
+  categoryId?: mongoose.Types.ObjectId
+  categoryName?: string
+  categorySlug?: string
   tags: string[]
   ingredients?: string
   benefits: string[]
@@ -43,9 +43,9 @@ const ProductSchema = new Schema<IProduct>(
     sku: { type: String, sparse: true },
     stock: { type: Number, default: 0 },
     images: { type: [String], default: [] },
-    categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
-    categoryName: { type: String, required: true },
-    categorySlug: { type: String, required: true },
+    categoryId: { type: Schema.Types.ObjectId, ref: 'Category' },
+    categoryName: String,
+    categorySlug: String,
     tags: { type: [String], default: [] },
     ingredients: String,
     benefits: { type: [String], default: [] },

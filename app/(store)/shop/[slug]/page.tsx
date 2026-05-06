@@ -12,9 +12,8 @@ import Badge from '@/components/ui/Badge'
 
 export const dynamic = 'force-dynamic'
 
-type ProductDoc = Omit<IProduct, '_id' | 'categoryId' | 'createdAt' | 'updatedAt'> & {
+type ProductDoc = Omit<IProduct, '_id' | 'createdAt' | 'updatedAt'> & {
   _id: string
-  categoryId: string
   createdAt: string
   updatedAt: string
 }
@@ -33,7 +32,8 @@ async function getProduct(slug: string): Promise<{ product: ProductDoc; reviews:
   if (!product) return null
   const [reviews, related] = await Promise.all([
     Review.find({ productId: product._id }).sort({ createdAt: -1 }).limit(20).lean(),
-    Product.find({ categoryId: product.categoryId, _id: { $ne: product._id }, isActive: true })
+    Product.find({ _id: { $ne: product._id }, isActive: true })
+      .sort({ soldCount: -1, createdAt: -1 })
       .limit(4)
       .lean(),
   ])
@@ -74,13 +74,11 @@ export default async function ProductPage({ params }: { params: { slug: string }
     <div className="container-wide py-8 md:py-12">
       <nav className="mb-6 text-sm text-warmgray">
         <a href="/" className="hover:text-forest">Home</a> ·{' '}
-        <a href="/shop" className="hover:text-forest">Shop</a> ·{' '}
-        <a href={`/category/${product.categorySlug}`} className="hover:text-forest">{product.categoryName}</a>
+        <a href="/shop" className="hover:text-forest">Shop</a>
       </nav>
       <div className="grid gap-10 lg:grid-cols-2">
         <ProductImageGallery images={product.images} name={product.name} />
         <div className="flex flex-col gap-4">
-          <p className="text-xs uppercase tracking-widest text-turmeric-700">{product.categoryName}</p>
           <h1 className="font-display text-4xl text-charcoal md:text-5xl">{product.name}</h1>
           {product.shortDesc && <p className="font-accent text-xl text-warmgray">{product.shortDesc}</p>}
           <div className="flex items-center gap-3">

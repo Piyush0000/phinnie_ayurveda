@@ -20,7 +20,6 @@ interface Product {
   reviewCount: number
   stock: number
   shortDesc?: string
-  categoryName?: string
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -96,11 +95,6 @@ export default function ProductCard({ product }: { product: Product }) {
         </button>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4">
-        {product.categoryName && (
-          <div className="text-[11px] uppercase tracking-wider text-turmeric-700">
-            {product.categoryName}
-          </div>
-        )}
         <h3 className="font-display text-lg leading-tight text-charcoal line-clamp-2">
           {product.name}
         </h3>

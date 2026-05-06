@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { X } from 'lucide-react'
@@ -8,12 +8,6 @@ import { Input, Textarea } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import ImageUploader from './ImageUploader'
 import { slugify } from '@/lib/utils'
-
-interface Category {
-  _id: string
-  name: string
-  slug: string
-}
 
 interface ProductData {
   _id?: string
@@ -27,7 +21,6 @@ interface ProductData {
   sku?: string
   stock?: number
   images?: string[]
-  categoryId?: string
   tags?: string[]
   ingredients?: string
   benefits?: string[]
@@ -41,7 +34,6 @@ interface ProductData {
 
 export default function ProductForm({ initial, productId }: { initial?: ProductData; productId?: string }) {
   const router = useRouter()
-  const [categories, setCategories] = useState<Category[]>([])
   const [form, setForm] = useState<ProductData>({
     name: '',
     slug: '',
@@ -60,10 +52,6 @@ export default function ProductForm({ initial, productId }: { initial?: ProductD
   const [tagInput, setTagInput] = useState('')
   const [benefitInput, setBenefitInput] = useState('')
   const [saving, setSaving] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/categories').then((r) => r.json()).then((d) => setCategories(d.categories ?? []))
-  }, [])
 
   const update = <K extends keyof ProductData>(key: K, value: ProductData[K]) => {
     setForm((f) => ({ ...f, [key]: value }))
@@ -129,20 +117,6 @@ export default function ProductForm({ initial, productId }: { initial?: ProductD
             className="md:col-span-2"
             required
           />
-          <div className="md:col-span-2">
-            <label className="mb-1.5 block text-sm font-semibold">Category</label>
-            <select
-              value={form.categoryId ?? ''}
-              onChange={(e) => update('categoryId', e.target.value)}
-              required
-              className="w-full rounded-lg border border-warmgray/30 bg-white px-4 py-2.5 outline-none focus:border-forest"
-            >
-              <option value="">Select category</option>
-              {categories.map((c) => (
-                <option key={c._id} value={c._id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
         </div>
       </section>
 

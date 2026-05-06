@@ -30,7 +30,7 @@ export default function HeroSection() {
             className="inline-flex items-center gap-2 rounded-full border border-turmeric/40 bg-cream/10 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-turmeric-200 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-turmeric" />
-            Phinnie Ayurveda · Rooted in Tradition
+            Thinnie Ayurveda · Rooted in Tradition
           </motion.span>
 
           <motion.h1

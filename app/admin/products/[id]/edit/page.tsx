@@ -13,19 +13,12 @@ export default async function EditProductPage({ params }: { params: { id: string
   if (!product) return notFound()
   const initial = JSON.parse(JSON.stringify(product)) as Record<string, unknown> & {
     name?: string
-    categoryId?: string
   }
   return (
     <>
       <AdminHeader title={`Edit: ${initial.name ?? ''}`} />
       <div className="p-6 lg:p-8">
-        <ProductForm
-          productId={params.id}
-          initial={{
-            ...initial,
-            categoryId: String(initial.categoryId ?? ''),
-          }}
-        />
+        <ProductForm productId={params.id} initial={initial} />
       </div>
     </>
   )

@@ -15,7 +15,7 @@ export default function BrandStorySection() {
             <div className="relative overflow-hidden rounded-3xl shadow-warm-lg ring-1 ring-forest/10">
               <Image
                 src="/media/brand-story.png"
-                alt="Phinnie Ayurveda — handcrafted with care"
+                alt="Thinnie Ayurveda — handcrafted with care"
                 width={1200}
                 height={1200}
                 className="h-full w-full object-cover"
@@ -40,7 +40,7 @@ export default function BrandStorySection() {
             </h2>
             <div className="mt-6 space-y-5 font-accent text-lg leading-relaxed text-warmgray md:text-xl">
               <p>
-                Phinnie Ayurveda began in a small kitchen in Rishikesh — a copper vessel,
+                Thinnie Ayurveda began in a small kitchen in Rishikesh — a copper vessel,
                 cold-pressed sesame, and a recipe handed down through four generations.
               </p>
               <p>

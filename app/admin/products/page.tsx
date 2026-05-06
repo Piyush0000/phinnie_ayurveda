@@ -17,7 +17,6 @@ interface Product {
   comparePrice?: number
   stock: number
   images: string[]
-  categoryName: string
   isActive: boolean
   isFeatured: boolean
   rating: number
@@ -83,7 +82,6 @@ export default function AdminProductsPage() {
             <thead className="border-b border-forest/10 bg-parchment/40 text-left text-xs uppercase text-warmgray">
               <tr>
                 <th className="py-3 pl-4 pr-2">Product</th>
-                <th className="py-3 pr-2">Category</th>
                 <th className="py-3 pr-2">Price</th>
                 <th className="py-3 pr-2">Stock</th>
                 <th className="py-3 pr-2">Status</th>
@@ -92,9 +90,9 @@ export default function AdminProductsPage() {
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="py-12 text-center text-warmgray">Loading…</td></tr>
+                <tr><td colSpan={5} className="py-12 text-center text-warmgray">Loading…</td></tr>
               ) : products.length === 0 ? (
-                <tr><td colSpan={6} className="py-12 text-center text-warmgray">No products yet</td></tr>
+                <tr><td colSpan={5} className="py-12 text-center text-warmgray">No products yet</td></tr>
               ) : (
                 products.map((p) => (
                   <tr key={p._id} className="border-b border-forest/5">
@@ -119,7 +117,6 @@ export default function AdminProductsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="py-3 pr-2 text-charcoal">{p.categoryName}</td>
                     <td className="py-3 pr-2 font-semibold">{formatPrice(p.price)}</td>
                     <td className="py-3 pr-2">
                       <span className={p.stock < 10 ? 'font-semibold text-terracotta' : ''}>{p.stock}</span>

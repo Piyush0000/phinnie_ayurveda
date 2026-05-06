@@ -1,10 +1,7 @@
 import type { MetadataRoute } from 'next'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
-import Category from '@/models/Category'
 
-// Re-build the sitemap hourly so newly published products and categories
-// appear without requiring a redeploy.
 export const revalidate = 3600
 
 const STATIC_PATHS = [
@@ -34,23 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     await connectDB()
-    const [products, categories] = await Promise.all([
-      Product.find({ isActive: true }).select('slug updatedAt').lean(),
-      Category.find({}).select('slug updatedAt').lean(),
-    ])
+    const products = await Product.find({ isActive: true }).select('slug updatedAt').lean()
     const productEntries: MetadataRoute.Sitemap = products.map((p) => ({
       url: `${baseUrl}/shop/${p.slug}`,
       lastModified: p.updatedAt ?? now,
       changeFrequency: 'weekly',
       priority: 0.6,
     }))
-    const categoryEntries: MetadataRoute.Sitemap = categories.map((c) => ({
-      url: `${baseUrl}/category/${c.slug}`,
-      lastModified: c.updatedAt ?? now,
-      changeFrequency: 'weekly',
-      priority: 0.5,
-    }))
-    return [...staticEntries, ...categoryEntries, ...productEntries]
+    return [...staticEntries, ...productEntries]
   } catch {
     return staticEntries
   }

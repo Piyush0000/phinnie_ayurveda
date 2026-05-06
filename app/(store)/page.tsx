@@ -1,7 +1,6 @@
 import HeroSection from '@/components/store/HeroSection'
 import BrandStorySection from '@/components/store/BrandStorySection'
 import ProcessSection from '@/components/store/ProcessSection'
-import CategoryShowcase from '@/components/store/CategoryShowcase'
 import FeaturedProducts from '@/components/store/FeaturedProducts'
 import BenefitsSection from '@/components/store/BenefitsSection'
 import TestimonialsSection from '@/components/store/TestimonialsSection'
@@ -9,42 +8,33 @@ import NewsletterSection from '@/components/store/NewsletterSection'
 import Link from 'next/link'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
-import Category from '@/models/Category'
 
 export const dynamic = 'force-dynamic'
 
 async function getHomeData() {
-  if (!isDatabaseConfigured()) return { featured: [], categories: [] }
+  if (!isDatabaseConfigured()) return { featured: [] }
   try {
     await connectDB()
-    let featured = await Product.find({ isActive: true, isFeatured: true })
-      .sort({ soldCount: -1 })
-      .limit(8)
+    const featured = await Product.find({ isActive: true })
+      .sort({ isFeatured: -1, soldCount: -1, createdAt: -1 })
       .lean()
 
-    if (featured.length === 0) {
-      featured = await Product.find({ isActive: true }).sort({ createdAt: -1 }).limit(4).lean()
-    }
-
-    const categories = await Category.find({}).sort({ name: 1 }).lean()
     return {
       featured: JSON.parse(JSON.stringify(featured)),
-      categories: JSON.parse(JSON.stringify(categories)),
     }
   } catch {
-    return { featured: [], categories: [] }
+    return { featured: [] }
   }
 }
 
 export default async function HomePage() {
-  const { featured, categories } = await getHomeData()
+  const { featured } = await getHomeData()
   return (
     <>
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
       <BenefitsSection />
       <BrandStorySection />
-      <CategoryShowcase categories={categories} />
       <FeaturedProducts products={featured} />
       <ProcessSection />
       <PromoBanner />

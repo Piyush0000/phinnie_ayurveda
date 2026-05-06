@@ -38,7 +38,7 @@ export default function ProcessSection() {
       <div className="container-wide relative py-24 md:py-32">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
-            <p className="text-xs uppercase tracking-[0.3em] text-turmeric-200">Why Phinnie</p>
+            <p className="text-xs uppercase tracking-[0.3em] text-turmeric-200">Why Thinnie</p>
             <h2 className="mt-3 font-display text-4xl leading-tight md:text-5xl lg:text-6xl">
               From <span className="italic text-turmeric-200">earth</span> to your everyday ritual.
             </h2>

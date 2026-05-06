@@ -51,7 +51,6 @@ export const productSchema = z.object({
   sku: z.string().optional(),
   stock: z.number().int().nonnegative(),
   images: z.array(z.string().url()).default([]),
-  categoryId: z.string(),
   tags: z.array(z.string()).default([]),
   ingredients: z.string().optional(),
   benefits: z.array(z.string()).default([]),

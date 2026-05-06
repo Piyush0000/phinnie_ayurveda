@@ -32,7 +32,7 @@ export default function ContactPage() {
               <MapPin size={18} /> <span className="font-display text-lg">Visit Us</span>
             </div>
             <p className="mt-1.5 text-sm text-charcoal">
-              SLim and Saane,<br />
+              Thinnie Slim and Saane,<br />
               Khewat no. 491, Khatauni No. 583,<br />
               ward no. 10 Lakhpat colony Karnal 132116
             </p>

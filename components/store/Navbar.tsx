@@ -10,9 +10,6 @@ import { useCartStore } from '@/store/cartStore'
 const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/shop', label: 'Shop' },
-  { href: '/category/hair-care', label: 'Hair' },
-  { href: '/category/skin-care', label: 'Skin' },
-  { href: '/category/wellness', label: 'Wellness' },
   { href: '/about', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]

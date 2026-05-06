@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import type { FilterQuery, SortOrder } from 'mongoose'
 import connectDB from '@/lib/mongodb'
 import Product, { type IProduct } from '@/models/Product'
-import Category from '@/models/Category'
 import { handleApiError, requireAdmin } from '@/lib/api-helpers'
 import { productSchema } from '@/lib/validations'
 
@@ -12,7 +11,6 @@ export async function GET(req: NextRequest) {
   try {
     await connectDB()
     const sp = req.nextUrl.searchParams
-    const category = sp.get('category')
     const search = sp.get('search')
     const sort = sp.get('sort') ?? 'newest'
     const featured = sp.get('featured') === 'true'
@@ -24,7 +22,6 @@ export async function GET(req: NextRequest) {
 
     const query: FilterQuery<IProduct> = {}
     if (!includeInactive) query.isActive = true
-    if (category) query.categorySlug = category
     if (featured) query.isFeatured = true
     if (search && search.trim()) query.$text = { $search: search.trim() }
     if (minPrice !== undefined || maxPrice !== undefined) {
@@ -76,16 +73,9 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       )
     }
-    const cat = await Category.findById(parsed.data.categoryId).lean()
-    if (!cat) return NextResponse.json({ error: 'Category not found' }, { status: 400 })
     const exists = await Product.findOne({ slug: parsed.data.slug })
     if (exists) return NextResponse.json({ error: 'Slug already exists' }, { status: 409 })
-    const product = await Product.create({
-      ...parsed.data,
-      categoryName: cat.name,
-      categorySlug: cat.slug,
-    })
-    await Category.findByIdAndUpdate(cat._id, { $inc: { productCount: 1 } })
+    const product = await Product.create(parsed.data)
     return NextResponse.json(product)
   } catch (err) {
     return handleApiError(err)

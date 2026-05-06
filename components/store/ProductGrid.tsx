@@ -11,7 +11,6 @@ interface Product {
   reviewCount: number
   stock: number
   shortDesc?: string
-  categoryName?: string
 }
 
 export default function ProductGrid({ products }: { products: Product[] }) {
@@ -19,7 +18,7 @@ export default function ProductGrid({ products }: { products: Product[] }) {
     return (
       <div className="rounded-2xl border border-dashed border-warmgray/30 bg-parchment/50 p-12 text-center">
         <p className="font-display text-xl text-charcoal">No products found</p>
-        <p className="mt-2 text-sm text-warmgray">Try a different search or category.</p>
+        <p className="mt-2 text-sm text-warmgray">Try a different search.</p>
       </div>
     )
   }

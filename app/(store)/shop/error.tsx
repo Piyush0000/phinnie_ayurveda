@@ -18,7 +18,7 @@ export default function ShopError({
     <div className="container-narrow py-16 text-center">
       <h1 className="font-display text-4xl text-charcoal">Couldn't load the shop</h1>
       <p className="mt-3 font-accent text-lg text-warmgray">
-        Something interrupted the catalog load. Try again, or browse another category.
+        Something interrupted the catalog load. Please try again.
       </p>
       <div className="mt-6 flex justify-center gap-3">
         <button
