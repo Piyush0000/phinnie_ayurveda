@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Trash2, ShieldCheck, Shield, Check, Ban, Clock } from 'lucide-react'
+import { Trash2, ShieldCheck, Shield, Check, Ban, Clock, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
 import AdminHeader from '@/components/admin/AdminHeader'
 import Badge from '@/components/ui/Badge'
 import Button from '@/components/ui/Button'
 import StarRating from '@/components/store/StarRating'
-import { formatDateTime, cn } from '@/lib/utils'
+import { formatDateTime, formatDate, cn } from '@/lib/utils'
 import type { ReviewModerationStatus } from '@/models/Review'
 
 interface Review {
@@ -124,6 +124,30 @@ export default function AdminReviewsPage() {
     void load()
   }
 
+  const exportCSV = () => {
+    const headers = ['User', 'Rating', 'Title', 'Body', 'Verified', 'Status', 'Product ID', 'Created']
+    const rows = reviews.map((r) => [
+      r.userName,
+      r.rating,
+      r.title ?? '',
+      r.body ?? '',
+      r.isVerified ? 'Yes' : 'No',
+      r.moderationStatus,
+      r.productId,
+      formatDate(r.createdAt),
+    ])
+    const csv = [headers, ...rows]
+      .map((row) => row.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `reviews-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   const handleBulkDelete = async () => {
     if (selected.size === 0) return
     if (!confirm(`Delete ${selected.size} review${selected.size === 1 ? '' : 's'}? This cannot be undone.`)) return
@@ -145,6 +169,14 @@ export default function AdminReviewsPage() {
     <>
       <AdminHeader title="Reviews" />
       <div className="p-6 lg:p-8">
+        <div className="mb-5 flex justify-end">
+          <button
+            onClick={exportCSV}
+            className="inline-flex h-10 items-center gap-2 rounded-lg border-2 border-forest px-5 font-semibold text-forest hover:bg-forest hover:text-cream"
+          >
+            <Download size={14} /> Export CSV
+          </button>
+        </div>
         <div className="mb-5 flex flex-wrap items-center gap-2">
           {STATUS_FILTERS.map((f) => (
             <button

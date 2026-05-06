@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Plus, Trash2, Edit, Save, X } from 'lucide-react'
+import { Plus, Trash2, Edit, Save, X, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { Input } from '@/components/ui/Input'
@@ -118,15 +118,48 @@ export default function AdminCouponsPage() {
     void load()
   }
 
+  const exportCSV = () => {
+    const headers = ['Code', 'Type', 'Value', 'Min Order', 'Max Uses', 'Used', 'Active', 'Expires', 'Created']
+    const rows = coupons.map((c) => [
+      c.code,
+      c.type,
+      c.value,
+      c.minOrder ?? '',
+      c.maxUses ?? '',
+      c.usedCount,
+      c.isActive ? 'Yes' : 'No',
+      c.expiresAt ? formatDate(c.expiresAt) : '',
+      formatDate(c.createdAt),
+    ])
+    const csv = [headers, ...rows]
+      .map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `coupons-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <>
       <AdminHeader title="Coupons" />
       <div className="p-6 lg:p-8">
-        <div className="mb-5 flex items-center justify-between">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-warmgray">Promotional discount codes for the storefront.</p>
-          <Button onClick={startNew}>
-            <Plus size={14} /> New Coupon
-          </Button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={exportCSV}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border-2 border-forest px-5 font-semibold text-forest hover:bg-forest hover:text-cream"
+            >
+              <Download size={14} /> Export CSV
+            </button>
+            <Button onClick={startNew}>
+              <Plus size={14} /> New Coupon
+            </Button>
+          </div>
         </div>
 
         {editingId && (

@@ -3,7 +3,7 @@ import { isValidObjectId } from 'mongoose'
 import { auth } from '@/lib/auth'
 import connectDB from '@/lib/mongodb'
 import Order from '@/models/Order'
-import { handleApiError } from '@/lib/api-helpers'
+import { handleApiError, requireAdmin } from '@/lib/api-helpers'
 
 export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -25,6 +25,19 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
     return NextResponse.json(order)
+  } catch (err) {
+    return handleApiError(err)
+  }
+}
+
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+    await connectDB()
+    const order = await Order.findByIdAndDelete(params.id)
+    if (!order) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ success: true })
   } catch (err) {
     return handleApiError(err)
   }

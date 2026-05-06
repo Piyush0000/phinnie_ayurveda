@@ -26,3 +26,16 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     return handleApiError(err)
   }
 }
+
+export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const { error } = await requireAdmin()
+    if (error) return error
+    await connectDB()
+    const user = await User.findByIdAndDelete(params.id)
+    if (!user) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    return handleApiError(err)
+  }
+}

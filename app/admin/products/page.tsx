@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Edit, Trash2, Search } from 'lucide-react'
+import { Plus, Edit, Trash2, Search, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
 import AdminHeader from '@/components/admin/AdminHeader'
 import Badge from '@/components/ui/Badge'
@@ -55,6 +55,30 @@ export default function AdminProductsPage() {
     load()
   }
 
+  const exportCSV = () => {
+    const headers = ['Name', 'Price', 'Compare Price', 'Stock', 'Active', 'Featured', 'Rating', 'Sold']
+    const rows = products.map((p) => [
+      p.name,
+      p.price,
+      p.comparePrice ?? '',
+      p.stock,
+      p.isActive ? 'Yes' : 'No',
+      p.isFeatured ? 'Yes' : 'No',
+      p.rating,
+      p.soldCount,
+    ])
+    const csv = [headers, ...rows]
+      .map((r) => r.map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
+      .join('\n')
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `products-${new Date().toISOString().slice(0, 10)}.csv`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
   return (
     <>
       <AdminHeader title="Products" />
@@ -69,12 +93,20 @@ export default function AdminProductsPage() {
               className="h-10 w-full rounded-lg border border-warmgray/30 bg-cream pl-10 pr-3 outline-none focus:border-forest"
             />
           </div>
-          <Link
-            href="/admin/products/new"
-            className="inline-flex h-10 items-center gap-2 rounded-lg bg-forest px-5 font-semibold text-cream hover:bg-forest-600"
-          >
-            <Plus size={16} /> Add Product
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={exportCSV}
+              className="inline-flex h-10 items-center gap-2 rounded-lg border-2 border-forest px-5 font-semibold text-forest hover:bg-forest hover:text-cream"
+            >
+              <Download size={14} /> Export CSV
+            </button>
+            <Link
+              href="/admin/products/new"
+              className="inline-flex h-10 items-center gap-2 rounded-lg bg-forest px-5 font-semibold text-cream hover:bg-forest-600"
+            >
+              <Plus size={16} /> Add Product
+            </Link>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-forest/10 bg-cream shadow-warm">

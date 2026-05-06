@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Search, Download } from 'lucide-react'
+import { Search, Download, Trash2 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import AdminHeader from '@/components/admin/AdminHeader'
 import { formatPrice, formatDate } from '@/lib/utils'
 
@@ -21,19 +22,34 @@ export default function AdminCustomersPage() {
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
 
+  const load = () => {
+    setLoading(true)
+    const params = new URLSearchParams({ limit: '100' })
+    if (search) params.set('search', search)
+    fetch(`/api/customers?${params.toString()}`)
+      .then((r) => r.json())
+      .then((d) => setCustomers(d.customers ?? []))
+      .catch(() => setCustomers([]))
+      .finally(() => setLoading(false))
+  }
+
   useEffect(() => {
-    const t = setTimeout(() => {
-      setLoading(true)
-      const params = new URLSearchParams({ limit: '100' })
-      if (search) params.set('search', search)
-      fetch(`/api/customers?${params.toString()}`)
-        .then((r) => r.json())
-        .then((d) => setCustomers(d.customers ?? []))
-        .catch(() => setCustomers([]))
-        .finally(() => setLoading(false))
-    }, 300)
+    const t = setTimeout(load, 300)
     return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search])
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Delete customer ${name}? This cannot be undone.`)) return
+    const res = await fetch(`/api/customers/${id}`, { method: 'DELETE' })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      toast.error(data.error || 'Could not delete')
+      return
+    }
+    toast.success('Customer deleted')
+    load()
+  }
 
   const exportCSV = () => {
     const headers = ['Name', 'Email', 'Phone', 'Orders', 'Total Spent', 'Joined']
@@ -85,14 +101,15 @@ export default function AdminCustomersPage() {
                 <th className="py-3 pr-2">Email</th>
                 <th className="py-3 pr-2">Orders</th>
                 <th className="py-3 pr-2">Total Spent</th>
-                <th className="py-3 pr-4">Joined</th>
+                <th className="py-3 pr-2">Joined</th>
+                <th className="py-3 pr-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={5} className="py-12 text-center text-warmgray">Loading…</td></tr>
+                <tr><td colSpan={6} className="py-12 text-center text-warmgray">Loading…</td></tr>
               ) : customers.length === 0 ? (
-                <tr><td colSpan={5} className="py-12 text-center text-warmgray">No customers yet</td></tr>
+                <tr><td colSpan={6} className="py-12 text-center text-warmgray">No customers yet</td></tr>
               ) : (
                 customers.map((c) => (
                   <tr key={c._id} className="border-b border-forest/5">
@@ -104,7 +121,18 @@ export default function AdminCustomersPage() {
                     <td className="py-3 pr-2 text-charcoal">{c.email}</td>
                     <td className="py-3 pr-2">{c.ordersCount}</td>
                     <td className="py-3 pr-2 font-semibold text-forest">{formatPrice(c.totalSpent)}</td>
-                    <td className="py-3 pr-4 text-warmgray">{formatDate(c.createdAt)}</td>
+                    <td className="py-3 pr-2 text-warmgray">{formatDate(c.createdAt)}</td>
+                    <td className="py-3 pr-4">
+                      <div className="flex justify-end">
+                        <button
+                          onClick={() => handleDelete(c._id, c.name ?? c.email)}
+                          className="rounded-lg border border-warmgray/30 p-2 text-terracotta hover:bg-terracotta-50"
+                          title="Delete customer"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))
               )}
