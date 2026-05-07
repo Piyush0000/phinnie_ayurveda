@@ -9,7 +9,7 @@ export default function HeroSection() {
     <section className="relative isolate overflow-hidden bg-forest-900 text-cream">
       <video
         className="absolute inset-0 h-full w-full object-cover"
-        src="/media/egge.mp4"
+        src="/media/VID_20260506_113528_764.mp4"
         autoPlay
         muted
         loop
