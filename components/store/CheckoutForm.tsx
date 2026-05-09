@@ -1,15 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
+import { CreditCard, Truck, CheckCircle2 } from 'lucide-react'
 import { addressSchema, type AddressInput } from '@/lib/validations'
 import { useCartStore } from '@/store/cartStore'
 import { Input, Textarea } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { formatPrice } from '@/lib/utils'
+
+type PaymentMethod = 'ONLINE' | 'COD'
 
 declare global {
   interface Window {
@@ -68,6 +71,7 @@ export default function CheckoutForm() {
   const [loading, setLoading] = useState(false)
   const [couponCode, setCouponCode] = useState('')
   const [notes, setNotes] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('ONLINE')
 
   const {
     register,
@@ -98,10 +102,12 @@ export default function CheckoutForm() {
     }
     setLoading(true)
     try {
-      const ok = await loadRazorpay()
-      if (!ok) {
-        toast.error('Could not load Razorpay. Check your internet connection.')
-        return
+      if (paymentMethod === 'ONLINE') {
+        const ok = await loadRazorpay()
+        if (!ok) {
+          toast.error('Could not load Razorpay. Check your internet connection.')
+          return
+        }
       }
 
       const orderRes = await fetch('/api/orders', {
@@ -112,6 +118,7 @@ export default function CheckoutForm() {
           items: items.map((i) => ({ productId: i.productId, quantity: i.quantity })),
           couponCode: coupon?.code,
           notes,
+          paymentMethod,
         }),
       })
       const orderData = await orderRes.json()
@@ -120,6 +127,13 @@ export default function CheckoutForm() {
         return
       }
       const orderId: string = orderData.orderId
+
+      if (paymentMethod === 'COD') {
+        clearCart()
+        toast.success('Order placed! Pay on delivery.')
+        router.push(`/order-confirmation/${orderData.orderNumber}`)
+        return
+      }
 
       const payRes = await fetch('/api/payment/create-order', {
         method: 'POST',
@@ -223,11 +237,37 @@ export default function CheckoutForm() {
           rows={3}
         />
 
+        <div>
+          <h3 className="font-display text-xl text-forest">Payment Method</h3>
+          <p className="mt-1 text-sm text-warmgray">Choose how you’d like to pay.</p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <PaymentOption
+              selected={paymentMethod === 'ONLINE'}
+              onSelect={() => setPaymentMethod('ONLINE')}
+              icon={<CreditCard size={22} />}
+              title="Online Payment"
+              subtitle="UPI · Cards · Netbanking"
+              badge="Secured by Razorpay"
+            />
+            <PaymentOption
+              selected={paymentMethod === 'COD'}
+              onSelect={() => setPaymentMethod('COD')}
+              icon={<Truck size={22} />}
+              title="Cash on Delivery"
+              subtitle="Pay in cash when your order arrives"
+              badge="Pay on delivery"
+            />
+          </div>
+        </div>
+
         <Button type="submit" loading={loading} size="lg" className="w-full">
-          Pay Now with Razorpay
+          {paymentMethod === 'COD' ? 'Place Order (Cash on Delivery)' : 'Pay Now with Razorpay'}
         </Button>
         <p className="text-center text-xs text-warmgray">
-          Secured by Razorpay · UPI · Cards · Netbanking
+          {paymentMethod === 'COD'
+            ? 'Pay the courier in cash when your order is delivered'
+            : 'Secured by Razorpay · UPI · Cards · Netbanking'}
         </p>
       </form>
 
@@ -283,5 +323,52 @@ export default function CheckoutForm() {
         </dl>
       </aside>
     </div>
+  )
+}
+
+interface PaymentOptionProps {
+  selected: boolean
+  onSelect: () => void
+  icon: ReactNode
+  title: string
+  subtitle: string
+  badge: string
+}
+
+function PaymentOption({ selected, onSelect, icon, title, subtitle, badge }: PaymentOptionProps) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-pressed={selected}
+      className={`relative flex items-start gap-3 rounded-xl border-2 p-4 text-left transition ${
+        selected
+          ? 'border-forest bg-forest/5 shadow-warm'
+          : 'border-warmgray/20 bg-white hover:border-forest/40'
+      }`}
+    >
+      <span
+        className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition ${
+          selected ? 'bg-forest text-cream' : 'bg-parchment text-forest'
+        }`}
+      >
+        {icon}
+      </span>
+      <span className="flex-1">
+        <span className="block font-semibold text-charcoal">{title}</span>
+        <span className="mt-0.5 block text-xs text-warmgray">{subtitle}</span>
+        <span className="mt-1.5 inline-block rounded-full bg-turmeric-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-turmeric-700">
+          {badge}
+        </span>
+      </span>
+      <span
+        className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition ${
+          selected ? 'border-forest bg-forest text-cream' : 'border-warmgray/30 bg-white'
+        }`}
+        aria-hidden
+      >
+        {selected && <CheckCircle2 size={14} />}
+      </span>
+    </button>
   )
 }

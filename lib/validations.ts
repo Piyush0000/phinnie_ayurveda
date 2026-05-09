@@ -25,6 +25,9 @@ export const addressSchema = z.object({
 })
 export type AddressInput = z.infer<typeof addressSchema>
 
+export const paymentMethodSchema = z.enum(['ONLINE', 'COD'])
+export type PaymentMethod = z.infer<typeof paymentMethodSchema>
+
 export const checkoutSchema = z.object({
   shippingAddress: addressSchema,
   items: z
@@ -37,6 +40,7 @@ export const checkoutSchema = z.object({
     .min(1, 'Cart cannot be empty'),
   couponCode: z.string().optional(),
   notes: z.string().optional(),
+  paymentMethod: paymentMethodSchema.default('ONLINE'),
 })
 export type CheckoutInput = z.infer<typeof checkoutSchema>
 

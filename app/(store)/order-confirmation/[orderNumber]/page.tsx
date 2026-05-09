@@ -102,8 +102,14 @@ export default async function OrderConfirmationPage({
             <div className="flex justify-between"><dt>Shipping</dt><dd>{order.shippingCharge === 0 ? 'Free' : formatPrice(order.shippingCharge)}</dd></div>
             <div className="flex justify-between"><dt>Tax</dt><dd>{formatPrice(order.tax)}</dd></div>
             <div className="mt-3 flex justify-between border-t border-forest/10 pt-3 text-lg font-bold text-forest">
-              <dt>Total Paid</dt><dd>{formatPrice(order.total)}</dd>
+              <dt>{order.paymentStatus === 'PAID' ? 'Total Paid' : 'Total Due'}</dt>
+              <dd>{formatPrice(order.total)}</dd>
             </div>
+            {order.paymentMethod === 'COD' && order.paymentStatus !== 'PAID' && (
+              <p className="mt-2 text-center text-xs text-warmgray">
+                Pay {formatPrice(order.total)} in cash to the courier on delivery.
+              </p>
+            )}
           </dl>
         </div>
 

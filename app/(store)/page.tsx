@@ -4,6 +4,7 @@ import ProcessSection from '@/components/store/ProcessSection'
 import FeaturedProducts from '@/components/store/FeaturedProducts'
 import BenefitsSection from '@/components/store/BenefitsSection'
 import TestimonialsSection from '@/components/store/TestimonialsSection'
+import GallerySection from '@/components/store/GallerySection'
 import NewsletterSection from '@/components/store/NewsletterSection'
 import Link from 'next/link'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
@@ -39,6 +40,7 @@ export default async function HomePage() {
       <ProcessSection />
       <PromoBanner />
       <TestimonialsSection />
+      <GallerySection />
       <NewsletterSection />
     </>
   )

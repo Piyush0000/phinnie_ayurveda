@@ -10,6 +10,7 @@ import { handleApiError, requireAdmin } from '@/lib/api-helpers'
 import { checkoutSchema } from '@/lib/validations'
 import { generateOrderNumber } from '@/lib/order-number'
 import { rateLimit } from '@/lib/rate-limit'
+import { finalizeCODOrder } from '@/lib/order-fulfillment'
 
 export const dynamic = 'force-dynamic'
 
@@ -129,6 +130,9 @@ export async function POST(req: NextRequest) {
     const tax = 0
     const total = Math.max(0, afterDiscount + shippingCharge)
 
+    const paymentMethod = parsed.data.paymentMethod
+    const isCOD = paymentMethod === 'COD'
+
     const orderNumber = generateOrderNumber()
     const order = await Order.create({
       orderNumber,
@@ -144,13 +148,26 @@ export async function POST(req: NextRequest) {
       tax,
       total,
       notes: parsed.data.notes,
-      statusHistory: [{ status: 'PENDING', timestamp: new Date(), note: 'Order placed' }],
+      paymentMethod,
+      status: isCOD ? 'CONFIRMED' : 'PENDING',
+      paymentStatus: 'PENDING',
+      statusHistory: isCOD
+        ? [
+            { status: 'PENDING', timestamp: new Date(), note: 'Order placed' },
+            { status: 'CONFIRMED', timestamp: new Date(), note: 'Cash on Delivery confirmed' },
+          ]
+        : [{ status: 'PENDING', timestamp: new Date(), note: 'Order placed' }],
     })
+
+    if (isCOD) {
+      await finalizeCODOrder(order)
+    }
 
     return NextResponse.json({
       orderId: String(order._id),
       orderNumber: order.orderNumber,
       total: order.total,
+      paymentMethod,
     })
   } catch (err) {
     return handleApiError(err)

@@ -47,3 +47,14 @@ export async function finalizePaidOrder(order: IOrder): Promise<void> {
   await Promise.all([applyOrderInventory(order), recordCouponUse(order)])
   void sendOrderConfirmation(order)
 }
+
+/**
+ * COD orders skip the Razorpay verify path entirely. Stock and coupon usage
+ * still need to be reserved at placement time, and the customer should get the
+ * same confirmation email — `paymentStatus` simply stays PENDING until the
+ * courier collects payment on delivery.
+ */
+export async function finalizeCODOrder(order: IOrder): Promise<void> {
+  await Promise.all([applyOrderInventory(order), recordCouponUse(order)])
+  void sendOrderConfirmation(order)
+}
