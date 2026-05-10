@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, MapPin, Send } from 'lucide-react'
+import Link from 'next/link'
+import { Mail, MapPin, Send, Star } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Button from '@/components/ui/Button'
 import { Input, Textarea } from '@/components/ui/Input'
@@ -36,6 +37,20 @@ export default function ContactPage() {
               Khewat no. 491, Khatauni No. 583,<br />
               ward no. 10 Lakhpat colony Karnal 132116
             </p>
+          </div>
+          <div className="rounded-2xl border border-forest/10 bg-parchment/50 p-5">
+            <div className="flex items-center gap-3 text-forest">
+              <Star size={18} /> <span className="font-display text-lg">Leave a Review</span>
+            </div>
+            <p className="mt-1.5 text-sm text-charcoal">
+              Loved your experience? Share it with our community.
+            </p>
+            <Link
+              href="/reviews/submit"
+              className="mt-2 inline-block text-sm font-semibold text-forest underline-offset-4 hover:underline"
+            >
+              Submit a review →
+            </Link>
           </div>
         </div>
 

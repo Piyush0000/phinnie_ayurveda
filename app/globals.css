@@ -42,6 +42,8 @@ h1, h2, h3, h4, h5, h6 {
 @layer utilities {
   .container-narrow { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
   .container-wide { max-width: 1440px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+  .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
 }
 
 @media (min-width: 768px) {

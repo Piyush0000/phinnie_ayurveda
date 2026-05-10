@@ -124,6 +124,28 @@ export const reviewModerationSchema = z.object({
   moderationStatus: z.enum(['PENDING', 'APPROVED', 'REJECTED']).optional(),
 })
 
+export const testimonialSchema = z.object({
+  name: z.string().min(2, 'Name is required').max(120),
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().min(5, 'Please share a few words').max(2000),
+  avatar: z.string().url().optional().or(z.literal('')),
+  location: z.string().max(120).optional().or(z.literal('')),
+  isActive: z.boolean().default(true),
+  approvalStatus: z.enum(['PENDING', 'APPROVED', 'REJECTED']).default('APPROVED'),
+})
+export type TestimonialInput = z.infer<typeof testimonialSchema>
+
+export const testimonialUpdateSchema = testimonialSchema.partial()
+export type TestimonialUpdateInput = z.infer<typeof testimonialUpdateSchema>
+
+export const testimonialPublicSubmitSchema = z.object({
+  name: z.string().min(2, 'Name is required').max(120),
+  rating: z.number().int().min(1).max(5),
+  comment: z.string().min(10, 'Please share a few more details').max(2000),
+  location: z.string().max(120).optional().or(z.literal('')),
+})
+export type TestimonialPublicSubmitInput = z.infer<typeof testimonialPublicSubmitSchema>
+
 export const forgotPasswordSchema = z.object({
   email: z.string().email('Enter a valid email'),
 })
