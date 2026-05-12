@@ -187,16 +187,17 @@ export default function AdminGalleryPage() {
               disabled={uploading}
             />
             <Button
+              size="lg"
               onClick={() => fileRef.current?.click()}
               loading={uploading}
               disabled={uploading}
             >
-              <Upload size={14} />
+              <Upload size={16} />
               {uploading
                 ? uploadProgress
                   ? `Uploading ${uploadProgress.done}/${uploadProgress.total}`
                   : 'Uploading…'
-                : 'Upload photos or videos'}
+                : 'Upload Media'}
             </Button>
           </div>
         </div>
@@ -228,6 +229,13 @@ export default function AdminGalleryPage() {
                 ? 'No gallery items yet. Upload your first photo or video to get started.'
                 : 'No items match this filter.'}
             </p>
+            {items.length === 0 && (
+              <div className="mt-4">
+                <Button onClick={() => fileRef.current?.click()} disabled={uploading}>
+                  <Upload size={14} /> Upload Media
+                </Button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
