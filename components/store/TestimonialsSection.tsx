@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { Star } from 'lucide-react'
 
 interface Testimonial {
@@ -70,12 +69,6 @@ export default function TestimonialsSection() {
       <div className="text-center">
         <p className="text-xs uppercase tracking-widest text-turmeric-700">Loved by thousands</p>
         <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">What Our Family Says</h2>
-        <Link
-          href="/reviews/submit"
-          className="mt-4 inline-block text-sm font-semibold text-forest underline-offset-4 hover:underline"
-        >
-          Share your experience →
-        </Link>
       </div>
       <div className="mt-10 grid gap-6 md:grid-cols-3">
         {list.slice(0, 3).map((r) => (

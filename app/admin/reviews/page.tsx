@@ -235,17 +235,22 @@ export default function AdminReviewsPage() {
     <>
       <AdminHeader title="Reviews" />
       <div className="p-6 lg:p-8">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-warmgray">
-            Manage customer reviews shown on the storefront.
-            {pendingCount > 0 && (
-              <span className="ml-2 font-semibold text-turmeric-700">
-                {pendingCount} pending review
-              </span>
-            )}
-          </p>
-          <Button onClick={openNew}>
-            <Plus size={16} /> Add New Review
+        <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-forest/10 bg-cream p-5 shadow-warm md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="font-display text-xl text-charcoal">
+              Customer reviews are managed here
+            </h2>
+            <p className="mt-1 text-sm text-warmgray">
+              Reviews on the storefront can only be added or removed from this page.
+              {pendingCount > 0 && (
+                <span className="ml-2 font-semibold text-turmeric-700">
+                  {pendingCount} pending review
+                </span>
+              )}
+            </p>
+          </div>
+          <Button onClick={openNew} variant="secondary" size="lg" className="w-full md:w-auto">
+            <Plus size={18} /> Add New Review
           </Button>
         </div>
 
