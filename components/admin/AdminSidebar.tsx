@@ -15,6 +15,7 @@ import {
   Tag,
   Star,
   Quote,
+  Images,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -26,6 +27,7 @@ const NAV = [
   { href: '/admin/coupons', label: 'Coupons', icon: Tag },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/testimonials', label: 'Testimonials', icon: Quote },
+  { href: '/admin/gallery', label: 'Gallery', icon: Images },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 

@@ -26,19 +26,35 @@ export function getCloudinary(): typeof cloudinary {
   return cloudinary
 }
 
+type CloudinaryResourceType = 'image' | 'video' | 'auto'
+
 export async function uploadToCloudinary(
   buffer: Buffer,
   folder = 'thinnie-ayurvedic',
-): Promise<{ url: string; publicId: string }> {
+  resourceType: CloudinaryResourceType = 'image',
+): Promise<{ url: string; publicId: string; resourceType: 'image' | 'video' }> {
   const cld = getCloudinary()
   return new Promise((resolve, reject) => {
     const stream = cld.uploader.upload_stream(
-      { folder, resource_type: 'image' },
+      { folder, resource_type: resourceType },
       (err, result) => {
         if (err || !result) return reject(err ?? new Error('Upload failed'))
-        resolve({ url: result.secure_url, publicId: result.public_id })
+        resolve({
+          url: result.secure_url,
+          publicId: result.public_id,
+          resourceType: (result.resource_type as 'image' | 'video') ?? 'image',
+        })
       },
     )
     stream.end(buffer)
   })
+}
+
+export async function deleteFromCloudinary(
+  publicId: string,
+  resourceType: 'image' | 'video' = 'image',
+): Promise<void> {
+  if (!publicId) return
+  const cld = getCloudinary()
+  await cld.uploader.destroy(publicId, { resource_type: resourceType, invalidate: true })
 }

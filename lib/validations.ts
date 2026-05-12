@@ -138,6 +138,19 @@ export type TestimonialInput = z.infer<typeof testimonialSchema>
 export const testimonialUpdateSchema = testimonialSchema.partial()
 export type TestimonialUpdateInput = z.infer<typeof testimonialUpdateSchema>
 
+export const galleryItemSchema = z.object({
+  url: z.string().url('A valid URL is required'),
+  type: z.enum(['IMAGE', 'VIDEO']),
+  caption: z.string().max(240).optional().or(z.literal('')),
+  publicId: z.string().optional().or(z.literal('')),
+  sortOrder: z.number().int().optional(),
+  isActive: z.boolean().default(true),
+})
+export type GalleryItemInput = z.infer<typeof galleryItemSchema>
+
+export const galleryItemUpdateSchema = galleryItemSchema.partial()
+export type GalleryItemUpdateInput = z.infer<typeof galleryItemUpdateSchema>
+
 export const testimonialPublicSubmitSchema = z.object({
   name: z.string().min(2, 'Name is required').max(120),
   rating: z.number().int().min(1).max(5),

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import Reveal from './Reveal'
@@ -12,28 +12,28 @@ type MediaItem = {
   alt: string
 }
 
-const ITEMS: MediaItem[] = [
+type ApiItem = {
+  _id: string
+  url: string
+  type: 'IMAGE' | 'VIDEO'
+  caption?: string
+}
+
+const FALLBACK: MediaItem[] = [
   { src: '/gallery/IMG_20260508_181247_529.jpg', type: 'image', alt: 'Thinnie Ayurveda — handcrafted ritual' },
-  { src: '/gallery/VID_20260508_181239_230.mp4', type: 'video', alt: 'SLim and Saane in motion' },
   { src: '/gallery/IMG_20260508_181247_746.jpg', type: 'image', alt: 'Slow-cooked the bilona way' },
   { src: '/gallery/IMG_20260508_181247_766.jpg', type: 'image', alt: 'Heritage herbs' },
-  { src: '/gallery/VID_20260508_181239_640.mp4', type: 'video', alt: 'Texture pour' },
   { src: '/gallery/IMG_20260508_181247_891.jpg', type: 'image', alt: 'Stone-ground roots' },
-  { src: '/gallery/VID_20260508_181239_961.mp4', type: 'video', alt: 'Bottling SLim and Saane' },
   { src: '/gallery/IMG_20260508_181248_388.jpg', type: 'image', alt: 'Herbal infusion' },
   { src: '/gallery/IMG_20260508_181248_403.jpg', type: 'image', alt: 'Daily ritual' },
-  { src: '/gallery/VID_20260508_181239_988.mp4', type: 'video', alt: 'Behind the craft' },
-  { src: '/gallery/IMG_20260508_181248_443.jpg', type: 'image', alt: 'Family tradition' },
-  { src: '/gallery/IMG_20260508_181248_512.jpg', type: 'image', alt: 'Roots and oils' },
-  { src: '/gallery/VID_20260508_181240_048.mp4', type: 'video', alt: 'Wellness in motion' },
-  { src: '/gallery/IMG_20260508_181258_642.jpg', type: 'image', alt: 'Ayurvedic wisdom' },
-  { src: '/gallery/IMG_20260508_181259_026.jpg', type: 'image', alt: 'Cold-pressed sesame' },
-  { src: '/gallery/IMG_20260508_181259_190.jpg', type: 'image', alt: 'Shade-dried leaves' },
 ]
 
 const AUTOPLAY_MS = 4000
+const CLOUDINARY_HOST = /^https:\/\/res\.cloudinary\.com\//
 
 export default function GallerySection() {
+  const [items, setItems] = useState<MediaItem[]>([])
+  const [loaded, setLoaded] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const isOpen = activeIndex !== null
   const trackRef = useRef<HTMLDivElement | null>(null)
@@ -41,14 +41,40 @@ export default function GallerySection() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(true)
 
+  useEffect(() => {
+    let alive = true
+    fetch('/api/gallery?limit=60')
+      .then((r) => (r.ok ? r.json() : { items: [] }))
+      .then((data: { items?: ApiItem[] }) => {
+        if (!alive) return
+        const mapped: MediaItem[] = (data.items ?? []).map((it) => ({
+          src: it.url,
+          type: it.type === 'VIDEO' ? 'video' : 'image',
+          alt: it.caption?.trim() || 'Thinnie Ayurveda gallery',
+        }))
+        setItems(mapped)
+        setLoaded(true)
+      })
+      .catch(() => {
+        if (!alive) return
+        setItems([])
+        setLoaded(true)
+      })
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  const list = useMemo(() => (loaded && items.length > 0 ? items : FALLBACK), [loaded, items])
+
   const close = useCallback(() => setActiveIndex(null), [])
   const next = useCallback(
-    () => setActiveIndex((i) => (i === null ? null : (i + 1) % ITEMS.length)),
-    [],
+    () => setActiveIndex((i) => (i === null ? null : (i + 1) % list.length)),
+    [list.length],
   )
   const prev = useCallback(
-    () => setActiveIndex((i) => (i === null ? null : (i - 1 + ITEMS.length) % ITEMS.length)),
-    [],
+    () => setActiveIndex((i) => (i === null ? null : (i - 1 + list.length) % list.length)),
+    [list.length],
   )
 
   useEffect(() => {
@@ -94,7 +120,7 @@ export default function GallerySection() {
       track.removeEventListener('scroll', updateScrollState)
       window.removeEventListener('resize', updateScrollState)
     }
-  }, [updateScrollState])
+  }, [updateScrollState, list.length])
 
   useEffect(() => {
     if (isOpen || isHovered) return
@@ -110,9 +136,14 @@ export default function GallerySection() {
       }
     }, AUTOPLAY_MS)
     return () => window.clearInterval(id)
-  }, [isOpen, isHovered, scrollByCard])
+  }, [isOpen, isHovered, scrollByCard, list.length])
 
-  const active = activeIndex !== null ? ITEMS[activeIndex] : null
+  if (loaded && items.length === 0) {
+    // No DB items and no fallback worth showing — render nothing rather than a half-empty section.
+    // (FALLBACK still kicks in above, so this guard is only hit if FALLBACK is manually emptied.)
+  }
+
+  const active = activeIndex !== null ? list[activeIndex] : null
 
   return (
     <section className="bg-parchment/40">
@@ -140,9 +171,9 @@ export default function GallerySection() {
               className="hide-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-2"
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
-              {ITEMS.map((item, idx) => (
+              {list.map((item, idx) => (
                 <button
-                  key={item.src}
+                  key={`${item.src}-${idx}`}
                   type="button"
                   data-gallery-item
                   onClick={() => setActiveIndex(idx)}
@@ -156,6 +187,7 @@ export default function GallerySection() {
                       fill
                       sizes="(min-width: 1280px) 28vw, (min-width: 1024px) 27vw, (min-width: 768px) 31vw, (min-width: 640px) 44vw, 70vw"
                       className="object-cover transition duration-500 group-hover:scale-105"
+                      unoptimized={!CLOUDINARY_HOST.test(item.src) && !item.src.startsWith('/')}
                     />
                   ) : (
                     <>
@@ -261,6 +293,7 @@ export default function GallerySection() {
                     sizes="100vw"
                     className="object-contain"
                     priority
+                    unoptimized={!CLOUDINARY_HOST.test(active.src) && !active.src.startsWith('/')}
                   />
                 </div>
               ) : (
