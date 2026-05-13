@@ -61,17 +61,13 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             <Menu size={22} />
           </button>
 
-          <Link href="/" aria-label={storeName} className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt={storeName}
-              width={480}
-              height={213}
-              priority
-              quality={95}
-              sizes="(min-width: 1024px) 320px, 240px"
-              className="h-16 w-auto lg:h-20"
-            />
+          <Link href="/" aria-label={storeName} className="group flex flex-col items-center">
+            <span className="font-display text-4xl tracking-tight text-forest lg:text-5xl">
+              Thinnie
+            </span>
+            <span className="mt-[-2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-turmeric-700 lg:text-[11px]">
+              SLim and Saane
+            </span>
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
@@ -180,8 +176,9 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             >
               <X size={20} />
             </button>
-            <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="inline-flex items-center">
-              <Image src="/logo.png" alt={storeName} width={320} height={142} quality={95} className="h-12 w-auto" />
+            <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="flex flex-col items-start">
+              <span className="font-display text-3xl tracking-tight text-forest">Thinnie</span>
+              <span className="mt-[-2px] text-[9px] font-semibold uppercase tracking-[0.25em] text-turmeric-700">SLim and Saane</span>
             </Link>
             <nav className="mt-8 flex flex-col gap-3">
               {NAV_LINKS.map((l) => (
