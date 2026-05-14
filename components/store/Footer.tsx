@@ -15,7 +15,7 @@ export default function Footer({ social }: FooterProps = {}) {
     <footer className="mt-16 bg-forest-800 text-cream">
       <div className="container-wide grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <h3 className="font-display text-2xl">Thinnie Slim and Saane</h3>
+          <h3 className="font-display text-2xl">Thinnie Slim and Sane</h3>
           <p className="mt-3 text-sm leading-relaxed text-cream/70">
             Authentic Ayurveda crafted from time-honored formulas. Pure, ethical, and made with reverence for nature.
           </p>
@@ -81,7 +81,7 @@ export default function Footer({ social }: FooterProps = {}) {
       </div>
       <div className="border-t border-cream/15">
         <div className="container-wide flex flex-col items-center justify-between gap-3 py-5 text-xs text-cream/60 md:flex-row">
-          <p>© {new Date().getFullYear()} Thinnie Slim and Saane. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Thinnie Slim and Sane. All rights reserved.</p>
           <nav className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <Link href="/terms-and-conditions" className="hover:text-cream">Terms</Link>
             <Link href="/privacy-policy" className="hover:text-cream">Privacy</Link>

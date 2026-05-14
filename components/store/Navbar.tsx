@@ -41,9 +41,10 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
           scrolled
-            ? 'border-b border-forest/10 bg-cream/85 shadow-warm backdrop-blur-xl supports-[backdrop-filter]:bg-cream/70'
-            : 'bg-cream/70 backdrop-blur-md supports-[backdrop-filter]:bg-cream/55'
+            ? 'border-b border-forest/10 shadow-warm backdrop-blur-xl'
+            : 'backdrop-blur-md'
         }`}
+        style={{ backgroundColor: '#FAFCF5' }}
       >
         {bannerText && (
           <div className="border-b border-forest/10 bg-forest text-cream">
@@ -61,13 +62,15 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             <Menu size={22} />
           </button>
 
-          <Link href="/" aria-label={storeName} className="group flex flex-col items-center">
-            <span className="font-display text-4xl tracking-tight text-forest lg:text-5xl">
-              Thinnie
-            </span>
-            <span className="mt-[-2px] text-[10px] font-semibold uppercase tracking-[0.25em] text-turmeric-700 lg:text-[11px]">
-              SLim and Saane
-            </span>
+          <Link href="/" aria-label={storeName} className="group flex items-center">
+            <Image
+              src="/logo.png"
+              alt={storeName}
+              width={1222}
+              height={721}
+              priority
+              className="h-16 w-auto lg:h-20"
+            />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex">
@@ -168,7 +171,10 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-charcoal/60" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 h-full w-72 bg-cream p-6 shadow-warm-lg animate-fade-in">
+          <aside
+            className="absolute left-0 top-0 h-full w-72 p-6 shadow-warm-lg animate-fade-in"
+            style={{ backgroundColor: '#FAFCF5' }}
+          >
             <button
               onClick={() => setMobileOpen(false)}
               className="absolute right-4 top-4 rounded-lg p-2 text-forest hover:bg-parchment"
@@ -176,9 +182,14 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
             >
               <X size={20} />
             </button>
-            <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="flex flex-col items-start">
-              <span className="font-display text-3xl tracking-tight text-forest">Thinnie</span>
-              <span className="mt-[-2px] text-[9px] font-semibold uppercase tracking-[0.25em] text-turmeric-700">SLim and Saane</span>
+            <Link href="/" onClick={() => setMobileOpen(false)} aria-label={storeName} className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt={storeName}
+                width={488}
+                height={288}
+                className="h-14 w-auto"
+              />
             </Link>
             <nav className="mt-8 flex flex-col gap-3">
               {NAV_LINKS.map((l) => (

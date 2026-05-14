@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest) {
   try {
     await connectDB()
-    const limit = Math.min(Number(req.nextUrl.searchParams.get('limit')) || 12, 50)
+    const limit = Math.min(Number(req.nextUrl.searchParams.get('limit')) || 12, 500)
     const testimonials = await Testimonial.find({
       isActive: true,
       approvalStatus: 'APPROVED',

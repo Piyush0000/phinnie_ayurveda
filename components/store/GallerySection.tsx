@@ -155,7 +155,7 @@ export default function GallerySection() {
               The Thinnie Ayurveda Gallery
             </h2>
             <p className="mx-auto mt-4 max-w-xl font-accent text-lg text-warmgray">
-              Glimpses of the SLim and Saane ritual — from copper kadhais to your morning shelf.
+              Glimpses of the Slim and Sane ritual — from copper kadhais to your morning shelf.
             </p>
           </div>
         </Reveal>

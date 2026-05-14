@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
 
   useEffect(() => {
     let alive = true
-    fetch('/api/testimonials?limit=12')
+    fetch('/api/testimonials?limit=200')
       .then((r) => (r.ok ? r.json() : { testimonials: [] }))
       .then((data) => {
         if (!alive) return
@@ -63,6 +63,7 @@ export default function TestimonialsSection() {
   }, [])
 
   const list = loaded && reviews.length > 0 ? reviews : FALLBACK
+  const scrollable = list.length > 9
 
   return (
     <section className="container-wide py-16 md:py-20">
@@ -70,8 +71,14 @@ export default function TestimonialsSection() {
         <p className="text-xs uppercase tracking-widest text-turmeric-700">Loved by thousands</p>
         <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">What Our Family Says</h2>
       </div>
-      <div className="mt-10 grid gap-6 md:grid-cols-3">
-        {list.slice(0, 3).map((r) => (
+      <div
+        className={
+          scrollable
+            ? 'mt-10 grid max-h-[44rem] gap-6 overflow-y-auto pr-2 md:grid-cols-2 lg:grid-cols-3'
+            : 'mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3'
+        }
+      >
+        {list.map((r) => (
           <article
             key={r._id}
             className="flex flex-col rounded-2xl border border-forest/10 bg-cream p-7 shadow-warm"

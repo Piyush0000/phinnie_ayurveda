@@ -493,14 +493,14 @@ async function main() {
   await SiteSettings.findOneAndUpdate(
     {},
     {
-      storeName: 'Thinnie Slim and Saane',
+      storeName: 'Thinnie Slim and Sane',
       storeEmail: 'hello@thinnie.in',
       storeAddress: 'Khewat no. 491, Khatauni No. 583, ward no. 10 Lakhpat colony Karnal 132116',
       currency: 'INR',
       freeShippingMin: 999,
       shippingCharge: 99,
       taxRate: 18,
-      metaTitle: 'Thinnie Slim and Saane — Authentic Ayurveda',
+      metaTitle: 'Thinnie Slim and Sane — Authentic Ayurveda',
       metaDescription: 'Premium Ayurvedic products handcrafted from time-honored formulas.',
     },
     { upsert: true, new: true },
