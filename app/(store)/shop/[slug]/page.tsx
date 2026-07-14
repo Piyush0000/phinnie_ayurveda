@@ -9,6 +9,7 @@ import StarRating from '@/components/store/StarRating'
 import AddToCartSection from './AddToCartSection'
 import { formatPrice, calculateDiscount, formatDate } from '@/lib/utils'
 import Badge from '@/components/ui/Badge'
+import { getPublicSettings } from '@/lib/site-settings'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,6 +70,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
   if (!data) notFound()
   const { product, reviews, related } = data
   const discount = calculateDiscount(product.price, product.comparePrice)
+  const settings = await getPublicSettings()
 
   return (
     <div className="container-wide py-8 md:py-12">
@@ -126,7 +128,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
           <div className="mt-4 grid grid-cols-2 gap-3 rounded-2xl border border-forest/10 bg-parchment/50 p-4 text-center text-xs text-warmgray md:grid-cols-4">
             <div>✦ Ayush Certified</div>
             <div>✦ 100% Pure</div>
-            <div>✦ Free Ship ₹999+</div>
+            <div>✦ Free Ship {formatPrice(settings.freeShippingMin)}+</div>
             <div>✦ Easy Returns</div>
           </div>
         </div>

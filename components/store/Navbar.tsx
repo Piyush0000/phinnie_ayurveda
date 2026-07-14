@@ -17,12 +17,20 @@ const NAV_LINKS = [
 interface NavbarProps {
   bannerText?: string | null
   storeName?: string
+  freeShippingMin?: number
+  shippingCharge?: number
 }
 
-export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: NavbarProps = {}) {
+export default function Navbar({
+  bannerText,
+  storeName = 'Thinnie Ayurvedic',
+  freeShippingMin,
+  shippingCharge,
+}: NavbarProps = {}) {
   const { data: session } = useSession()
   const itemCount = useCartStore((s) => s.getItemCount())
   const openCart = useCartStore((s) => s.openCart)
+  const setConfig = useCartStore((s) => s.setConfig)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenu, setUserMenu] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -35,6 +43,12 @@ export default function Navbar({ bannerText, storeName = 'Thinnie Ayurvedic' }: 
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    if (freeShippingMin !== undefined && shippingCharge !== undefined) {
+      setConfig({ freeShippingMin, shippingCharge })
+    }
+  }, [freeShippingMin, shippingCharge, setConfig])
 
   return (
     <>

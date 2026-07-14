@@ -9,6 +9,7 @@ import NewsletterSection from '@/components/store/NewsletterSection'
 import Link from 'next/link'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
+import { getPublicSettings } from '@/lib/site-settings'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,11 +31,12 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const { featured } = await getHomeData()
+  const settings = await getPublicSettings()
   return (
     <>
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
-      <BenefitsSection />
+      <BenefitsSection freeShippingMin={settings.freeShippingMin} />
       <BrandStorySection />
       <FeaturedProducts products={featured} />
       <ProcessSection />

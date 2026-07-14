@@ -3,14 +3,17 @@
 import { Leaf, ShieldCheck, Truck, Sparkles } from 'lucide-react'
 import Reveal from './Reveal'
 
-const BENEFITS = [
-  { icon: Leaf, title: '100% Natural', desc: 'Pure herbs sourced from trusted Ayurvedic farms across India.' },
-  { icon: ShieldCheck, title: 'AYUSH Certified', desc: 'Every formula tested for purity, potency, and safety.' },
-  { icon: Truck, title: 'Free Shipping', desc: 'Complimentary delivery on every order above ₹999.' },
-  { icon: Sparkles, title: 'Cruelty-Free', desc: 'Ethically made — never tested on animals.' },
-]
+interface BenefitsSectionProps {
+  freeShippingMin?: number
+}
 
-export default function BenefitsSection() {
+export default function BenefitsSection({ freeShippingMin = 999 }: BenefitsSectionProps) {
+  const BENEFITS = [
+    { icon: Leaf, title: '100% Natural', desc: 'Pure herbs sourced from trusted Ayurvedic farms across India.' },
+    { icon: ShieldCheck, title: 'AYUSH Certified', desc: 'Every formula tested for purity, potency, and safety.' },
+    { icon: Truck, title: 'Free Shipping', desc: `Complimentary delivery on every order above ₹${freeShippingMin}.` },
+    { icon: Sparkles, title: 'Cruelty-Free', desc: 'Ethically made — never tested on animals.' },
+  ]
   return (
     <section className="bg-parchment/50">
       <div className="container-wide py-14 md:py-20">

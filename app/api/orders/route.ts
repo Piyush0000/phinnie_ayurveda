@@ -122,11 +122,11 @@ export async function POST(req: NextRequest) {
     }
 
     const settings = (await SiteSettings.findOne().lean()) ?? {
-      freeShippingMin: 0,
-      shippingCharge: 0,
+      freeShippingMin: 999,
+      shippingCharge: 99,
     }
     const afterDiscount = subtotal - discount
-    const shippingCharge = 0
+    const shippingCharge = afterDiscount >= (settings.freeShippingMin ?? 999) ? 0 : (settings.shippingCharge ?? 99)
     const tax = 0
     const total = Math.max(0, afterDiscount + shippingCharge)
 
