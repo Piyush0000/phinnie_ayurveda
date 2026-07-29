@@ -6,7 +6,7 @@ import BenefitsSection from '@/components/store/BenefitsSection'
 import TestimonialsSection from '@/components/store/TestimonialsSection'
 import GallerySection from '@/components/store/GallerySection'
 import NewsletterSection from '@/components/store/NewsletterSection'
-import Link from 'next/link'
+import AdBanner from '@/components/store/AdBanner'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
 import { getPublicSettings } from '@/lib/site-settings'
@@ -37,10 +37,10 @@ export default async function HomePage() {
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
       <BenefitsSection freeShippingMin={settings.freeShippingMin} />
+      <AdBanner />
       <BrandStorySection />
       <FeaturedProducts products={featured} />
       <ProcessSection />
-      <PromoBanner />
       <TestimonialsSection />
       <GallerySection />
       <NewsletterSection />
@@ -58,28 +58,6 @@ function SetupBanner() {
           <code className="rounded bg-cream px-1.5 py-0.5">MONGODB_URI</code>, then run{' '}
           <code className="rounded bg-cream px-1.5 py-0.5">npm run seed</code> to populate sample data.
         </p>
-      </div>
-    </section>
-  )
-}
-
-function PromoBanner() {
-  return (
-    <section className="bg-forest text-cream">
-      <div className="container-wide flex flex-col items-center justify-between gap-6 py-12 md:flex-row md:py-16">
-        <div className="text-center md:text-left">
-          <p className="text-xs uppercase tracking-widest text-turmeric-200">Limited Time</p>
-          <h2 className="mt-1 font-display text-3xl md:text-4xl">First Order? Save 15%</h2>
-          <p className="mt-2 font-accent text-lg text-cream/80">
-            Use code <strong className="text-turmeric">WELCOME15</strong> at checkout
-          </p>
-        </div>
-        <Link
-          href="/shop"
-          className="inline-flex h-12 items-center rounded-lg bg-turmeric px-7 font-semibold text-charcoal hover:bg-turmeric-400"
-        >
-          Shop Now
-        </Link>
       </div>
     </section>
   )
