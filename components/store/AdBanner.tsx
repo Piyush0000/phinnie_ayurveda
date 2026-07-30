@@ -31,20 +31,20 @@ export default function AdBanner() {
   if (!mounted || !isVisible) return null
 
   return (
-    <section className="relative bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 text-white min-h-[700px] md:min-h-[800px] overflow-hidden">
+    <section className="relative bg-gradient-to-br from-forest-900 via-forest-800 to-emerald-900 text-cream min-h-[700px] md:min-h-[800px] overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 left-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute top-40 right-10 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-10 left-1/2 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-10 left-10 w-72 h-72 bg-turmeric rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute top-40 right-10 w-72 h-72 bg-amber-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-10 left-1/2 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <button
         onClick={handleDismiss}
-        className="absolute top-4 right-4 z-20 rounded-full bg-white/20 backdrop-blur-sm p-2 hover:bg-white/30 transition-colors"
+        className="absolute top-4 right-4 z-20 rounded-full bg-cream/20 backdrop-blur-sm p-2 hover:bg-cream/30 transition-colors"
         aria-label="Close ad"
       >
-        <X className="h-6 w-6 text-white" />
+        <X className="h-6 w-6 text-cream" />
       </button>
 
       <div className="container-wide relative z-10 flex flex-col md:flex-row items-center justify-center gap-8 py-12 md:py-16">
@@ -55,13 +55,13 @@ export default function AdBanner() {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="absolute -inset-4 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-3xl blur-2xl opacity-40" />
+            <div className="absolute -inset-4 bg-gradient-to-r from-turmeric to-amber-500 rounded-3xl blur-2xl opacity-40" />
             <img 
               src="/ad.jpeg" 
               alt="Special Promotion" 
-              className="relative w-full h-[350px] md:h-[450px] lg:h-[550px] object-cover rounded-3xl shadow-2xl border-4 border-white/50"
+              className="relative w-full h-[350px] md:h-[450px] lg:h-[550px] object-cover rounded-3xl shadow-2xl border-4 border-turmeric/50"
             />
-            <div className="absolute -top-4 -right-4 bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full font-bold text-lg shadow-lg animate-bounce">
+            <div className="absolute -top-4 -right-4 bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-4 py-2 rounded-full font-bold text-lg shadow-lg animate-bounce">
               50% OFF
             </div>
           </motion.div>
@@ -73,81 +73,81 @@ export default function AdBanner() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
-              <Sparkles className="h-5 w-5 text-yellow-300" />
-              <span className="text-sm font-semibold uppercase tracking-wider">Limited Time Offer</span>
+            <div className="inline-flex items-center gap-2 bg-turmeric/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-turmeric/30">
+              <Sparkles className="h-5 w-5 text-turmeric-300" />
+              <span className="text-sm font-semibold uppercase tracking-wider text-turmeric-200">Limited Time Offer</span>
             </div>
             
             <h2 className="font-display text-4xl md:text-5xl lg:text-7xl font-bold leading-tight mb-4">
-              <span className="bg-gradient-to-r from-yellow-200 via-pink-200 to-purple-200 bg-clip-text text-transparent">
-                First Order?
+              <span className="bg-gradient-to-r from-turmeric-200 via-amber-200 to-yellow-200 bg-clip-text text-transparent">
+                Thinnie Birthday
               </span>
               <br />
-              <span className="text-white">Save 15%</span>
+              <span className="text-cream">Sale</span>
             </h2>
             
-            <p className="font-accent text-xl md:text-2xl text-white/90 mb-6">
-              Use code <span className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-1 rounded-lg font-bold text-2xl mx-1">WELCOME15</span> at checkout
+            <p className="font-accent text-xl md:text-2xl text-cream/90 mb-6">
+              Use code <span className="inline-block bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-4 py-1 rounded-lg font-bold text-2xl mx-1">BIRTHDAY15</span> at checkout
             </p>
 
             {/* Data Points */}
             <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <Star className="h-5 w-5 text-yellow-400" />
-                  <span className="text-2xl font-bold">4.9/5</span>
+                  <Star className="h-5 w-5 text-turmeric-300" />
+                  <span className="text-2xl font-bold text-cream">4.9/5</span>
                 </div>
-                <p className="text-sm text-white/80">10,000+ Happy Customers</p>
+                <p className="text-sm text-cream/80">10,000+ Happy Customers</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
                 <div className="flex items-center gap-2 mb-2">
-                  <Award className="h-5 w-5 text-green-400" />
-                  <span className="text-2xl font-bold">100%</span>
+                  <Award className="h-5 w-5 text-emerald-400" />
+                  <span className="text-2xl font-bold text-cream">100%</span>
                 </div>
-                <p className="text-sm text-white/80">Natural Ingredients</p>
+                <p className="text-sm text-cream/80">Natural Ingredients</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
                 <div className="flex items-center gap-2 mb-2">
                   <Truck className="h-5 w-5 text-blue-400" />
-                  <span className="text-2xl font-bold">Free</span>
+                  <span className="text-2xl font-bold text-cream">Free</span>
                 </div>
-                <p className="text-sm text-white/80">Shipping on ₹999+</p>
+                <p className="text-sm text-cream/80">Shipping on ₹999+</p>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
                 <div className="flex items-center gap-2 mb-2">
                   <Heart className="h-5 w-5 text-pink-400" />
-                  <span className="text-2xl font-bold">24/7</span>
+                  <span className="text-2xl font-bold text-cream">24/7</span>
                 </div>
-                <p className="text-sm text-white/80">Customer Support</p>
+                <p className="text-sm text-cream/80">Customer Support</p>
               </div>
             </div>
 
             {/* Trust Badges */}
             <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20">
-                <Shield className="h-4 w-4 text-green-400" />
-                <span className="text-xs font-semibold">AYUSH Certified</span>
+              <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
+                <Shield className="h-4 w-4 text-emerald-400" />
+                <span className="text-xs font-semibold text-cream">AYUSH Certified</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20">
+              <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
                 <Heart className="h-4 w-4 text-pink-400" />
-                <span className="text-xs font-semibold">Cruelty-Free</span>
+                <span className="text-xs font-semibold text-cream">Cruelty-Free</span>
               </div>
-              <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-white/20">
-                <Award className="h-4 w-4 text-yellow-400" />
-                <span className="text-xs font-semibold">Lab Tested</span>
+              <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
+                <Award className="h-4 w-4 text-turmeric-300" />
+                <span className="text-xs font-semibold text-cream">Lab Tested</span>
               </div>
             </div>
 
             <Link
               href="/shop"
-              className="inline-flex h-16 items-center gap-3 rounded-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 px-10 font-bold text-white text-xl hover:from-yellow-300 hover:via-orange-400 hover:to-pink-400 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 border-2 border-white/30"
+              className="inline-flex h-16 items-center gap-3 rounded-full bg-gradient-to-r from-turmeric via-amber-500 to-yellow-500 px-10 font-bold text-forest-900 text-xl hover:from-turmeric-400 hover:via-amber-400 hover:to-yellow-400 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:scale-105 border-2 border-cream/30"
             >
               Shop Now
               <Sparkles className="h-5 w-5" />
             </Link>
 
-            <p className="mt-4 text-sm text-white/70">
-              *Valid on first purchase only. T&C apply.
+            <p className="mt-4 text-sm text-cream/70">
+              *Valid on birthday special purchases. T&C apply.
             </p>
           </motion.div>
         </div>
