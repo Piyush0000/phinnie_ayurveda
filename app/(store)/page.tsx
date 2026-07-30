@@ -34,10 +34,10 @@ export default async function HomePage() {
   const settings = await getPublicSettings()
   return (
     <>
+      <AdBanner />
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
       <BenefitsSection freeShippingMin={settings.freeShippingMin} />
-      <AdBanner />
       <BrandStorySection />
       <FeaturedProducts products={featured} />
       <ProcessSection />
