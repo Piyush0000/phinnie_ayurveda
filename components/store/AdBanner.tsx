@@ -48,7 +48,35 @@ export default function AdBanner() {
       </button>
 
       <div className="container-wide relative z-10 flex flex-col md:flex-row items-center justify-center gap-8 py-12 md:py-16">
-        <div className="w-full md:w-1/2 flex justify-center">
+        <div className="w-full md:w-1/2 flex justify-center relative">
+          {/* Floating Ayurvedic Avatars */}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="absolute -left-4 top-1/4 w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-4 border-turmeric shadow-xl z-10"
+          >
+            <img src="/gallery/IMG_20260508_181247_529.jpg" alt="Ayurvedic herbs" className="w-full h-full object-cover" />
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="absolute -right-4 top-1/3 w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-4 border-amber-400 shadow-xl z-10"
+          >
+            <img src="/gallery/IMG_20260508_181247_746.jpg" alt="Natural ingredients" className="w-full h-full object-cover" />
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="absolute left-1/4 -bottom-4 w-14 h-14 md:w-18 md:h-18 rounded-full overflow-hidden border-4 border-emerald-400 shadow-xl z-10"
+          >
+            <img src="/gallery/IMG_20260508_181247_766.jpg" alt="Ayurvedic products" className="w-full h-full object-cover" />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -62,16 +90,36 @@ export default function AdBanner() {
               className="relative w-full h-[350px] md:h-[450px] lg:h-[550px] object-cover rounded-3xl shadow-2xl border-4 border-turmeric/50"
             />
             <div className="absolute -top-4 -right-4 bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-4 py-2 rounded-full font-bold text-lg shadow-lg animate-bounce">
-              50% OFF
+              60% OFF
             </div>
           </motion.div>
         </div>
 
-        <div className="w-full md:w-1/2 text-center md:text-left">
+        <div className="w-full md:w-1/2 text-center md:text-left relative">
+          {/* Decorative Ayurvedic Elements */}
+          <motion.div 
+            initial={{ opacity: 0, rotate: -20 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="absolute -top-8 right-8 w-12 h-12 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-turmeric/50 shadow-lg opacity-60"
+          >
+            <img src="/gallery/IMG_20260508_181258_642.jpg" alt="" className="w-full h-full object-cover" />
+          </motion.div>
+          
+          <motion.div 
+            initial={{ opacity: 0, rotate: 20 }}
+            animate={{ opacity: 1, rotate: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="absolute top-1/2 -right-6 w-10 h-10 md:w-14 md:h-14 rounded-full overflow-hidden border-2 border-amber-400/50 shadow-lg opacity-50"
+          >
+            <img src="/gallery/IMG_20260508_181259_026.jpg" alt="" className="w-full h-full object-cover" />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative z-10"
           >
             <div className="inline-flex items-center gap-2 bg-turmeric/20 backdrop-blur-sm rounded-full px-4 py-2 mb-4 border border-turmeric/30">
               <Sparkles className="h-5 w-5 text-turmeric-300" />
@@ -83,59 +131,116 @@ export default function AdBanner() {
                 Thinnie Birthday
               </span>
               <br />
-              <span className="text-cream">Sale</span>
+              <span className="text-cream">Sale - 60% OFF</span>
             </h2>
             
             <p className="font-accent text-xl md:text-2xl text-cream/90 mb-6">
-              Use code <span className="inline-block bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-4 py-1 rounded-lg font-bold text-2xl mx-1">BIRTHDAY15</span> at checkout
+              Celebrate with us! Get amazing discounts on all Ayurvedic products
             </p>
 
-            {/* Data Points */}
+            {/* Data Points with Ayurvedic Images */}
             <div className="grid grid-cols-2 gap-4 mb-8">
-              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 opacity-20">
+                  <img src="/gallery/IMG_20260508_181248_388.jpg" alt="" className="w-full h-full object-cover rounded-bl-xl" />
+                </div>
+                <div className="flex items-center gap-2 mb-2 relative z-10">
                   <Star className="h-5 w-5 text-turmeric-300" />
                   <span className="text-2xl font-bold text-cream">4.9/5</span>
                 </div>
-                <p className="text-sm text-cream/80">10,000+ Happy Customers</p>
+                <p className="text-sm text-cream/80 relative z-10">10,000+ Happy Customers</p>
               </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 opacity-20">
+                  <img src="/gallery/IMG_20260508_181248_403.jpg" alt="" className="w-full h-full object-cover rounded-bl-xl" />
+                </div>
+                <div className="flex items-center gap-2 mb-2 relative z-10">
                   <Award className="h-5 w-5 text-emerald-400" />
                   <span className="text-2xl font-bold text-cream">100%</span>
                 </div>
-                <p className="text-sm text-cream/80">Natural Ingredients</p>
+                <p className="text-sm text-cream/80 relative z-10">Natural Ingredients</p>
               </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 opacity-20">
+                  <img src="/gallery/IMG_20260508_181248_443.jpg" alt="" className="w-full h-full object-cover rounded-bl-xl" />
+                </div>
+                <div className="flex items-center gap-2 mb-2 relative z-10">
                   <Truck className="h-5 w-5 text-blue-400" />
                   <span className="text-2xl font-bold text-cream">Free</span>
                 </div>
-                <p className="text-sm text-cream/80">Shipping on ₹999+</p>
+                <p className="text-sm text-cream/80 relative z-10">Shipping on ₹999+</p>
               </div>
-              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="bg-cream/10 backdrop-blur-sm rounded-xl p-4 border border-cream/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-16 h-16 opacity-20">
+                  <img src="/gallery/IMG_20260508_181248_512.jpg" alt="" className="w-full h-full object-cover rounded-bl-xl" />
+                </div>
+                <div className="flex items-center gap-2 mb-2 relative z-10">
                   <Heart className="h-5 w-5 text-pink-400" />
                   <span className="text-2xl font-bold text-cream">24/7</span>
                 </div>
-                <p className="text-sm text-cream/80">Customer Support</p>
+                <p className="text-sm text-cream/80 relative z-10">Customer Support</p>
               </div>
             </div>
 
-            {/* Trust Badges */}
+            {/* Trust Badges with Product Images */}
             <div className="flex flex-wrap justify-center md:justify-start gap-3 mb-8">
               <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
+                <div className="w-6 h-6 rounded-full overflow-hidden border border-emerald-400">
+                  <img src="/gallery/IMG_20260508_181259_190.jpg" alt="" className="w-full h-full object-cover" />
+                </div>
                 <Shield className="h-4 w-4 text-emerald-400" />
                 <span className="text-xs font-semibold text-cream">AYUSH Certified</span>
               </div>
               <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
+                <div className="w-6 h-6 rounded-full overflow-hidden border border-pink-400">
+                  <img src="/gallery/IMG_20260508_181247_891.jpg" alt="" className="w-full h-full object-cover" />
+                </div>
                 <Heart className="h-4 w-4 text-pink-400" />
                 <span className="text-xs font-semibold text-cream">Cruelty-Free</span>
               </div>
               <div className="flex items-center gap-2 bg-cream/10 backdrop-blur-sm rounded-full px-3 py-1.5 border border-cream/20">
+                <div className="w-6 h-6 rounded-full overflow-hidden border border-turmeric-300">
+                  <img src="/gallery/IMG_20260508_181247_529.jpg" alt="" className="w-full h-full object-cover" />
+                </div>
                 <Award className="h-4 w-4 text-turmeric-300" />
                 <span className="text-xs font-semibold text-cream">Lab Tested</span>
               </div>
+            </div>
+
+            {/* Additional Product Showcase */}
+            <div className="flex gap-3 mb-8 justify-center md:justify-start">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 border-turmeric/30 shadow-lg"
+              >
+                <img src="/gallery/IMG_20260508_181247_746.jpg" alt="Ayurvedic product" className="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 border-amber-400/30 shadow-lg"
+              >
+                <img src="/gallery/IMG_20260508_181247_766.jpg" alt="Ayurvedic product" className="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 1.0 }}
+                className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 border-emerald-400/30 shadow-lg"
+              >
+                <img src="/gallery/IMG_20260508_181248_388.jpg" alt="Ayurvedic product" className="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 1.1 }}
+                className="w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden border-2 border-pink-400/30 shadow-lg"
+              >
+                <img src="/gallery/IMG_20260508_181248_403.jpg" alt="Ayurvedic product" className="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+              </motion.div>
             </div>
 
             <Link
