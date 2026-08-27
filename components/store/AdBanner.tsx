@@ -138,13 +138,13 @@ export default function AdBanner() {
             className="relative w-full max-w-md"
           >
             <div className="absolute -inset-2 md:-inset-4 bg-gradient-to-r from-turmeric to-amber-500 rounded-2xl md:rounded-3xl blur-xl md:blur-2xl opacity-40" />
-            <img 
-              src="/ad.jpeg" 
-              alt="Special Promotion" 
-              className="relative w-full h-[250px] sm:h-[300px] md:h-[400px] lg:h-[500px] object-cover rounded-2xl md:rounded-3xl shadow-2xl border-3 md:border-4 border-turmeric/50"
+            <img
+              src="/rakhi-offer.jpeg"
+              alt="Raksha Bandhan Special Offer"
+              className="relative w-full h-auto object-contain rounded-2xl md:rounded-3xl shadow-2xl border-3 md:border-4 border-turmeric/50"
             />
             <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-sm md:text-lg shadow-lg animate-bounce">
-              60% OFF
+              BUY 3 GET 1 FREE
             </div>
           </motion.div>
         </div>
@@ -177,17 +177,17 @@ export default function AdBanner() {
           >
             <div className="inline-flex items-center gap-2 bg-turmeric/20 backdrop-blur-sm rounded-full px-3 py-1.5 md:px-4 md:py-2 mb-3 md:mb-4 border border-turmeric/30">
               <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-turmeric-300" />
-              <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-turmeric-200">Limited Time Offer</span>
+              <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-turmeric-200">Raksha Bandhan Offer</span>
             </div>
-            
+
             <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-2 md:mb-3 lg:mb-4">
               <span className="bg-gradient-to-r from-turmeric-200 via-amber-200 to-yellow-200 bg-clip-text text-transparent">
-                Thinnie Birthday
+                This Raksha Bandhan
               </span>
               <br />
-              <span className="text-cream">Sale - 60% OFF</span>
+              <span className="text-cream">Gift Good Health</span>
             </h2>
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -195,15 +195,15 @@ export default function AdBanner() {
               className="mb-3 md:mb-4 lg:mb-6"
             >
               <p className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-turmeric-200">
-                Big celebration
+                Buy 3 Get 1 Free
               </p>
               <p className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-amber-200">
-                Bigger results
+                Worth ₹500
               </p>
             </motion.div>
-            
+
             <p className="font-accent text-sm sm:text-base md:text-lg lg:text-xl text-cream/90 mb-4 md:mb-6">
-              Celebrate with us! Get amazing discounts on all Ayurvedic products
+              Because their wellness matters the most — gift your sibling a bond of lifelong health
             </p>
 
             {/* Data Points with Ayurvedic Images */}
@@ -320,7 +320,7 @@ export default function AdBanner() {
             </Link>
 
             <p className="mt-3 md:mt-4 text-xs md:text-sm text-cream/70">
-              *Valid on birthday special purchases. T&C apply.
+              *Valid on Raksha Bandhan special purchases. T&C apply.
             </p>
           </motion.div>
         </div>
