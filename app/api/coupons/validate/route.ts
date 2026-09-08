@@ -4,10 +4,14 @@ import connectDB from '@/lib/mongodb'
 import Coupon from '@/models/Coupon'
 import { handleApiError } from '@/lib/api-helpers'
 import { rateLimit } from '@/lib/rate-limit'
+import { computeCouponDiscount } from '@/lib/coupon'
 
 const schema = z.object({
   code: z.string().min(1),
   subtotal: z.number().nonnegative(),
+  items: z
+    .array(z.object({ price: z.number().nonnegative(), quantity: z.number().int().positive() }))
+    .optional(),
 })
 
 export async function POST(req: NextRequest) {
@@ -35,14 +39,23 @@ export async function POST(req: NextRequest) {
     if (c.maxUses && c.usedCount >= c.maxUses) {
       return NextResponse.json({ error: 'Coupon usage limit reached' }, { status: 400 })
     }
-    const discountAmount =
-      c.type === 'PERCENT'
-        ? Math.round((parsed.data.subtotal * c.value) / 100)
-        : Math.min(c.value, parsed.data.subtotal)
+    if (c.type === 'BOGO' && (!parsed.data.items || parsed.data.items.length === 0)) {
+      return NextResponse.json({ error: 'Add items to your cart to use this offer' }, { status: 400 })
+    }
+    const discountAmount = computeCouponDiscount(c, parsed.data.items ?? [], parsed.data.subtotal)
+    if (c.type === 'BOGO' && discountAmount === 0) {
+      const needed = (c.buyQty ?? 1) + (c.getQty ?? 1)
+      return NextResponse.json(
+        { error: `Add at least ${needed} items to unlock this offer` },
+        { status: 400 },
+      )
+    }
     return NextResponse.json({
       code: c.code,
       type: c.type,
       value: c.value,
+      buyQty: c.buyQty,
+      getQty: c.getQty,
       discountAmount,
     })
   } catch (err) {

@@ -11,6 +11,7 @@ import { useCartStore } from '@/store/cartStore'
 import { Input, Textarea } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { formatPrice } from '@/lib/utils'
+import { couponOfferLabel } from '@/lib/coupon'
 
 type PaymentMethod = 'ONLINE' | 'COD'
 
@@ -86,7 +87,11 @@ export default function CheckoutForm() {
     const res = await fetch('/api/coupons/validate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: couponCode, subtotal }),
+      body: JSON.stringify({
+        code: couponCode,
+        subtotal,
+        items: items.map((i) => ({ price: i.price, quantity: i.quantity })),
+      }),
     })
     const data = await res.json()
     if (!res.ok) return toast.error(data.error || 'Invalid coupon')
@@ -302,7 +307,9 @@ export default function CheckoutForm() {
             </>
           ) : (
             <div className="flex w-full items-center justify-between rounded-lg bg-turmeric-50 px-3 py-2">
-              <span className="text-sm font-semibold text-turmeric-700">{coupon.code} applied</span>
+              <span className="text-sm font-semibold text-turmeric-700">
+                {coupon.code} applied — {couponOfferLabel(coupon)}
+              </span>
               <button type="button" onClick={removeCoupon} className="text-xs text-terracotta hover:underline">
                 Remove
               </button>

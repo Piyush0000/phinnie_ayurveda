@@ -8,12 +8,15 @@ import { Input } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import { formatDate, formatPrice } from '@/lib/utils'
+import { couponOfferLabel } from '@/lib/coupon'
 
 interface Coupon {
   _id: string
   code: string
-  type: 'PERCENT' | 'FIXED'
+  type: 'PERCENT' | 'FIXED' | 'BOGO'
   value: number
+  buyQty?: number
+  getQty?: number
   minOrder?: number
   maxUses?: number
   usedCount: number
@@ -24,8 +27,10 @@ interface Coupon {
 
 interface FormState {
   code: string
-  type: 'PERCENT' | 'FIXED'
+  type: 'PERCENT' | 'FIXED' | 'BOGO'
   value: number
+  buyQty: number | ''
+  getQty: number | ''
   minOrder: number | ''
   maxUses: number | ''
   isActive: boolean
@@ -36,6 +41,8 @@ const EMPTY: FormState = {
   code: '',
   type: 'PERCENT',
   value: 10,
+  buyQty: '',
+  getQty: '',
   minOrder: '',
   maxUses: '',
   isActive: true,
@@ -71,6 +78,8 @@ export default function AdminCouponsPage() {
       code: c.code,
       type: c.type,
       value: c.value,
+      buyQty: c.buyQty ?? '',
+      getQty: c.getQty ?? '',
       minOrder: c.minOrder ?? '',
       maxUses: c.maxUses ?? '',
       isActive: c.isActive,
@@ -84,6 +93,8 @@ export default function AdminCouponsPage() {
       code: form.code.trim(),
       type: form.type,
       value: Number(form.value),
+      buyQty: form.type === 'BOGO' && form.buyQty !== '' ? Number(form.buyQty) : undefined,
+      getQty: form.type === 'BOGO' && form.getQty !== '' ? Number(form.getQty) : undefined,
       minOrder: form.minOrder === '' ? undefined : Number(form.minOrder),
       maxUses: form.maxUses === '' ? undefined : Number(form.maxUses),
       isActive: form.isActive,
@@ -178,21 +189,45 @@ export default function AdminCouponsPage() {
               <label className="mb-1.5 block text-sm font-semibold">Type</label>
               <select
                 value={form.type}
-                onChange={(e) => setForm({ ...form, type: e.target.value as 'PERCENT' | 'FIXED' })}
+                onChange={(e) => setForm({ ...form, type: e.target.value as 'PERCENT' | 'FIXED' | 'BOGO' })}
                 className="w-full rounded-lg border border-warmgray/30 bg-white px-4 py-2.5 outline-none focus:border-forest"
               >
                 <option value="PERCENT">Percentage off</option>
                 <option value="FIXED">Fixed amount off</option>
+                <option value="BOGO">Buy X Get Y (e.g. Buy 3 Get 1 Free)</option>
               </select>
             </div>
             <Input
-              label={form.type === 'PERCENT' ? 'Value (%)' : 'Value (₹)'}
+              label={form.type === 'PERCENT' ? 'Value (%)' : form.type === 'FIXED' ? 'Value (₹)' : 'Free item discount (%)'}
               type="number"
               min="1"
+              max={form.type === 'BOGO' ? 100 : undefined}
               value={form.value}
               onChange={(e) => setForm({ ...form, value: Number(e.target.value) })}
               required
             />
+            {form.type === 'BOGO' && (
+              <>
+                <Input
+                  label="Buy quantity"
+                  type="number"
+                  min="1"
+                  value={form.buyQty}
+                  onChange={(e) => setForm({ ...form, buyQty: e.target.value === '' ? '' : Number(e.target.value) })}
+                  placeholder="3"
+                  required
+                />
+                <Input
+                  label="Get quantity (free / discounted)"
+                  type="number"
+                  min="1"
+                  value={form.getQty}
+                  onChange={(e) => setForm({ ...form, getQty: e.target.value === '' ? '' : Number(e.target.value) })}
+                  placeholder="1"
+                  required
+                />
+              </>
+            )}
             <Input
               label="Min Order (₹)"
               type="number"
@@ -256,9 +291,7 @@ export default function AdminCouponsPage() {
                   return (
                     <tr key={c._id} className="border-b border-forest/5">
                       <td className="py-3 pl-4 pr-2 font-mono font-semibold text-forest">{c.code}</td>
-                      <td className="py-3 pr-2">
-                        {c.type === 'PERCENT' ? `${c.value}% off` : `${formatPrice(c.value)} off`}
-                      </td>
+                      <td className="py-3 pr-2">{couponOfferLabel(c)}</td>
                       <td className="py-3 pr-2">{c.minOrder ? formatPrice(c.minOrder) : '—'}</td>
                       <td className="py-3 pr-2">{c.usedCount} / {c.maxUses ?? '∞'}</td>
                       <td className="py-3 pr-2 text-warmgray">

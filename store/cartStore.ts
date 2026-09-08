@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { computeCouponDiscount } from '@/lib/coupon'
 
 export interface CartItem {
   productId: string
@@ -16,8 +17,10 @@ export interface CartItem {
 
 export interface AppliedCoupon {
   code: string
-  type: 'PERCENT' | 'FIXED'
+  type: 'PERCENT' | 'FIXED' | 'BOGO'
   value: number
+  buyQty?: number
+  getQty?: number
   discountAmount: number
 }
 
@@ -110,8 +113,8 @@ export const useCartStore = create<CartState>()(
         const subtotal = get().getSubtotal()
         const c = get().coupon
         if (!c) return 0
-        const raw = c.type === 'PERCENT' ? (subtotal * c.value) / 100 : c.value
-        return Math.min(Math.round(raw), subtotal)
+        const items = get().items.map((i) => ({ price: i.price, quantity: i.quantity }))
+        return computeCouponDiscount(c, items, subtotal)
       },
 
       getShipping: () => {

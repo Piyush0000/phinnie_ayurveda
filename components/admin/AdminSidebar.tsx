@@ -16,6 +16,7 @@ import {
   Star,
   MessageSquare,
   Images,
+  Megaphone,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +26,7 @@ const NAV = [
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/customers', label: 'Customers', icon: Users },
   { href: '/admin/coupons', label: 'Coupons', icon: Tag },
+  { href: '/admin/promotions', label: 'Promotions', icon: Megaphone },
   { href: '/admin/reviews', label: 'Reviews', icon: Star },
   { href: '/admin/gallery', label: 'Gallery', icon: Images },
   { href: '/admin/product-reviews', label: 'Product Reviews', icon: MessageSquare },

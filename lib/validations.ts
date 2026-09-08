@@ -91,18 +91,24 @@ export type CategoryCreateInput = z.infer<typeof categoryCreateSchema>
 export const categoryUpdateSchema = categoryCreateSchema.partial()
 export type CategoryUpdateInput = z.infer<typeof categoryUpdateSchema>
 
-export const couponSchema = z.object({
+const couponBaseSchema = z.object({
   code: z.string().min(2).max(40).regex(/^[A-Z0-9_-]+$/i, 'Letters, digits, dash and underscore only'),
-  type: z.enum(['PERCENT', 'FIXED']),
+  type: z.enum(['PERCENT', 'FIXED', 'BOGO']),
   value: z.number().positive(),
+  buyQty: z.number().int().positive().optional(),
+  getQty: z.number().int().positive().optional(),
   minOrder: z.number().nonnegative().optional(),
   maxUses: z.number().int().positive().optional(),
   isActive: z.boolean().default(true),
   expiresAt: z.string().datetime().optional().or(z.literal('')),
 })
-export type CouponInput = z.infer<typeof couponSchema>
+export const couponSchema = couponBaseSchema.refine(
+  (data) => data.type !== 'BOGO' || (!!data.buyQty && !!data.getQty),
+  { message: 'Buy quantity and get quantity are required for Buy X Get Y offers', path: ['buyQty'] },
+)
+export type CouponInput = z.infer<typeof couponBaseSchema>
 
-export const couponUpdateSchema = couponSchema.partial()
+export const couponUpdateSchema = couponBaseSchema.partial()
 export type CouponUpdateInput = z.infer<typeof couponUpdateSchema>
 
 export const settingsSchema = z.object({
@@ -150,6 +156,28 @@ export type GalleryItemInput = z.infer<typeof galleryItemSchema>
 
 export const galleryItemUpdateSchema = galleryItemSchema.partial()
 export type GalleryItemUpdateInput = z.infer<typeof galleryItemUpdateSchema>
+
+export const promotionSchema = z.object({
+  placement: z.enum(['HERO', 'STRIP']),
+  badgeText: z.string().max(80).optional().or(z.literal('')),
+  title: z.string().min(2, 'Title is required').max(160),
+  subtitle: z.string().max(160).optional().or(z.literal('')),
+  highlight1: z.string().max(80).optional().or(z.literal('')),
+  highlight2: z.string().max(80).optional().or(z.literal('')),
+  description: z.string().max(400).optional().or(z.literal('')),
+  imageBadge: z.string().max(40).optional().or(z.literal('')),
+  imageUrl: z.string().url().optional().or(z.literal('')),
+  publicId: z.string().optional().or(z.literal('')),
+  ctaText: z.string().max(40).optional().or(z.literal('')),
+  ctaLink: z.string().max(200).optional().or(z.literal('')),
+  footnote: z.string().max(200).optional().or(z.literal('')),
+  isActive: z.boolean().default(true),
+  sortOrder: z.number().int().optional(),
+})
+export type PromotionInput = z.infer<typeof promotionSchema>
+
+export const promotionUpdateSchema = promotionSchema.partial()
+export type PromotionUpdateInput = z.infer<typeof promotionUpdateSchema>
 
 export const testimonialPublicSubmitSchema = z.object({
   name: z.string().min(2, 'Name is required').max(120),

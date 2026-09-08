@@ -11,6 +11,7 @@ import { checkoutSchema } from '@/lib/validations'
 import { generateOrderNumber } from '@/lib/order-number'
 import { rateLimit } from '@/lib/rate-limit'
 import { finalizeCODOrder } from '@/lib/order-fulfillment'
+import { computeCouponDiscount } from '@/lib/coupon'
 
 export const dynamic = 'force-dynamic'
 
@@ -111,10 +112,11 @@ export async function POST(req: NextRequest) {
       if (c && (!c.expiresAt || c.expiresAt > new Date())) {
         if (!c.minOrder || subtotal >= c.minOrder) {
           if (!c.maxUses || c.usedCount < c.maxUses) {
-            discount =
-              c.type === 'PERCENT'
-                ? Math.round((subtotal * c.value) / 100)
-                : Math.min(c.value, subtotal)
+            discount = computeCouponDiscount(
+              c,
+              items.map((i) => ({ price: i.price, quantity: i.quantity })),
+              subtotal,
+            )
             appliedCoupon = { code: c.code }
           }
         }

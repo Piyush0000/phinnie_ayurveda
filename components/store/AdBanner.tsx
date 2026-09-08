@@ -5,9 +5,38 @@ import { X, Sparkles, Award, Truck, Heart, Shield, Star } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
+interface HeroPromotion {
+  badgeText?: string
+  title?: string
+  subtitle?: string
+  highlight1?: string
+  highlight2?: string
+  description?: string
+  imageBadge?: string
+  imageUrl?: string
+  ctaText?: string
+  ctaLink?: string
+  footnote?: string
+}
+
+const DEFAULT_PROMO: Required<Omit<HeroPromotion, never>> = {
+  badgeText: 'Raksha Bandhan Offer',
+  title: 'This Raksha Bandhan',
+  subtitle: 'Gift Good Health',
+  highlight1: 'Buy 3 Get 1 Free',
+  highlight2: 'Worth ₹500',
+  description: 'Because their wellness matters the most — gift your sibling a bond of lifelong health',
+  imageBadge: 'BUY 3 GET 1 FREE',
+  imageUrl: '/rakhi-offer.jpeg',
+  ctaText: 'Shop Now',
+  ctaLink: '/shop',
+  footnote: '*Valid on Raksha Bandhan special purchases. T&C apply.',
+}
+
 export default function AdBanner() {
   const [isVisible, setIsVisible] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const [promo, setPromo] = useState<HeroPromotion | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -21,6 +50,10 @@ export default function AdBanner() {
         setIsVisible(false)
       }
     }
+    fetch('/api/promotions?placement=HERO')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => setPromo(data?.promotions?.[0] ?? null))
+      .catch(() => setPromo(null))
   }, [])
 
   const handleDismiss = () => {
@@ -29,6 +62,8 @@ export default function AdBanner() {
   }
 
   if (!mounted || !isVisible) return null
+
+  const p = { ...DEFAULT_PROMO, ...Object.fromEntries(Object.entries(promo ?? {}).filter(([, v]) => v)) }
 
   return (
     <section className="relative bg-forest-900 text-cream min-h-[600px] sm:min-h-[650px] md:min-h-[700px] lg:min-h-[800px] overflow-hidden">
@@ -139,13 +174,15 @@ export default function AdBanner() {
           >
             <div className="absolute -inset-2 md:-inset-4 bg-gradient-to-r from-turmeric to-amber-500 rounded-2xl md:rounded-3xl blur-xl md:blur-2xl opacity-40" />
             <img
-              src="/rakhi-offer.jpeg"
-              alt="Raksha Bandhan Special Offer"
+              src={p.imageUrl}
+              alt={p.title}
               className="relative w-full h-auto object-contain rounded-2xl md:rounded-3xl shadow-2xl border-3 md:border-4 border-turmeric/50"
             />
-            <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-sm md:text-lg shadow-lg animate-bounce">
-              BUY 3 GET 1 FREE
-            </div>
+            {p.imageBadge && (
+              <div className="absolute -top-3 -right-3 md:-top-4 md:-right-4 bg-gradient-to-r from-turmeric to-amber-500 text-forest-900 px-3 py-1.5 md:px-4 md:py-2 rounded-full font-bold text-sm md:text-lg shadow-lg animate-bounce">
+                {p.imageBadge}
+              </div>
+            )}
           </motion.div>
         </div>
 
@@ -177,15 +214,15 @@ export default function AdBanner() {
           >
             <div className="inline-flex items-center gap-2 bg-turmeric/20 backdrop-blur-sm rounded-full px-3 py-1.5 md:px-4 md:py-2 mb-3 md:mb-4 border border-turmeric/30">
               <Sparkles className="h-4 w-4 md:h-5 md:w-5 text-turmeric-300" />
-              <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-turmeric-200">Raksha Bandhan Offer</span>
+              <span className="text-xs md:text-sm font-semibold uppercase tracking-wider text-turmeric-200">{p.badgeText}</span>
             </div>
 
             <h2 className="font-display text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight mb-2 md:mb-3 lg:mb-4">
               <span className="bg-gradient-to-r from-turmeric-200 via-amber-200 to-yellow-200 bg-clip-text text-transparent">
-                This Raksha Bandhan
+                {p.title}
               </span>
               <br />
-              <span className="text-cream">Gift Good Health</span>
+              <span className="text-cream">{p.subtitle}</span>
             </h2>
 
             <motion.div
@@ -195,15 +232,15 @@ export default function AdBanner() {
               className="mb-3 md:mb-4 lg:mb-6"
             >
               <p className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-turmeric-200">
-                Buy 3 Get 1 Free
+                {p.highlight1}
               </p>
               <p className="font-display text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-amber-200">
-                Worth ₹500
+                {p.highlight2}
               </p>
             </motion.div>
 
             <p className="font-accent text-sm sm:text-base md:text-lg lg:text-xl text-cream/90 mb-4 md:mb-6">
-              Because their wellness matters the most — gift your sibling a bond of lifelong health
+              {p.description}
             </p>
 
             {/* Data Points with Ayurvedic Images */}
@@ -312,16 +349,18 @@ export default function AdBanner() {
             </div>
 
             <Link
-              href="/shop"
+              href={p.ctaLink}
               className="inline-flex h-12 md:h-14 lg:h-16 items-center gap-2 md:gap-3 rounded-full bg-gradient-to-r from-turmeric via-amber-500 to-yellow-500 px-6 md:px-8 lg:px-10 font-bold text-forest-900 text-base md:text-lg lg:text-xl hover:from-turmeric-400 hover:via-amber-400 hover:to-yellow-400 transition-all duration-300 shadow-xl md:shadow-2xl hover:shadow-3xl transform hover:scale-105 border-2 border-cream/30"
             >
-              Shop Now
+              {p.ctaText}
               <Sparkles className="h-4 w-4 md:h-5 md:w-5" />
             </Link>
 
-            <p className="mt-3 md:mt-4 text-xs md:text-sm text-cream/70">
-              *Valid on Raksha Bandhan special purchases. T&C apply.
-            </p>
+            {p.footnote && (
+              <p className="mt-3 md:mt-4 text-xs md:text-sm text-cream/70">
+                {p.footnote}
+              </p>
+            )}
           </motion.div>
         </div>
       </div>
