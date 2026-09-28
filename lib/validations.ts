@@ -215,6 +215,7 @@ export const offerSchema = z
     productIds: z.array(z.string().regex(/^[a-f\d]{24}$/i, 'Invalid product')).default([]),
     combineWithCoupons: z.boolean().default(false),
     showCountdownBar: z.boolean().default(true),
+    countdownTheme: z.enum(['purple', 'maroon', 'green', 'saffron', 'pink']).default('purple'),
     isActive: z.boolean().default(true),
     startsAt: optionalDate,
     endsAt: optionalDate,

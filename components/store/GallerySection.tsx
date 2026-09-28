@@ -150,7 +150,7 @@ export default function GallerySection() {
       <div className="container-wide py-16 md:py-24">
         <Reveal>
           <div className="text-center">
-            <p className="text-xs uppercase tracking-[0.25em] text-turmeric-700">In our world</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#0f766e]">In our world</p>
             <h2 className="mt-3 font-display text-4xl text-charcoal md:text-5xl">
               The Thinnie Ayurveda Gallery
             </h2>

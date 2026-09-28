@@ -1,6 +1,9 @@
 // Pure, client-safe helpers for "Buy N @ ₹X" bundle offers (no mongoose imports here).
 import { computeCouponDiscount, type CouponLike } from './coupon'
 
+export const COUNTDOWN_THEMES = ['purple', 'maroon', 'green', 'saffron', 'pink'] as const
+export type CountdownTheme = (typeof COUNTDOWN_THEMES)[number]
+
 export interface OfferTier {
   quantity: number
   price: number
@@ -20,6 +23,7 @@ export interface PublicOffer {
   productIds: string[]
   combineWithCoupons: boolean
   showCountdownBar: boolean
+  countdownTheme: CountdownTheme
   startsAt?: string | null
   endsAt?: string | null
 }

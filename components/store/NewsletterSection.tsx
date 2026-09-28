@@ -10,7 +10,7 @@ export default function NewsletterSection() {
 
   return (
     <section className="container-wide py-12">
-      <div className="overflow-hidden rounded-3xl bg-forest p-8 text-cream shadow-warm-lg md:p-14">
+      <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-forest via-[#1f4d3a] to-[#4b1680] p-8 text-cream shadow-warm-lg md:p-14">
         <div className="grid items-center gap-8 md:grid-cols-2">
           <div>
             <p className="text-xs uppercase tracking-widest text-turmeric-300">Join the family</p>
@@ -49,7 +49,7 @@ export default function NewsletterSection() {
             <button
               type="submit"
               disabled={loading}
-              className="h-12 rounded-lg bg-turmeric px-7 font-semibold text-charcoal hover:bg-turmeric-400 disabled:opacity-50"
+              className="h-12 rounded-lg bg-gradient-to-r from-[#f59e0b] to-[#db2777] px-7 font-semibold text-white shadow-md hover:brightness-110 disabled:opacity-50"
             >
               {loading ? 'Subscribing…' : 'Subscribe'}
             </button>

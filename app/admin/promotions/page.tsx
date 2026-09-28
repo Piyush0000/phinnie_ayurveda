@@ -255,7 +255,7 @@ export default function AdminPromotionsPage() {
                     ? setForm({ ...form, title: e.target.value })
                     : setForm({ ...form, badgeText: e.target.value })
                 }
-                placeholder={form.placement === 'STRIP' ? 'This Raksha Bandhan — Buy 3 Get 1 Free' : 'Raksha Bandhan Offer'}
+                placeholder={form.placement === 'STRIP' ? 'Festive Dhamaka — Buy 2 @ ₹999' : 'Festive Offer'}
                 required={form.placement === 'STRIP'}
               />
               {form.placement === 'HERO' && (
@@ -263,7 +263,7 @@ export default function AdminPromotionsPage() {
                   label="Title"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="This Raksha Bandhan"
+                  placeholder="Thinnie Festive Dhamaka"
                   required
                 />
               )}
@@ -308,7 +308,7 @@ export default function AdminPromotionsPage() {
                   label="Footnote (small print)"
                   value={form.footnote}
                   onChange={(e) => setForm({ ...form, footnote: e.target.value })}
-                  placeholder="*Valid on Raksha Bandhan special purchases. T&C apply."
+                  placeholder="*T&C apply."
                 />
               </>
             )}

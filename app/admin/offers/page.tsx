@@ -9,7 +9,9 @@ import { Input } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import { cn, formatPrice } from '@/lib/utils'
-import { isOfferLive, tierLabel, type OfferTier } from '@/lib/bundle-offer'
+import { isOfferLive, tierLabel, COUNTDOWN_THEMES, type CountdownTheme, type OfferTier } from '@/lib/bundle-offer'
+import { COUNTDOWN_PALETTES } from '@/lib/countdown-palettes'
+import OfferCountdownBar from '@/components/store/OfferCountdownBar'
 
 interface Offer {
   _id: string
@@ -25,6 +27,7 @@ interface Offer {
   productIds: string[]
   combineWithCoupons: boolean
   showCountdownBar: boolean
+  countdownTheme?: CountdownTheme
   isActive: boolean
   startsAt?: string | null
   endsAt?: string | null
@@ -51,6 +54,7 @@ interface FormState {
   productIds: string[]
   combineWithCoupons: boolean
   showCountdownBar: boolean
+  countdownTheme: CountdownTheme
   isActive: boolean
   startsAt: string
   endsAt: string
@@ -73,6 +77,7 @@ const PRESET: FormState = {
   productIds: [],
   combineWithCoupons: false,
   showCountdownBar: true,
+  countdownTheme: 'purple',
   isActive: true,
   startsAt: '',
   endsAt: '',
@@ -157,6 +162,7 @@ export default function AdminOffersPage() {
       productIds: o.productIds.map(String),
       combineWithCoupons: o.combineWithCoupons,
       showCountdownBar: o.showCountdownBar,
+      countdownTheme: o.countdownTheme ?? 'purple',
       isActive: o.isActive,
       startsAt: toLocalInput(o.startsAt),
       endsAt: toLocalInput(o.endsAt),
@@ -384,6 +390,55 @@ export default function AdminOffersPage() {
               </div>
             </section>
 
+            {/* Countdown bar */}
+            <section className="rounded-xl border border-warmgray/20 bg-white p-4">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h4 className="font-semibold text-charcoal">Countdown bar (top of every page)</h4>
+                  <p className="text-xs text-warmgray">Text comes from “Countdown bar text”; time counts down to the end date.</p>
+                </div>
+                <label className="flex items-center gap-2 text-sm font-semibold">
+                  <input type="checkbox" checked={form.showCountdownBar} onChange={(e) => set('showCountdownBar', e.target.checked)} />
+                  Show countdown bar
+                </label>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {COUNTDOWN_THEMES.map((theme) => (
+                  <button
+                    key={theme}
+                    type="button"
+                    onClick={() => set('countdownTheme', theme)}
+                    className={cn(
+                      'flex items-center gap-2 rounded-full border-2 py-1 pl-1 pr-3 text-xs font-semibold transition',
+                      form.countdownTheme === theme ? 'border-charcoal' : 'border-transparent bg-parchment/60 hover:border-warmgray/40',
+                    )}
+                  >
+                    <span className="h-6 w-6 rounded-full" style={{ background: COUNTDOWN_PALETTES[theme].bg }} />
+                    {COUNTDOWN_PALETTES[theme].label}
+                  </button>
+                ))}
+              </div>
+              {form.showCountdownBar && (
+                <div className="pointer-events-none mt-3 overflow-hidden rounded-lg">
+                  <OfferCountdownBar
+                    offer={{
+                      _id: 'preview',
+                      title: form.title || 'Offer',
+                      countdownLabel: form.countdownLabel,
+                      ctaText: form.ctaText,
+                      ctaLink: '#',
+                      tiers: [],
+                      productIds: [],
+                      combineWithCoupons: false,
+                      showCountdownBar: true,
+                      countdownTheme: form.countdownTheme,
+                      endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : null,
+                    }}
+                  />
+                </div>
+              )}
+            </section>
+
             {/* Schedule */}
             <section className="grid gap-4 md:grid-cols-2">
               <Input label="Starts (optional)" type="datetime-local" value={form.startsAt} onChange={(e) => set('startsAt', e.target.value)} hint="Leave empty to start now" />
@@ -423,9 +478,8 @@ export default function AdminOffersPage() {
             </section>
 
             {/* Switches */}
-            <section className="grid gap-3 sm:grid-cols-3">
+            <section className="grid gap-3 sm:grid-cols-2">
               <Toggle checked={form.isActive} onChange={(v) => set('isActive', v)} title="Active" desc="Live on the storefront & checkout" />
-              <Toggle checked={form.showCountdownBar} onChange={(v) => set('showCountdownBar', v)} title="Countdown bar" desc="Show the timer strip at the top of every page" />
               <Toggle checked={form.combineWithCoupons} onChange={(v) => set('combineWithCoupons', v)} title="Stack with coupons" desc="Off: the better of offer or coupon is applied" />
             </section>
 

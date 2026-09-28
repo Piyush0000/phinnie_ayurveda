@@ -66,9 +66,10 @@ export default function TestimonialsSection() {
   const scrollable = list.length > 9
 
   return (
-    <section className="container-wide py-16 md:py-20">
+    <section className="bg-gradient-to-b from-cream via-[#f7f0ff] to-cream">
+      <div className="container-wide py-16 md:py-20">
       <div className="text-center">
-        <p className="text-xs uppercase tracking-widest text-turmeric-700">Loved by thousands</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-[#7e22ce]">Loved by thousands</p>
         <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">What Our Family Says</h2>
       </div>
       <div
@@ -81,7 +82,7 @@ export default function TestimonialsSection() {
         {list.map((r) => (
           <article
             key={r._id}
-            className="flex flex-col rounded-2xl border border-forest/10 bg-cream p-7 shadow-warm"
+            className="flex flex-col rounded-2xl border border-[#7e22ce]/10 bg-white p-7 shadow-warm transition hover:-translate-y-1 hover:shadow-warm-lg"
           >
             <div className="flex">
               {Array.from({ length: r.rating }).map((_, i) => (
@@ -98,7 +99,7 @@ export default function TestimonialsSection() {
                   className="h-10 w-10 rounded-full object-cover"
                 />
               ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-forest font-display text-lg text-cream">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-[#db2777] to-[#7e22ce] font-display text-lg text-white">
                   {r.name.charAt(0)}
                 </div>
               )}
@@ -109,6 +110,7 @@ export default function TestimonialsSection() {
             </div>
           </article>
         ))}
+      </div>
       </div>
     </section>
   )

@@ -2,6 +2,8 @@
 
 import Reveal from './Reveal'
 
+const STEP_COLORS = ['#fbbf24', '#f472b6', '#c084fc']
+
 const STEPS = [
   {
     n: '01',
@@ -52,12 +54,12 @@ export default function ProcessSection() {
           {STEPS.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.12}>
               <div className="group h-full rounded-3xl border border-cream/15 bg-cream/5 p-8 backdrop-blur-md transition hover:border-turmeric/50 hover:bg-cream/10">
-                <span className="font-display text-5xl text-turmeric-200/80 md:text-6xl">{s.n}</span>
+                <span className="font-display text-5xl md:text-6xl" style={{ color: STEP_COLORS[i % STEP_COLORS.length] }}>{s.n}</span>
                 <h3 className="mt-5 font-display text-2xl text-cream md:text-3xl">{s.title}</h3>
                 <p className="mt-3 font-accent text-base leading-relaxed text-cream/75 md:text-lg">
                   {s.desc}
                 </p>
-                <div className="mt-6 h-px w-12 bg-turmeric transition-all group-hover:w-20" />
+                <div className="mt-6 h-0.5 w-12 transition-all group-hover:w-20" style={{ background: STEP_COLORS[i % STEP_COLORS.length] }} />
               </div>
             </Reveal>
           ))}

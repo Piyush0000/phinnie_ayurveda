@@ -19,6 +19,7 @@ export interface IOffer extends Document {
   productIds: mongoose.Types.ObjectId[]
   combineWithCoupons: boolean
   showCountdownBar: boolean
+  countdownTheme: string
   isActive: boolean
   startsAt?: Date
   endsAt?: Date
@@ -46,6 +47,7 @@ const OfferSchema = new Schema<IOffer>(
     productIds: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
     combineWithCoupons: { type: Boolean, default: false },
     showCountdownBar: { type: Boolean, default: true },
+    countdownTheme: { type: String, default: 'purple' },
     isActive: { type: Boolean, default: true },
     startsAt: Date,
     endsAt: Date,

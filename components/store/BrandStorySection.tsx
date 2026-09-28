@@ -32,7 +32,7 @@ export default function BrandStorySection() {
 
         <Reveal direction="left" delay={0.1}>
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-turmeric-700">Our Story</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#db2777]">Our Story</p>
             <h2 className="mt-3 font-display text-4xl leading-tight text-charcoal md:text-5xl lg:text-6xl">
               A quiet ritual,
               <br />
@@ -52,15 +52,15 @@ export default function BrandStorySection() {
 
             <dl className="mt-10 grid grid-cols-3 gap-6 border-y border-forest/10 py-6">
               <div>
-                <dt className="font-display text-3xl text-forest md:text-4xl">40+</dt>
+                <dt className="font-display text-3xl text-[#ea580c] md:text-4xl">40+</dt>
                 <dd className="mt-1 text-xs uppercase tracking-wider text-warmgray">Heritage Herbs</dd>
               </div>
               <div>
-                <dt className="font-display text-3xl text-forest md:text-4xl">4 gen.</dt>
+                <dt className="font-display text-3xl text-[#db2777] md:text-4xl">4 gen.</dt>
                 <dd className="mt-1 text-xs uppercase tracking-wider text-warmgray">of Family Craft</dd>
               </div>
               <div>
-                <dt className="font-display text-3xl text-forest md:text-4xl">10k+</dt>
+                <dt className="font-display text-3xl text-[#7e22ce] md:text-4xl">10k+</dt>
                 <dd className="mt-1 text-xs uppercase tracking-wider text-warmgray">Daily Rituals</dd>
               </div>
             </dl>

@@ -61,7 +61,7 @@ export default function Navbar({
         style={{ backgroundColor: '#FAFCF5' }}
       >
         {bannerText && (
-          <div className="border-b border-forest/10 bg-forest text-cream">
+          <div className="border-b border-forest/10 bg-gradient-to-r from-forest via-[#0f766e] to-forest text-cream">
             <div className="container-wide flex h-8 items-center justify-center text-xs tracking-wide">
               <span className="opacity-90">{bannerText}</span>
             </div>

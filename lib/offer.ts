@@ -1,7 +1,7 @@
 import connectDB, { isDatabaseConfigured } from './mongodb'
 import Offer, { type IOffer } from '@/models/Offer'
 import SiteSettings from '@/models/SiteSettings'
-import type { PublicOffer } from './bundle-offer'
+import { COUNTDOWN_THEMES, type CountdownTheme, type PublicOffer } from './bundle-offer'
 import type { OfferInput } from './validations'
 
 /** Preset created once on a fresh store so the festive offer is live out of the box. */
@@ -20,6 +20,7 @@ export const FESTIVE_DHAMAKA_PRESET = {
   ],
   combineWithCoupons: false,
   showCountdownBar: true,
+  countdownTheme: 'purple',
   isActive: true,
 }
 
@@ -37,6 +38,9 @@ export function toPublicOffer(o: Pick<IOffer, keyof IOffer>): PublicOffer {
     productIds: (o.productIds ?? []).map((id) => String(id)),
     combineWithCoupons: !!o.combineWithCoupons,
     showCountdownBar: o.showCountdownBar !== false,
+    countdownTheme: (COUNTDOWN_THEMES as readonly string[]).includes(o.countdownTheme)
+      ? (o.countdownTheme as CountdownTheme)
+      : 'purple',
     startsAt: o.startsAt ? new Date(o.startsAt).toISOString() : null,
     endsAt: o.endsAt ? new Date(o.endsAt).toISOString() : null,
   }
@@ -102,6 +106,7 @@ export function offerDocFromInput(data: OfferInput) {
     productIds: data.productIds,
     combineWithCoupons: data.combineWithCoupons,
     showCountdownBar: data.showCountdownBar,
+    countdownTheme: data.countdownTheme,
     isActive: data.isActive,
     startsAt: data.startsAt ? new Date(data.startsAt) : null,
     endsAt: data.endsAt ? new Date(data.endsAt) : null,

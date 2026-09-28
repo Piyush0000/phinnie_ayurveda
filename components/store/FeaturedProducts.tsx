@@ -17,10 +17,11 @@ interface Product {
 
 export default function FeaturedProducts({ products }: { products: Product[] }) {
   return (
-    <section className="container-wide py-16 md:py-20">
+    <section className="bg-gradient-to-b from-cream via-[#fff4e8] to-cream">
+      <div className="container-wide py-16 md:py-20">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="text-xs uppercase tracking-widest text-turmeric-700">Our Collection</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#ea580c]">Our Collection</p>
           <h2 className="mt-2 font-display text-4xl text-charcoal md:text-5xl">Wellness Products</h2>
         </div>
         <Link
@@ -34,6 +35,7 @@ export default function FeaturedProducts({ products }: { products: Product[] }) 
         {products.map((p) => (
           <ProductCard key={p._id} product={p} />
         ))}
+      </div>
       </div>
     </section>
   )
