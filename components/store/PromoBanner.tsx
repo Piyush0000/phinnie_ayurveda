@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { X, Sparkles, Leaf } from 'lucide-react'
 import Link from 'next/link'
 
-const DEFAULT_HEADLINES = ['This Raksha Bandhan — Buy 3 Get 1 Free, Worth ₹500']
+const DEFAULT_HEADLINES = ['100% Natural Ayurveda — Free shipping on orders over ₹999']
 
 interface StripPromotion {
   title: string

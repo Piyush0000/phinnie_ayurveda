@@ -51,7 +51,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatPrice(o.subtotal)}</dd></div>
               {o.discount > 0 && (
                 <div className="flex justify-between text-terracotta">
-                  <dt>Discount {o.couponCode && `(${o.couponCode})`}</dt><dd>-{formatPrice(o.discount)}</dd>
+                  <dt>Discount {[o.offerTitle, o.couponCode].filter(Boolean).length > 0 && `(${[o.offerTitle, o.couponCode].filter(Boolean).join(' + ')})`}</dt><dd>-{formatPrice(o.discount)}</dd>
                 </div>
               )}
               <div className="flex justify-between"><dt>Shipping</dt><dd>{o.shippingCharge === 0 ? 'Free' : formatPrice(o.shippingCharge)}</dd></div>

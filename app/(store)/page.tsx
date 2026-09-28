@@ -6,10 +6,11 @@ import BenefitsSection from '@/components/store/BenefitsSection'
 import TestimonialsSection from '@/components/store/TestimonialsSection'
 import GallerySection from '@/components/store/GallerySection'
 import NewsletterSection from '@/components/store/NewsletterSection'
-import AdBanner from '@/components/store/AdBanner'
+import FestiveOfferBanner from '@/components/store/FestiveOfferBanner'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
 import { getPublicSettings } from '@/lib/site-settings'
+import { getActiveOffer } from '@/lib/offer'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,10 +32,10 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const { featured } = await getHomeData()
-  const settings = await getPublicSettings()
+  const [settings, offer] = await Promise.all([getPublicSettings(), getActiveOffer()])
   return (
     <>
-      <AdBanner />
+      {offer && <FestiveOfferBanner offer={offer} />}
       <HeroSection />
       {!isDatabaseConfigured() && <SetupBanner />}
       <BenefitsSection freeShippingMin={settings.freeShippingMin} />

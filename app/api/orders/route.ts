@@ -11,7 +11,8 @@ import { checkoutSchema } from '@/lib/validations'
 import { generateOrderNumber } from '@/lib/order-number'
 import { rateLimit } from '@/lib/rate-limit'
 import { finalizeCODOrder } from '@/lib/order-fulfillment'
-import { computeCouponDiscount } from '@/lib/coupon'
+import { resolveDiscounts } from '@/lib/bundle-offer'
+import { getActiveOffer } from '@/lib/offer'
 
 export const dynamic = 'force-dynamic'
 
@@ -102,26 +103,35 @@ export async function POST(req: NextRequest) {
 
     const subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0)
 
-    let discount = 0
-    let appliedCoupon: { code: string } | null = null
+    let coupon: Parameters<typeof resolveDiscounts>[3] = null
+    let appliedCouponCode: string | undefined
     if (parsed.data.couponCode) {
       const c = await Coupon.findOne({
         code: parsed.data.couponCode.toUpperCase(),
         isActive: true,
       })
-      if (c && (!c.expiresAt || c.expiresAt > new Date())) {
-        if (!c.minOrder || subtotal >= c.minOrder) {
-          if (!c.maxUses || c.usedCount < c.maxUses) {
-            discount = computeCouponDiscount(
-              c,
-              items.map((i) => ({ price: i.price, quantity: i.quantity })),
-              subtotal,
-            )
-            appliedCoupon = { code: c.code }
-          }
-        }
+      if (
+        c &&
+        (!c.expiresAt || c.expiresAt > new Date()) &&
+        (!c.minOrder || subtotal >= c.minOrder) &&
+        (!c.maxUses || c.usedCount < c.maxUses)
+      ) {
+        coupon = c
+        appliedCouponCode = c.code
       }
     }
+
+    // The festive bundle offer is applied automatically; the server is the source of truth.
+    const offer = await getActiveOffer()
+    const discounts = resolveDiscounts(
+      items.map((i) => ({ productId: String(i.productId), price: i.price, quantity: i.quantity })),
+      subtotal,
+      offer,
+      coupon,
+    )
+    const discount = discounts.total
+    const couponCode = discounts.couponDiscount > 0 ? appliedCouponCode : undefined
+    const offerTitle = discounts.offerDiscount > 0 ? offer?.title : undefined
 
     const settings = (await SiteSettings.findOne().lean()) ?? {
       freeShippingMin: 999,
@@ -145,7 +155,9 @@ export async function POST(req: NextRequest) {
       shippingAddress: parsed.data.shippingAddress,
       subtotal,
       discount,
-      couponCode: appliedCoupon?.code,
+      couponCode,
+      offerDiscount: discounts.offerDiscount,
+      offerTitle,
       shippingCharge,
       tax,
       total,

@@ -179,6 +179,52 @@ export type PromotionInput = z.infer<typeof promotionSchema>
 export const promotionUpdateSchema = promotionSchema.partial()
 export type PromotionUpdateInput = z.infer<typeof promotionUpdateSchema>
 
+const optionalDate = z
+  .string()
+  .optional()
+  .nullable()
+  .or(z.literal(''))
+  .refine((v) => !v || !Number.isNaN(Date.parse(v)), 'Invalid date')
+
+export const offerSchema = z
+  .object({
+    title: z.string().min(2, 'Title is required').max(120),
+    subtitle: z.string().max(200).optional().or(z.literal('')),
+    countdownLabel: z.string().max(80).optional().or(z.literal('')),
+    footnote: z.string().max(200).optional().or(z.literal('')),
+    ctaText: z.string().max(40).optional().or(z.literal('')),
+    ctaLink: z.string().max(200).optional().or(z.literal('')),
+    // Either an uploaded (absolute) URL or a file shipped in /public
+    imageUrl: z
+      .string()
+      .refine((v) => v === '' || v.startsWith('/') || /^https?:\/\//.test(v), 'Invalid image URL')
+      .optional(),
+    publicId: z.string().optional().or(z.literal('')),
+    tiers: z
+      .array(
+        z.object({
+          quantity: z.number().int().min(2, 'Bundle quantity must be at least 2').max(50),
+          price: z.number().positive('Bundle price must be above 0'),
+        }),
+      )
+      .min(1, 'Add at least one offer tier')
+      .refine(
+        (tiers) => new Set(tiers.map((t) => t.quantity)).size === tiers.length,
+        'Each tier needs a different quantity',
+      ),
+    productIds: z.array(z.string().regex(/^[a-f\d]{24}$/i, 'Invalid product')).default([]),
+    combineWithCoupons: z.boolean().default(false),
+    showCountdownBar: z.boolean().default(true),
+    isActive: z.boolean().default(true),
+    startsAt: optionalDate,
+    endsAt: optionalDate,
+  })
+  .refine(
+    (o) => !o.startsAt || !o.endsAt || Date.parse(o.endsAt) > Date.parse(o.startsAt),
+    { message: 'End date must be after start date', path: ['endsAt'] },
+  )
+export type OfferInput = z.infer<typeof offerSchema>
+
 export const testimonialPublicSubmitSchema = z.object({
   name: z.string().min(2, 'Name is required').max(120),
   rating: z.number().int().min(1).max(5),

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { computeCouponDiscount } from '@/lib/coupon'
+import { resolveDiscounts, type PublicOffer, type ResolvedDiscounts } from '@/lib/bundle-offer'
 
 export interface CartItem {
   productId: string
@@ -32,6 +32,8 @@ interface CartConfig {
 interface CartState {
   items: CartItem[]
   coupon: AppliedCoupon | null
+  /** Active festive/bundle offer, synced from the server on every page load (not persisted). */
+  offer: PublicOffer | null
   isOpen: boolean
   config: CartConfig
   addItem: (item: CartItem) => void
@@ -44,6 +46,8 @@ interface CartState {
   closeCart: () => void
   toggleCart: () => void
   setConfig: (cfg: Partial<CartConfig>) => void
+  setOffer: (offer: PublicOffer | null) => void
+  getDiscounts: () => ResolvedDiscounts
   getSubtotal: () => number
   getDiscount: () => number
   getShipping: () => number
@@ -62,6 +66,7 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       coupon: null,
+      offer: null,
       isOpen: false,
       config: DEFAULT_CONFIG,
 
@@ -106,16 +111,20 @@ export const useCartStore = create<CartState>()(
       toggleCart: () => set({ isOpen: !get().isOpen }),
 
       setConfig: (cfg) => set({ config: { ...get().config, ...cfg } }),
+      setOffer: (offer) => set({ offer }),
 
       getSubtotal: () => get().items.reduce((sum, i) => sum + i.price * i.quantity, 0),
 
-      getDiscount: () => {
-        const subtotal = get().getSubtotal()
-        const c = get().coupon
-        if (!c) return 0
-        const items = get().items.map((i) => ({ price: i.price, quantity: i.quantity }))
-        return computeCouponDiscount(c, items, subtotal)
+      getDiscounts: () => {
+        const items = get().items.map((i) => ({
+          productId: i.productId,
+          price: i.price,
+          quantity: i.quantity,
+        }))
+        return resolveDiscounts(items, get().getSubtotal(), get().offer, get().coupon)
       },
+
+      getDiscount: () => get().getDiscounts().total,
 
       getShipping: () => {
         const { freeShippingMin, shippingCharge } = get().config

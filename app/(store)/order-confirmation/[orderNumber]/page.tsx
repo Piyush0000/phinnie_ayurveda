@@ -98,7 +98,7 @@ export default async function OrderConfirmationPage({
           </ul>
           <dl className="mt-4 space-y-1.5 text-sm">
             <div className="flex justify-between"><dt>Subtotal</dt><dd>{formatPrice(order.subtotal)}</dd></div>
-            {order.discount > 0 && <div className="flex justify-between text-terracotta"><dt>Discount</dt><dd>-{formatPrice(order.discount)}</dd></div>}
+            {order.discount > 0 && <div className="flex justify-between text-terracotta"><dt>Discount{order.offerTitle ? ` (${order.offerTitle})` : ''}</dt><dd>-{formatPrice(order.discount)}</dd></div>}
             <div className="flex justify-between"><dt>Shipping</dt><dd>{order.shippingCharge === 0 ? 'Free' : formatPrice(order.shippingCharge)}</dd></div>
             <div className="flex justify-between"><dt>Tax</dt><dd>{formatPrice(order.tax)}</dd></div>
             <div className="mt-3 flex justify-between border-t border-forest/10 pt-3 text-lg font-bold text-forest">

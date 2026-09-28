@@ -1,17 +1,25 @@
 'use client'
 
-import { useState, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { CreditCard, Truck, CheckCircle2 } from 'lucide-react'
+import { CreditCard, Truck, CheckCircle2, Gift, PartyPopper } from 'lucide-react'
 import { addressSchema, type AddressInput } from '@/lib/validations'
 import { useCartStore } from '@/store/cartStore'
 import { Input, Textarea } from '@/components/ui/Input'
 import Button from '@/components/ui/Button'
 import { formatPrice } from '@/lib/utils'
 import { couponOfferLabel } from '@/lib/coupon'
+import {
+  nextOfferTier,
+  normalizeTiers,
+  resolveDiscounts,
+  tierLabel,
+  type PublicOffer,
+  type ResolvedDiscounts,
+} from '@/lib/bundle-offer'
 
 type PaymentMethod = 'ONLINE' | 'COD'
 
@@ -63,7 +71,7 @@ export default function CheckoutForm() {
   const items = useCartStore((s) => s.items)
   const coupon = useCartStore((s) => s.coupon)
   const subtotal = useCartStore((s) => s.getSubtotal())
-  const discount = useCartStore((s) => s.getDiscount())
+  const offer = useCartStore((s) => s.offer)
   const shipping = useCartStore((s) => s.getShipping())
   const total = useCartStore((s) => s.getTotal())
   const applyCoupon = useCartStore((s) => s.applyCoupon)
@@ -73,6 +81,17 @@ export default function CheckoutForm() {
   const [couponCode, setCouponCode] = useState('')
   const [notes, setNotes] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('ONLINE')
+
+  const discounts = useMemo(
+    () =>
+      resolveDiscounts(
+        items.map((i) => ({ productId: i.productId, price: i.price, quantity: i.quantity })),
+        subtotal,
+        offer,
+        coupon,
+      ),
+    [items, subtotal, offer, coupon],
+  )
 
   const {
     register,
@@ -288,6 +307,7 @@ export default function CheckoutForm() {
             </li>
           ))}
         </ul>
+        {offer && <OfferPanel offer={offer} discounts={discounts} />}
         <div className="mt-4 flex gap-2">
           {!coupon ? (
             <>
@@ -316,11 +336,32 @@ export default function CheckoutForm() {
             </div>
           )}
         </div>
+        {coupon && discounts.couponOverridden && (
+          <p className="mt-2 text-xs text-warmgray">
+            The festive offer saves you more, so it’s applied instead of {coupon.code}.
+          </p>
+        )}
+        {coupon && discounts.offerOverridden && (
+          <p className="mt-2 text-xs text-warmgray">
+            {coupon.code} saves you more than the festive offer, so the coupon is applied.
+          </p>
+        )}
         <dl className="mt-5 space-y-1.5 border-t border-forest/10 pt-4 text-sm">
           <div className="flex justify-between"><dt className="text-warmgray">Subtotal</dt><dd>{formatPrice(subtotal)}</dd></div>
-          {discount > 0 && (
+          {discounts.offerDiscount > 0 && offer && (
+            <div className="flex justify-between gap-3 font-semibold text-forest">
+              <dt>
+                {offer.title}
+                <span className="block text-xs font-normal text-warmgray">
+                  {discounts.bundle?.bundles.map(tierLabel).join(' + ')}
+                </span>
+              </dt>
+              <dd className="shrink-0">-{formatPrice(discounts.offerDiscount)}</dd>
+            </div>
+          )}
+          {discounts.couponDiscount > 0 && (
             <div className="flex justify-between text-terracotta">
-              <dt>Discount</dt><dd>-{formatPrice(discount)}</dd>
+              <dt>Coupon{coupon ? ` (${coupon.code})` : ''}</dt><dd>-{formatPrice(discounts.couponDiscount)}</dd>
             </div>
           )}
           <div className="flex justify-between"><dt className="text-warmgray">Shipping</dt><dd>{shipping === 0 ? 'Free' : formatPrice(shipping)}</dd></div>
@@ -329,6 +370,58 @@ export default function CheckoutForm() {
           </div>
         </dl>
       </aside>
+    </div>
+  )
+}
+
+function OfferPanel({ offer, discounts }: { offer: PublicOffer; discounts: ResolvedDiscounts }) {
+  const tiers = normalizeTiers(offer.tiers)
+  const eligible = discounts.bundle?.eligibleUnits ?? 0
+  const next = nextOfferTier(offer, eligible)
+  const usedQty = new Set(discounts.bundle?.bundles.map((b) => b.quantity))
+  const applied = discounts.offerDiscount > 0
+
+  return (
+    <div className="mt-4 overflow-hidden rounded-xl border-2 border-[#e0a100]/60 bg-gradient-to-br from-[#fff8e1] to-cream">
+      <div className="flex items-center gap-2 bg-gradient-to-r from-[#7a0f24] to-[#a3162f] px-3 py-2 text-cream">
+        <Gift size={16} className="text-[#f7c948]" />
+        <span className="text-sm font-bold">{offer.title}</span>
+      </div>
+      <div className="space-y-3 p-3">
+        <div className="flex flex-wrap gap-1.5">
+          {tiers.map((t) => (
+            <span
+              key={t.quantity}
+              className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                usedQty.has(t.quantity) && applied
+                  ? 'bg-forest text-cream'
+                  : 'bg-white text-forest ring-1 ring-forest/20'
+              }`}
+            >
+              {tierLabel(t)}
+            </span>
+          ))}
+        </div>
+        {applied ? (
+          <p className="flex items-center gap-1.5 text-sm font-semibold text-forest">
+            <PartyPopper size={16} className="shrink-0 text-[#c8860a]" />
+            You’re saving {formatPrice(discounts.offerDiscount)} with this offer!
+          </p>
+        ) : discounts.offerOverridden ? null : (
+          <p className="text-sm text-charcoal">
+            {next
+              ? `Add ${next.quantity - eligible} more ${offer.productIds.length ? 'eligible ' : ''}item${
+                  next.quantity - eligible === 1 ? '' : 's'
+                } to unlock ${tierLabel(next)}.`
+              : 'Offer price applies automatically when it beats the regular price.'}
+          </p>
+        )}
+        {applied && next && (
+          <p className="text-xs text-warmgray">
+            Add {next.quantity - eligible} more to get {tierLabel(next)}.
+          </p>
+        )}
+      </div>
     </div>
   )
 }

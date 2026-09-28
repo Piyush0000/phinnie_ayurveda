@@ -20,6 +20,7 @@ export interface ISiteSettings extends Document {
   social: ISocialLinks
   metaTitle?: string
   metaDescription?: string
+  offersInitialized?: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -43,6 +44,7 @@ const SiteSettingsSchema = new Schema<ISiteSettings>(
     },
     metaTitle: String,
     metaDescription: String,
+    offersInitialized: { type: Boolean, default: false },
   },
   { timestamps: true },
 )
