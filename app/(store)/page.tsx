@@ -10,7 +10,7 @@ import FestiveOfferBanner from '@/components/store/FestiveOfferBanner'
 import connectDB, { isDatabaseConfigured } from '@/lib/mongodb'
 import Product from '@/models/Product'
 import { getPublicSettings } from '@/lib/site-settings'
-import { getActiveOffer } from '@/lib/offer'
+import { getDisplayOffer } from '@/lib/offer'
 
 export const dynamic = 'force-dynamic'
 
@@ -32,7 +32,7 @@ async function getHomeData() {
 
 export default async function HomePage() {
   const { featured } = await getHomeData()
-  const [settings, offer] = await Promise.all([getPublicSettings(), getActiveOffer()])
+  const [settings, offer] = await Promise.all([getPublicSettings(), getDisplayOffer()])
   return (
     <>
       {offer && <FestiveOfferBanner offer={offer} />}

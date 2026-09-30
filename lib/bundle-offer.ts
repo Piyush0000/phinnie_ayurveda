@@ -26,6 +26,8 @@ export interface PublicOffer {
   countdownTheme: CountdownTheme
   startsAt?: string | null
   endsAt?: string | null
+  /** 'upcoming' = scheduled, shown with a "starts in" timer but prices not applied yet. */
+  phase?: 'live' | 'upcoming'
 }
 
 export interface OfferLineItem {

@@ -433,6 +433,8 @@ export default function AdminOffersPage() {
                       showCountdownBar: true,
                       countdownTheme: form.countdownTheme,
                       endsAt: form.endsAt ? new Date(form.endsAt).toISOString() : null,
+                      startsAt: form.startsAt ? new Date(form.startsAt).toISOString() : null,
+                      phase: form.startsAt && new Date(form.startsAt) > new Date() ? 'upcoming' : 'live',
                     }}
                   />
                 </div>
@@ -441,8 +443,8 @@ export default function AdminOffersPage() {
 
             {/* Schedule */}
             <section className="grid gap-4 md:grid-cols-2">
-              <Input label="Starts (optional)" type="datetime-local" value={form.startsAt} onChange={(e) => set('startsAt', e.target.value)} hint="Leave empty to start now" />
-              <Input label="Ends (optional)" type="datetime-local" value={form.endsAt} onChange={(e) => set('endsAt', e.target.value)} hint="Leave empty to run until paused; the timer then counts down to midnight each day" />
+              <Input label="Starts (optional)" type="datetime-local" value={form.startsAt} onChange={(e) => set('startsAt', e.target.value)} hint="Leave empty to start now. Before this time the site shows a “Starts In” countdown; prices apply from this moment." />
+              <Input label="Ends (optional)" type="datetime-local" value={form.endsAt} onChange={(e) => set('endsAt', e.target.value)} hint="Leave empty for no end (runs until you pause it); the timer then counts down to midnight each day" />
             </section>
 
             {/* Products */}

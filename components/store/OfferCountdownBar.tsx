@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import type { PublicOffer } from '@/lib/bundle-offer'
 import { COUNTDOWN_PALETTES } from '@/lib/countdown-palettes'
-import { useCountdown, pad2 } from './useCountdown'
+import { useOfferCountdown, pad2 } from './useCountdown'
 
 export default function OfferCountdownBar({ offer }: { offer: PublicOffer }) {
-  const t = useCountdown(offer.endsAt)
+  const { parts: t, upcoming } = useOfferCountdown(offer)
   const p = COUNTDOWN_PALETTES[offer.countdownTheme] ?? COUNTDOWN_PALETTES.purple
-  const label = offer.countdownLabel || `${offer.title} Ends In`
+  const label = upcoming
+    ? `${offer.title} Starts In`
+    : offer.countdownLabel || `${offer.title} Ends In`
   const units = t
     ? [
         ...(t.days > 0 ? [{ v: t.days, l: t.days === 1 ? 'Day' : 'Days' }] : []),

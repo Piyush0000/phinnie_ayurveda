@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import type { PublicOffer } from '@/lib/bundle-offer'
 
 export interface CountdownParts {
   days: number
@@ -26,21 +27,34 @@ function split(ms: number): CountdownParts {
 }
 
 /**
- * Live countdown to `endsAt`. Without an end date it counts down to midnight
- * (a rolling "today only" timer). Returns null until mounted to avoid SSR mismatch.
+ * Live countdown for an offer. A scheduled ('upcoming') offer counts down to its
+ * start and reloads the page when it goes live. A live offer counts down to its
+ * end date, or to midnight (a rolling "today only" timer) when it has none.
+ * Returns null parts until mounted to avoid SSR mismatch.
  */
-export function useCountdown(endsAt?: string | null): CountdownParts | null {
+export function useOfferCountdown(offer: Pick<PublicOffer, 'phase' | 'startsAt' | 'endsAt'>) {
+  const upcoming = offer.phase === 'upcoming' && !!offer.startsAt
+  const targetIso = upcoming ? offer.startsAt : offer.endsAt
   const [parts, setParts] = useState<CountdownParts | null>(null)
 
   useEffect(() => {
-    const target = () => (endsAt ? new Date(endsAt).getTime() : endOfToday())
-    const tick = () => setParts(split(target() - Date.now()))
+    const target = () => (targetIso ? new Date(targetIso).getTime() : endOfToday())
+    let reloaded = false
+    const tick = () => {
+      const left = target() - Date.now()
+      setParts(split(left))
+      if (upcoming && left <= 0 && !reloaded) {
+        reloaded = true
+        // Offer just started: re-render from the server so prices and timer switch to live.
+        window.setTimeout(() => window.location.reload(), 1500)
+      }
+    }
     tick()
     const id = window.setInterval(tick, 1000)
     return () => window.clearInterval(id)
-  }, [endsAt])
+  }, [targetIso, upcoming])
 
-  return parts
+  return { parts, upcoming }
 }
 
 export const pad2 = (n: number) => String(n).padStart(2, '0')

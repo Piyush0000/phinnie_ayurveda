@@ -5,15 +5,15 @@ import PromoBanner from '@/components/store/PromoBanner'
 import OfferCountdownBar from '@/components/store/OfferCountdownBar'
 import OfferSync from '@/components/store/OfferSync'
 import { getPublicSettings } from '@/lib/site-settings'
-import { getActiveOffer } from '@/lib/offer'
+import { getDisplayOffer } from '@/lib/offer'
 
 export const dynamic = 'force-dynamic'
 
 export default async function StoreLayout({ children }: { children: React.ReactNode }) {
-  const [settings, offer] = await Promise.all([getPublicSettings(), getActiveOffer()])
+  const [settings, offer] = await Promise.all([getPublicSettings(), getDisplayOffer()])
   return (
     <div className="flex min-h-screen flex-col">
-      <OfferSync offer={offer} />
+      <OfferSync offer={offer?.phase === 'live' ? offer : null} />
       {offer?.showCountdownBar && <OfferCountdownBar offer={offer} />}
       <Navbar
         bannerText={settings.bannerEnabled ? settings.bannerText : null}

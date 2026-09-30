@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, BadgeCheck, Flower2, Leaf, ShieldPlus, Sparkles, Timer } from 'lucide-react'
 import { normalizeTiers, type PublicOffer } from '@/lib/bundle-offer'
 import { formatPrice } from '@/lib/utils'
-import { useCountdown, pad2 } from './useCountdown'
+import { useOfferCountdown, pad2 } from './useCountdown'
 
 const MAROON = '#a3162f'
 
@@ -38,7 +38,10 @@ const TRUST = [
 
 export default function FestiveOfferBanner({ offer }: { offer: PublicOffer }) {
   const tiers = normalizeTiers(offer.tiers)
-  const t = useCountdown(offer.endsAt)
+  const { parts: t, upcoming } = useOfferCountdown(offer)
+  const startLabel = offer.startsAt
+    ? new Date(offer.startsAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })
+    : ''
   const taglines = (offer.subtitle ?? '').split(/\s*[·•|]\s*/).filter(Boolean)
   const [brand, ...rest] = offer.title.split(' ')
   // "Thinnie Festive Dhamaka" → brand "Thinnie", script word "Festive", ribbon word "Dhamaka"
@@ -95,7 +98,7 @@ export default function FestiveOfferBanner({ offer }: { offer: PublicOffer }) {
           className="relative z-10 text-center lg:text-left"
         >
           <span className="inline-flex items-center gap-2 rounded-full border border-[#e0a100]/40 bg-white/70 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-forest shadow-sm backdrop-blur">
-            <Sparkles className="h-4 w-4 text-[#e0a100]" /> Limited Time Festive Offer
+            <Sparkles className="h-4 w-4 text-[#e0a100]" /> {upcoming ? 'Coming Soon · Festive Offer' : 'Limited Time Festive Offer'}
           </span>
 
           <h2 id="festive-offer-heading" className="mt-5 leading-none">
@@ -169,7 +172,7 @@ export default function FestiveOfferBanner({ offer }: { offer: PublicOffer }) {
           {/* countdown */}
           <div className="mx-auto mt-7 flex max-w-xl flex-wrap items-center justify-center gap-3 lg:mx-0 lg:justify-start">
             <span className="flex items-center gap-1.5 text-sm font-bold uppercase tracking-wider text-[#7a0f24]">
-              <Timer className="h-4 w-4" /> Ends in
+              <Timer className="h-4 w-4" /> {upcoming ? 'Starts in' : 'Ends in'}
             </span>
             <div className="flex gap-2" role="timer" aria-live="off">
               {[
@@ -199,7 +202,9 @@ export default function FestiveOfferBanner({ offer }: { offer: PublicOffer }) {
             </Link>
             <span className="flex items-center gap-1.5 text-sm font-semibold text-forest">
               <BadgeCheck className="h-5 w-5 text-forest-400" />
-              Auto-applied at checkout · no coupon needed
+              {upcoming
+                ? `Offer starts ${startLabel} · auto-applied at checkout`
+                : 'Auto-applied at checkout · no coupon needed'}
             </span>
           </div>
 

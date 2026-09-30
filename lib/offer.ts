@@ -83,9 +83,33 @@ export async function getActiveOffer(): Promise<PublicOffer | null> {
     })
       .sort({ updatedAt: -1 })
       .lean()
-    return offer ? toPublicOffer(offer as unknown as IOffer) : null
+    return offer ? { ...toPublicOffer(offer as unknown as IOffer), phase: 'live' } : null
   } catch (err) {
     console.error('[offer] could not load active offer', err)
+    return null
+  }
+}
+
+/**
+ * What the storefront should show: the live offer, or — if none is live yet —
+ * the next scheduled one (phase 'upcoming', shown with a "starts in" countdown).
+ * Only a 'live' offer changes prices; checkout uses getActiveOffer.
+ */
+export async function getDisplayOffer(): Promise<PublicOffer | null> {
+  const live = await getActiveOffer()
+  if (live || !isDatabaseConfigured()) return live
+  try {
+    const now = new Date()
+    const next = await Offer.findOne({
+      isActive: true,
+      startsAt: { $gt: now },
+      $or: [{ endsAt: null }, { endsAt: { $gt: now } }],
+    })
+      .sort({ startsAt: 1 })
+      .lean()
+    return next ? { ...toPublicOffer(next as unknown as IOffer), phase: 'upcoming' } : null
+  } catch (err) {
+    console.error('[offer] could not load upcoming offer', err)
     return null
   }
 }
